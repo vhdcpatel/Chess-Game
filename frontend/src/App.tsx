@@ -1,11 +1,12 @@
 import './App.css'
+import ChessBoard from './components/chessBoard/ChessBoard'
 
 function App() {
 
 
   return (
     <div>
-      <h1>hello world! day1</h1>
+      <ChessBoard/>
     </div>
   )
 }
