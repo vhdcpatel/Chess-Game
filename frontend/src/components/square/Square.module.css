@@ -19,6 +19,11 @@
   background-color: var(--greenish-color);
 }
 
+.piece {
+  width: 85%;
+  height: 85%;
+}
+
 @media (max-width: 1200px) {
   .square {
     width: 3.75rem; 
