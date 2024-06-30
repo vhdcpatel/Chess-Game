@@ -20,7 +20,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             <div className={styles.mainOuterCtn}>
                 {FilesToRender.map((file) => {
                     return (
-                        <div key={file} style={{display: 'flex', flexDirection: 'row'}}>
+                        <div key={file} className={styles.ranks} >
                             {RanksToRender.map((rank) => {
                                 return (
                                   <Square key={(rank+file)} rank={rank} file={String(file)}/>

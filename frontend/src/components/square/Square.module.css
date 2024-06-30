@@ -1,0 +1,43 @@
+:root {
+  --greenish-color: #769656 ;
+  --light-brown-white-color: #EEEED2;
+}
+
+.square {
+  width: 4.375rem;
+  height: 4.375rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border:1px solid red; */
+}
+
+.light {
+  background-color: var(--light-brown-white-color);
+}
+.dark {
+  background-color: var(--greenish-color);
+}
+
+@media (max-width: 1200px) {
+  .square {
+    width: 3.75rem; 
+    height: 3.75rem; 
+  }
+}
+
+/* Adjust for tablets */
+@media (max-width: 768px) {
+  .square {
+    width: 3.125rem;
+    height: 3.125rem;
+  }
+}
+
+/* Adjust for mobile */
+@media (max-width: 480px) {
+  .square {
+    width: 2.5rem;
+    height: 2.5rem; 
+  }
+}
