@@ -1,4 +1,4 @@
-import { INITIALPOSITIONS, Piece } from "./constants/initialPosition";
+import { INITIALPOSITIONS, PieceModel } from "./constants/initialPosition";
 
 const pieceToSymbol = (type: string, color: string): string => {
   const symbols: { [key: string]: string } = {
@@ -22,7 +22,7 @@ const positionToIndices = (position: string): [number, number] => {
   return [rank, file];
 };
 
-const createInitialBoard = (pieces: Piece[]): (string | null)[][] => {
+const createInitialBoard = (pieces: PieceModel[]): (string | null)[][] => {
   const board: (string | null)[][] = Array(8).fill(null).map(() => Array(8).fill(null));
   pieces.forEach(piece => {
     const [rank, file] = positionToIndices(piece.position);

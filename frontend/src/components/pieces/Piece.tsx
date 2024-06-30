@@ -9,12 +9,24 @@ interface PieceProps {
 }
 
 const Piece: React.FC<PieceProps> = ({ type, color, position }) => {
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    // Wrapping data on the event object
+    const pieceData = JSON.stringify({ type, color, position });
+    event.dataTransfer.setData('application/json', pieceData);    
+  };
+
+
 
   const piecePath = getSrc[color][type];
 
   return (
     <div className={styles.piece}  data-position={position}>
-      <img src={piecePath}></img>
+      <img 
+        src={piecePath}
+        alt={`${color} ${type}`}
+        draggable
+        onDragStart={handleDragStart}
+      ></img>
     </div>
   );
 };

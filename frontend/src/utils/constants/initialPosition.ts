@@ -1,12 +1,12 @@
 import { PieceColor, PieceType } from "./srcMap";
 
-export interface Piece {
+export interface PieceModel {
   type: PieceType;
   color: PieceColor;
   position: string;
 }
 
-export const INITIALPOSITIONS: Piece[] = [
+export const INITIALPOSITIONS: PieceModel[] = [
   // White pieces
   { type: 'rook', color: 'white', position: 'a1' },
   { type: 'knight', color: 'white', position: 'b1' },
