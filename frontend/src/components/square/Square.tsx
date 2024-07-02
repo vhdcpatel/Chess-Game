@@ -1,23 +1,36 @@
 import React from 'react';
 import styles from './Square.module.css';
 import { charToNum } from '../../utils/charToNum';
+import { useDrop } from 'react-dnd';
 
 interface SquareProps {
   rank: string;
   file: string;
   children?: React.ReactNode;
-  onDrop?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (item: any, rank: string, file: string) => void;
 }
 
 const Square: React.FC<SquareProps> = (props) => {
   const {rank,file,children, onDrop} = props;
 
   const isLight = (Number(file) + charToNum(rank)) % 2 !== 0;
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'piece',
+    drop: (item) => onDrop(item, rank, file),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+  
   return (
     <React.Fragment>
-      <div className={`${isLight ? styles.light : styles.dark} ${styles.square}`} 
-           onDrop={onDrop}
-           onDragOver={(e) => e.preventDefault()} >
+      <div 
+          ref={drop} 
+          className={`${isLight ? styles.light : styles.dark} ${styles.square}`}
+          // Letter give some other effects.
+          style={{ backgroundColor: isOver ? 'lightgrey' : undefined }} 
+          >
         {children}
       </div>
     </React.Fragment>

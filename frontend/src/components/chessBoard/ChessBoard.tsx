@@ -19,17 +19,22 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const FilesToRender = player === 'white' ? FILES : [...FILES].reverse();
     const RanksToRender = player === 'white' ? RANKS : [...RANKS].reverse();
 
-    const [piecesPositions, setpiecesPosition] = useState(INITIALPOSITIONS);
+    const [piecesPositions, setPiecesPosition] = useState(INITIALPOSITIONS);
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>, rank: string, file: string) => {
-        event.preventDefault();
-        const pieceData  = event.dataTransfer.getData('application/json');
-        const piece: PieceModel = JSON.parse(pieceData);
-        // Pick Position:
-        console.log(piece.type, piece.color, piece.position);
-        // Drop position
+    const handleDrop = (item: PieceModel, rank: string, file: string) => {
+        
+        // Handle the piece movement here with target and origin positions.
+        console.log(item.type, item.color, item.position);
         console.log(rank, file);
-      };
+        
+        setPiecesPosition((prevPositions) => {
+            return prevPositions.map(p => 
+                p.position === item.position
+                    ? { ...p, position: `${rank}${file}` }
+                    : p
+            );
+        });
+    };
 
     return (
         <React.Fragment>
@@ -47,7 +52,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         key={(rank+file)} 
                                         rank={rank} 
                                         file={String(file)} 
-                                        onDrop={(event) => handleDrop(event, rank, String(file))}>
+                                        onDrop={handleDrop}>
                                         {piece && 
                                             <Piece type={piece.type} color={piece.color} position={position} />
                                         }
