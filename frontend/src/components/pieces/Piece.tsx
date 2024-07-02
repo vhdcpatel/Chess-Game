@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styles from './Piece.module.css';
 import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
+import isFirefox from '../../utils/detectFireFox';
 
 interface PieceProps {
   type: PieceType;
@@ -13,12 +14,14 @@ const Piece: React.FC<PieceProps> = ({ type, color, position }) => {
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
-    const dragPreviewImage = new Image();
-    dragPreviewImage.src = "";
-    preview(dragPreviewImage, {
-      offsetX: 25,
-      offsetY: 25,
-    });
+    if(!isFirefox()){    
+      const dragPreviewImage = new Image();
+      dragPreviewImage.src = "";
+      preview(dragPreviewImage, {
+        offsetX: 25,
+        offsetY: 25,
+      });
+    }
   },[]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({

@@ -29,6 +29,7 @@ describe("For proper rendering of the chess board", () => {
     expect(chessBoard).toHaveLength(64);
   });
 
+  // Not using the content so use class or some other workaround.
   it("Should render squares with correct ranks and files fow white player.", () => {
     render(<ChessBoard player="white" />);
     const squares = screen.getAllByTestId('square');
