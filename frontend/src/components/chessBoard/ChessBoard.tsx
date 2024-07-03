@@ -20,6 +20,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const RanksToRender = player === 'white' ? RANKS : [...RANKS].reverse();
 
     const [piecesPositions, setPiecesPosition] = useState(INITIALPOSITIONS);
+    const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
 
     const handleDrop = (item: PieceModel, rank: string, file: string) => {
         
@@ -35,6 +36,11 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             );
         });
     };
+
+    const possibleMoveSetterHandler = (state: "set" | "reset")=> (possiblePositons:string[] = [])=>{
+        // Handle the possible moves rendering here
+        console.log(possibleMoves);
+    }
 
     return (
         <React.Fragment>
@@ -54,7 +60,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         file={String(file)} 
                                         onDrop={handleDrop}>
                                         {piece && 
-                                            <Piece type={piece.type} color={piece.color} position={position} />
+                                            <Piece type={piece.type} color={piece.color} position={position} setPossibleMove={possibleMoveSetterHandler} />
                                         }
                                     </Square>
                                     );
