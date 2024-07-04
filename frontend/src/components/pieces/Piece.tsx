@@ -3,14 +3,17 @@ import styles from './Piece.module.css';
 import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
 import isFirefox from '../../utils/detectFireFox';
+import { getPossibleMoves } from '../../utils/getPossibleMoves';
 
 interface PieceProps {
   type: PieceType;
   color: PieceColor;
   position: string;
+  piecesPositions: { type: PieceType, color: PieceColor, position: string }[];
+  setPossibleMove: (state: "set" | "reset", possiblePositions?: string[]) => void;
 }
 
-const Piece: React.FC<PieceProps> = ({ type, color, position }) => {
+const Piece: React.FC<PieceProps> = ({ type, color, position, piecesPositions,setPossibleMove }) => {
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -31,6 +34,10 @@ const Piece: React.FC<PieceProps> = ({ type, color, position }) => {
       isDragging: monitor.isDragging(),
     }),
   }));
+
+  const handleClick = ()=>{
+    setPossibleMove("set", getPossibleMoves({ type, color, position }, piecesPositions));
+  }
   
   const piecePath = getSrc[color][type];
 
@@ -44,6 +51,7 @@ const Piece: React.FC<PieceProps> = ({ type, color, position }) => {
         ref={drag}
         style={{ opacity: isDragging ? 0.5 : 1 }}
         draggable={false}
+        onClick={handleClick}
       ></img>
     </div>
   );

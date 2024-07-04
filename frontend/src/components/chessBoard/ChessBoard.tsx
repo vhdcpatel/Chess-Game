@@ -35,12 +35,16 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                     : p
             );
         });
+        possibleMoveSetterHandler('reset');
     };
 
-    const possibleMoveSetterHandler = (state: "set" | "reset")=> (possiblePositons:string[] = [])=>{
-        // Handle the possible moves rendering here
-        console.log(possibleMoves);
-    }
+    const possibleMoveSetterHandler = (state: "set" | "reset", possiblePositions: string[] = []) => {
+        if (state === "set") {
+            setPossibleMoves(possiblePositions);
+        } else {
+            setPossibleMoves([]);
+        }
+    };
 
     return (
         <React.Fragment>
@@ -58,9 +62,17 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         key={(rank+file)} 
                                         rank={rank} 
                                         file={String(file)} 
-                                        onDrop={handleDrop}>
+                                        onDrop={handleDrop}
+                                        isPossibleMove={possibleMoves.includes(position)}
+                                        >
                                         {piece && 
-                                            <Piece type={piece.type} color={piece.color} position={position} setPossibleMove={possibleMoveSetterHandler} />
+                                            <Piece 
+                                                type={piece.type} 
+                                                color={piece.color} 
+                                                position={position} 
+                                                setPossibleMove={possibleMoveSetterHandler}
+                                                piecesPositions={piecesPositions}
+                                                />
                                         }
                                     </Square>
                                     );
