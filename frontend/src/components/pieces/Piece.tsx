@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './Piece.module.css';
 import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
@@ -14,6 +14,8 @@ interface PieceProps {
 }
 
 const Piece: React.FC<PieceProps> = ({ type, color, position, piecesPositions,setPossibleMove }) => {
+
+  const [possibleMovesVisible, setPossibleMovesVisible] = useState(false);
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -35,8 +37,13 @@ const Piece: React.FC<PieceProps> = ({ type, color, position, piecesPositions,se
     }),
   }));
 
-  const handleClick = ()=>{
-    setPossibleMove("set", getPossibleMoves({ type, color, position }, piecesPositions));
+  const handleClick = () => {
+    if (possibleMovesVisible) {
+      setPossibleMove("reset");
+    } else {
+      setPossibleMove("set", getPossibleMoves({ type, color, position }, piecesPositions));
+    }
+    setPossibleMovesVisible(!possibleMovesVisible);
   }
   
   const piecePath = getSrc[color][type];
