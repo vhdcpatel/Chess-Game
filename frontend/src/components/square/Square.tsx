@@ -23,15 +23,17 @@ const Square: React.FC<SquareProps> = (props) => {
       isOver: monitor.isOver(),
     }),
   });
+
+  const squareClasses = `${isLight ? styles.light : styles.dark} ${styles.square} ${isPossibleMove ? styles.possibleMove : ''}`;
   
   return (
     <React.Fragment>
       <div 
           ref={drop} 
-          className={`${isLight ? styles.light : styles.dark} ${styles.square}`}
-          // Letter give some other effects.
-          style={{ backgroundColor: isOver ? 'lightgrey' : isPossibleMove ? 'pink': undefined }} 
+          className={squareClasses}
+          style={{cursor: isPossibleMove ? 'pointer' : 'default'}}
           >
+        
         {children}
       </div>
     </React.Fragment>
