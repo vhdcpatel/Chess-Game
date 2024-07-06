@@ -8,6 +8,7 @@ import styles from './chessBoard.module.css';
 import { INITIALPOSITIONS, PieceModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import Piece from '../pieces/Piece';
+import { getPossibleMoves } from '../../utils/getPossibleMoves';
 
 interface ChessBoardProps {
     player: 'white'| 'black';
@@ -21,9 +22,9 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     const [piecesPositions, setPiecesPosition] = useState(INITIALPOSITIONS);
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
+    const [possibleMovesVisible, setPossibleMovesVisible] = useState(false);
 
     const handleDrop = (item: PieceModel, rank: string, file: string) => {
-        
         // Handle the piece movement here with target and origin positions.
         console.log(item.type, item.color, item.position);
         console.log(rank, file);
@@ -45,6 +46,20 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setPossibleMoves([]);
         }
     };
+
+    const possibleUpdateHandler = (PieceInfo: PieceModel,piecesPositions: PieceModel[]) =>{
+        if(possibleMovesVisible){
+            possibleMoveSetterHandler("reset");
+        }else{
+            const { type, color, position } = PieceInfo;
+            possibleMoveSetterHandler("set", getPossibleMoves({ type, color, position }, piecesPositions));
+        }
+        setPossibleMovesVisible((prev)=>!prev);
+    }
+
+    const setPossibleMovesHandler = (PieceInfo: PieceModel,)=>{
+        possibleUpdateHandler(PieceInfo,piecesPositions);
+    }
 
     return (
         <React.Fragment>
@@ -70,8 +85,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                                 type={piece.type} 
                                                 color={piece.color} 
                                                 position={position} 
-                                                setPossibleMove={possibleMoveSetterHandler}
-                                                piecesPositions={piecesPositions}
+                                                setPossibleMove={setPossibleMovesHandler}
                                                 />
                                         }
                                     </Square>

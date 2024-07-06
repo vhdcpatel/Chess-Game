@@ -3,19 +3,18 @@ import styles from './Piece.module.css';
 import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
 import isFirefox from '../../utils/detectFireFox';
-import { getPossibleMoves } from '../../utils/getPossibleMoves';
+
+import { PieceModel } from '../../utils/constants/initialPosition';
 
 interface PieceProps {
   type: PieceType;
   color: PieceColor;
   position: string;
-  piecesPositions: { type: PieceType, color: PieceColor, position: string }[];
-  setPossibleMove: (state: "set" | "reset", possiblePositions?: string[]) => void;
+  setPossibleMove: (PieceInfo: PieceModel) => void
 }
 
-const Piece: React.FC<PieceProps> = ({ type, color, position, piecesPositions,setPossibleMove }) => {
+const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove }) => {
 
-  const [possibleMovesVisible, setPossibleMovesVisible] = useState(false);
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -38,12 +37,7 @@ const Piece: React.FC<PieceProps> = ({ type, color, position, piecesPositions,se
   }));
 
   const handleClick = () => {
-    if (possibleMovesVisible) {
-      setPossibleMove("reset");
-    } else {
-      setPossibleMove("set", getPossibleMoves({ type, color, position }, piecesPositions));
-    }
-    setPossibleMovesVisible(!possibleMovesVisible);
+    setPossibleMove({ type, color, position});
   }
   
   const piecePath = getSrc[color][type];
