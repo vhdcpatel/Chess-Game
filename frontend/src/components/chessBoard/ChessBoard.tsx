@@ -33,7 +33,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         setPiecesPosition((prevPositions) => {
             return prevPositions.map(p => 
                 p.position === item.position
-                    ? { ...p, position: `${rank}${file}` }
+                    ? { ...p, position: `${file}${rank}` }
                     : p
             );
         });
@@ -65,18 +65,18 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         <React.Fragment>
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
                 <div className={styles.mainOuterCtn}>
-                    {FilesToRender.map((file) => {
+                    {RanksToRender.map((rank) => {
                         return (
-                            <div key={file} className={styles.ranks} >
-                                {RanksToRender.map((rank) => {
+                            <div key={rank} className={styles.ranks} >
+                                {FilesToRender.map((file) => {
                                     // Handle the pieces rendering here
-                                    const position = `${rank}${file}`;
+                                    const position = `${file}${rank}`;
                                     const piece = piecesPositions.find(p => p.position === position);
                                     return (
                                     <Square 
                                         key={(rank+file)} 
-                                        rank={rank} 
-                                        file={String(file)} 
+                                        rank={String(rank)} 
+                                        file={file} 
                                         onDrop={handleDrop}
                                         isPossibleMove={possibleMoves.includes(position)}
                                         >

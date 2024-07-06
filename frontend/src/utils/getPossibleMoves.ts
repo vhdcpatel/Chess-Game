@@ -6,17 +6,20 @@ interface Piece {
   position: string;
 }
 
-// Utility function to get possible moves for a piece
+const isWithinBounds = (file: number, rank: number) =>(file >= 97 && file <= 104 && rank >= 1 && rank <= 8);
+
 export const getPossibleMoves = (piece: Piece, piecesPositions: Piece[]): string[] => {
   const { type, color, position } = piece;
+  
   const possibleMoves: string[] = [];
+
   const [file, rank] = position.split('');
+  console.log(file, rank);
+  
   const fileIndex = file.charCodeAt(0);
   const rankIndex = parseInt(rank, 10);
-
-  const isWithinBounds = (file: number, rank: number) =>
-    file >= 97 && file <= 104 && rank >= 1 && rank <= 8;
-
+  console.log(fileIndex, rankIndex);
+  
   const isOpponentPiece = (pos: string) => {
     const pieceAtPosition = piecesPositions.find(p => p.position === pos);
     return pieceAtPosition && pieceAtPosition.color !== color;

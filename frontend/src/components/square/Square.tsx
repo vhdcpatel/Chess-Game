@@ -14,7 +14,8 @@ interface SquareProps {
 const Square: React.FC<SquareProps> = (props) => {
   const {rank,file,children, onDrop,isPossibleMove} = props;
 
-  const isLight = (Number(file) + charToNum(rank)) % 2 !== 0;
+  const isLight = (Number(rank) + charToNum(file)) % 2 !== 0;
+  
 
   const [{ isOver }, drop] = useDrop({
     accept: 'piece',
@@ -33,7 +34,7 @@ const Square: React.FC<SquareProps> = (props) => {
           className={squareClasses}
           style={{cursor: isPossibleMove ? 'pointer' : 'default'}}
           >
-        
+        {/* {rank}{file} */}
         {children}
       </div>
     </React.Fragment>
