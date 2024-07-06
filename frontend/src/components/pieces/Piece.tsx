@@ -30,7 +30,10 @@ const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove }) 
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: 'piece',
-    item: { type, color, position },
+    item: ()=>{
+      setPossibleMove({ type, color, position});
+      return { type, color, position }
+    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
