@@ -8,11 +8,12 @@ interface SquareProps {
   file: string;
   children?: React.ReactNode;
   onDrop: (item: any, rank: string, file: string) => void;
+  onClick: (file: string, rank: string) => void;
   isPossibleMove: boolean;
 }
 
 const Square: React.FC<SquareProps> = (props) => {
-  const {rank,file,children, onDrop,isPossibleMove} = props;
+  const {rank,file,children, onDrop,isPossibleMove, onClick} = props;
 
   const isLight = (Number(rank) + charToNum(file)) % 2 !== 0;
   
@@ -25,6 +26,12 @@ const Square: React.FC<SquareProps> = (props) => {
     }),
   });
 
+  const clickHandler = ()=>{
+    if(isPossibleMove && onClick){
+      onClick(file,rank);
+    }
+  }
+
   const squareClasses = `${isLight ? styles.light : styles.dark} ${styles.square} ${isPossibleMove ? styles.possibleMove : ''}`;
   
   return (
@@ -33,6 +40,7 @@ const Square: React.FC<SquareProps> = (props) => {
           ref={drop} 
           className={squareClasses}
           style={{cursor: isPossibleMove ? 'pointer' : 'default'}}
+          onClick={clickHandler}
           >
         {/* {rank}{file} */}
         {children}

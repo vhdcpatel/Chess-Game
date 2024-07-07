@@ -10,10 +10,11 @@ interface PieceProps {
   type: PieceType;
   color: PieceColor;
   position: string;
-  setPossibleMove: (PieceInfo: PieceModel) => void
+  setPossibleMove: (PieceInfo: PieceModel) => void;
+  activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceModel) => void;
 }
 
-const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove }) => {
+const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove, activePieceHandler }) => {
 
 
   // For prevention of getting background on the image tag.
@@ -32,6 +33,7 @@ const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove }) 
     type: 'piece',
     item: ()=>{
       setPossibleMove({ type, color, position});
+      activePieceHandler('set')({ type, color, position });
       return { type, color, position }
     },
     collect: (monitor) => ({
@@ -40,6 +42,7 @@ const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove }) 
   }));
 
   const handleClick = () => {
+    activePieceHandler('set')({ type, color, position });
     setPossibleMove({ type, color, position});
   }
   

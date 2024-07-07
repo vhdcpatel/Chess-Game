@@ -18,7 +18,7 @@ export const getPossibleMoves = (piece: Piece, piecesPositions: Piece[]): string
   
   const fileIndex = file.charCodeAt(0);
   const rankIndex = parseInt(rank, 10);
-  console.log(fileIndex, rankIndex);
+  console.log();
   
   const isOpponentPiece = (pos: string) => {
     const pieceAtPosition = piecesPositions.find(p => p.position === pos);
