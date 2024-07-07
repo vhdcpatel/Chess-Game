@@ -1,6 +1,6 @@
 // White Pieces
 import whiteRook from '../../assets/chessPieces/rookWhite.png' 
-import whiteKnight from '../../assets/chessPieces/kingWhite.png' 
+import whiteKnight from '../../assets/chessPieces/knightWhite.png' 
 import whiteBishop from '../../assets/chessPieces/bishopWhite.png' 
 import whiteQueen from '../../assets/chessPieces/queenWhite.png' 
 import whiteKing from '../../assets/chessPieces/kingWhite.png' 

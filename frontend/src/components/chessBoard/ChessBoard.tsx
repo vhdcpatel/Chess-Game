@@ -48,7 +48,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     };
 
-
     const handleDrop = (item: PieceModel, rank: string, file: string) => {
         // Handle the piece movement here with target and origin positions. 
         const prevPosition = item.position;
