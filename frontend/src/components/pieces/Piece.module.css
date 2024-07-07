@@ -17,6 +17,6 @@
 }
 
 .dragging {
-  opacity: 1 !important;
-  cursor: grabbing;
+  opacity: 0.5 !important;
+  cursor: grabbing !important;
 }

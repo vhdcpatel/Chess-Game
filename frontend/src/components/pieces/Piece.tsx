@@ -50,8 +50,8 @@ const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove, ac
 
   return (
     <div 
-      className={styles.piece}  
-    >
+      className={`${styles.piece} ${isDragging ? styles.dragging: ''}`}
+      >
       <img 
         src={piecePath}
         alt={`${color} ${type}`}
