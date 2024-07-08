@@ -23,24 +23,27 @@ export const PieceTypes = {
   Pawn: 'pawn',
 } as const;
 
-export type PieceColor = 'white' | 'black';
-export type PieceType = typeof PieceTypes[keyof typeof PieceTypes];
+export type PieceColor = 'w' | 'b';
+// export type PieceType = typeof PieceTypes[keyof typeof PieceTypes];
+// Setting both case button latter use only one.
+export type PieceType = 'r' | 'n' | 'b' | 'q' | 'k' | 'p' | 'R' | 'N' | 'B' | 'Q' | 'K' | 'P';
+
 
 export const getSrc: Record<PieceColor, Record<PieceType, string>> = {
-  'white': {
-    'rook': whiteRook,
-    'knight': whiteKnight,
-    'bishop': whiteBishop,
-    'queen': whiteQueen,
-    'king': whiteKing,
-    'pawn': whitePawn
+  'w': {
+    'r': whiteRook,
+    'n': whiteKnight,
+    'b': whiteBishop,
+    'q': whiteQueen,
+    'k': whiteKing,
+    'p': whitePawn
   },
-  'black': {
-    'rook': blackRook,
-    'knight': blackKnight,
-    'bishop': blackBishop,
-    'queen': blackQueen,
-    'king': blackKing,
-    'pawn': blackPawn
+  'b': {
+    'r': blackRook,
+    'n': blackKnight,
+    'b': blackBishop,
+    'q': blackQueen,
+    'k': blackKing,
+    'p': blackPawn
   }
 }
