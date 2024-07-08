@@ -6,18 +6,32 @@ interface Piece {
   position: string;
 }
 
-const isWithinBounds = (file: number, rank: number) =>(file >= 97 && file <= 104 && rank >= 1 && rank <= 8);
+const isWithinBounds = (file: number, rank: number) =>
+  file >= 97 && file <= 104 && rank >= 1 && rank <= 8;
 
-export const getPossibleMoves = (piece: Piece, piecesPositions: Piece[]): string[] => {
+const isInCheckAfterMove = (pieces: Piece[], color: PieceColor, move: string) => {
+  const updatedPositions = pieces.map(piece =>
+    piece.position === move ? { ...piece, position: move } : piece
+  ).filter(piece => piece.position !== move);
+
+  const king = updatedPositions.find(p => p.type === 'king' && p.color === color);
+  if (!king) return false;
+
+  return updatedPositions
+    .filter(p => p.color !== color)
+    .some(p => getPossibleMoves(p, updatedPositions, false).includes(king.position));
+};
+
+export const getPossibleMoves = (piece: Piece, piecesPositions: Piece[], checkCheck = true): string[] => {
   const { type, color, position } = piece;
-  
+
   const possibleMoves: string[] = [];
 
   const [file, rank] = position.split('');
-  
+
   const fileIndex = file.charCodeAt(0); // a to h.
   const rankIndex = parseInt(rank, 10); // 1 to 8.
-  
+
   const isOpponentPiece = (pos: string) => {
     const pieceAtPosition = piecesPositions.find(p => p.position === pos);
     return pieceAtPosition && pieceAtPosition.color !== color;
@@ -50,8 +64,6 @@ export const getPossibleMoves = (piece: Piece, piecesPositions: Piece[]): string
       currentRank += rankIncrement;
     }
   };
-
-
 
   switch (type) {
     case 'pawn':
@@ -120,6 +132,11 @@ export const getPossibleMoves = (piece: Piece, piecesPositions: Piece[]): string
 
     default:
       break;
+  }
+
+  // If checking for check, filter out moves that leave the king in check
+  if (checkCheck) {
+    return possibleMoves.filter(move => !isInCheckAfterMove(piecesPositions, color, move));
   }
 
   return possibleMoves;

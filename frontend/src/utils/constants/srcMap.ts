@@ -13,8 +13,18 @@ import blackQueen from '../../assets/chessPieces/queenBlack.png'
 import blackKing from '../../assets/chessPieces/kingBlack.png'
 import blackPawn from '../../assets/chessPieces/pawnBlack.png'
 
+// Enums 
+export const PieceTypes = {
+  Rook: 'rook',
+  Knight: 'knight',
+  Bishop: 'bishop',
+  Queen: 'queen',
+  King: 'king',
+  Pawn: 'pawn',
+} as const;
+
 export type PieceColor = 'white' | 'black';
-export type PieceType = 'rook' | 'knight' | 'bishop' | 'queen' | 'king' | 'pawn';
+export type PieceType = typeof PieceTypes[keyof typeof PieceTypes];
 
 export const getSrc: Record<PieceColor, Record<PieceType, string>> = {
   'white': {
