@@ -43,3 +43,5 @@ export const INITIALPOSITIONS: PieceModel[] = [
   { type: 'pawn', color: 'black', position: 'g7' },
   { type: 'pawn', color: 'black', position: 'h7' },
 ];
+
+export const DEFAULT_POSITION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
