@@ -24,8 +24,6 @@ export const PieceTypes = {
 } as const;
 
 export type PieceColor = 'w' | 'b';
-// export type PieceType = typeof PieceTypes[keyof typeof PieceTypes];
-// Setting both case button latter use only one.
 export type PieceType = 'r' | 'n' | 'b' | 'q' | 'k' | 'p' 
 
 

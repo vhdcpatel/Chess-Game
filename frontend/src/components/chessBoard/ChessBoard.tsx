@@ -5,7 +5,7 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
 import styles from './ChessBoard.module.css';
-import {  PieceModel } from '../../utils/constants/initialPosition';
+import {   PieceInfoModel, PieceModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import getPossibleMoves from '../../utils/getPossibleMoves';
 import { Chess, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
@@ -25,13 +25,11 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const RanksToRender = player === 'white' ? RANKS : [...RANKS].reverse();
 
     // const [piecesPositions, setPiecesPosition] = useState<PieceModel[]>(INITIALPOSITIONS);
+    const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
+    const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null)
 
     const [turn, setTurn] = useState<'white' | 'black'>('white');
-    const [selectedPiece, setSelectedPiece] = useState<PieceModel | null>(null);
-    const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
-
-    const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [fen, setFen] = useState<string>(defaultStartFEN);
 
     const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
@@ -69,10 +67,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
 
     console.log(game.board())
-    
-    const moves = game.moves({ square:'d1', verbose: true }) as Move[];
-    const possibleMovesMaped = moves.map(move => move.to);
-    console.log(possibleMovesMaped);
 
     const updatePositionHandler = (prevPiecePosition: string, file: string, rank: string) => {
         // setLastMove({ from: prevPiecePosition, to: `${file}${rank}` });
@@ -110,33 +104,40 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     };
 
 
-    const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceModel) => {
-        if (type === "set" && PieceInfo) {
-            setSelectedPiece(PieceInfo);
-        } else {
-            setSelectedPiece(null);
-        }
-    };
+   
 
-    const possibleUpdateHandler = (PieceInfo: PieceModel, piecesPositions: PieceModel[]) => {
-        if (possibleMoves.length !== 0) {
-            possibleMoveSetterHandler("reset");
-        } else {
-            const { type, color, position } = PieceInfo;
-            possibleMoveSetterHandler("set", getPossibleMoves({ type, color, position }, piecesPositions, true));
-        }
-    };
 
-    const setPossibleMovesHandler = (PieceInfo: PieceModel) => {
-        if (selectedPiece !== null) {
-            activePieceHandler('reset')();
-        }
-        possibleUpdateHandler(PieceInfo, piecesPositions);
-    };
+
+   
 
     */
-    const boardPosition = player ==='white' ? game.board() : game.board().reverse();
 
+    // Handle the possible moves for the selected piece.
+    const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => {
+        if (type === "reset") {
+            setActivePiece(null);
+            return;
+        }
+
+        PieceInfo && setActivePiece(PieceInfo);
+    };
+
+    const possibleMoveSetterHandler = (option: "set" | "reset")=> (square?: SquareNames) => {
+        if(option === "reset"){
+            setPossibleMoves([]);
+            return;
+        }
+        if(square){   
+            const possibleMoves = game.moves({ square, verbose: true }) as Move[];
+            const possibleMovesModified = possibleMoves.map(move => move.to);
+            setPossibleMoves(possibleMovesModified);
+        }
+    };
+
+    console.log(activePiece);
+    console.log(possibleMoves);
+    
+    const boardPosition = player ==='white' ? game.board() : game.board().reverse();
 
     return (
         <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
@@ -160,9 +161,10 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         type={piece.type}
                                         color={piece.color}
                                         position={piece.square}
+                                        active={activePiece?.square === piece.square}
                                         // active={selectedPiece?.position === piece.position}
-                                        // setPossibleMoves={setPossibleMovesHandler}
-                                        // activePieceHandler={activePieceHandler}
+                                        activePieceHandler={activePieceHandler}
+                                        setPossibleMove={possibleMoveSetterHandler}
                                     />
                                 )}
                             </Square>

@@ -3,16 +3,19 @@ import styles from './Piece.module.css';
 import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
 import isFirefox from '../../utils/detectFireFox';
+import { Square } from 'chess.js';
+import { PieceInfoModel } from '../../utils/constants/initialPosition';
 
 interface PieceProps {
   type: PieceType;
   color: PieceColor;
   position: string;
-  // setPossibleMove: (PieceInfo: PieceModel) => void;
-  // activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceModel) => void;
+  active: boolean;
+  setPossibleMove: (option: "set" | "reset") => (square?: Square) => void;
+  activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => void;
 }
 
-const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove, activePieceHandler }) => {
+const Piece: React.FC<PieceProps> = ({ type, color, position, setPossibleMove, activePieceHandler,active}) => {
 
 
   // For prevention of getting background on the image tag.
@@ -30,8 +33,10 @@ const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove, ac
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: 'piece',
     item: ()=>{
-      setPossibleMove({ type, color, position});
-      activePieceHandler('set')({ type, color, position });
+      setPossibleMove('set')(position as Square);
+      const currSquare: PieceInfoModel = { type, color, square: position as Square}
+      activePieceHandler('set')(currSquare);
+
       return { type, color, position }
     },
     collect: (monitor) => ({
@@ -40,8 +45,15 @@ const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove, ac
   }));
 
   const handleClick = () => {
-    activePieceHandler('set')({ type, color, position });
-    setPossibleMove({ type, color, position});
+    if(active){
+      activePieceHandler('reset')();
+      setPossibleMove('reset')();
+      return;
+    }
+    
+    const currSquare: PieceInfoModel = { type, color, square: position as Square}
+    activePieceHandler('set')(currSquare);
+    setPossibleMove('set')(position as Square);
   }
   
   const piecePath = getSrc[color][type];
