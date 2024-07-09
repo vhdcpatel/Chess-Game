@@ -26,7 +26,7 @@ export const PieceTypes = {
 export type PieceColor = 'w' | 'b';
 // export type PieceType = typeof PieceTypes[keyof typeof PieceTypes];
 // Setting both case button latter use only one.
-export type PieceType = 'r' | 'n' | 'b' | 'q' | 'k' | 'p' | 'R' | 'N' | 'B' | 'Q' | 'K' | 'P';
+export type PieceType = 'r' | 'n' | 'b' | 'q' | 'k' | 'p' 
 
 
 export const getSrc: Record<PieceColor, Record<PieceType, string>> = {

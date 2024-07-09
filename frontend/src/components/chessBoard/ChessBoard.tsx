@@ -29,7 +29,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
 
     const [game, setGame] = useState(new Chess());
-  const [pgn, setPgn] = useState('');
+    const [pgn, setPgn] = useState('');
 
   useEffect(() => {
     const newGame = new Chess();
