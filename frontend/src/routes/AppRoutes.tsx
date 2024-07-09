@@ -4,8 +4,7 @@ import Layout from '../layout/Layout';
 
 const Game = React.lazy(() => import('../components/game/Game'));
 
-const AppRoutes: React.FC = (props) => {
-    const {} = props;
+const AppRoutes: React.FC = () => {
 
     return (
       <Suspense fallback={<div>Loading...</div>}>
