@@ -28,7 +28,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null)
-
     const [turn, setTurn] = useState<'white' | 'black'>('white');
     const [fen, setFen] = useState<string>(defaultStartFEN);
 
@@ -47,7 +46,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
 
     const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
-        
         // Logic to handle the promotion of the pawn.
         let promotion: PieceSymbol = 'q'; // default promotion to queen.
         if (sourceSquare[1] === '7' && targetSquare[1] === '8' && game.get(sourceSquare)?.type === 'p') {
@@ -59,58 +57,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         // Updating the state of the game.
         handleMoveUpdate(sourceSquare, targetSquare, promotion);
     } 
-
-    // const onDrop = (sourceSquare: string, targetSquare: string) => {
-    //     // handleMove(from: sourceSquare as SquareNames, to: targetSquare as SquareNames);
-    // };
-
-
-
-    console.log(game.board())
-
-    const updatePositionHandler = (prevPiecePosition: string, file: string, rank: string) => {
-        // setLastMove({ from: prevPiecePosition, to: `${file}${rank}` });
-    };
-    /*
-
-    const handleClick = (file: string, rank: string) => {
-        if (selectedPiece !== null) {
-            const { position, color } = selectedPiece;
-            if (color === turn) {
-                updatePositionHandler(position, file, rank);
-                possibleMoveSetterHandler('reset');
-                activePieceHandler('reset')();
-                setTurn(turn === 'white' ? 'black' : 'white');
-            } else {
-                alert("Invalid Move");
-            }
-        } else {
-            console.log(file, rank);
-        }
-    };
-
-    const handleDrop = (item: PieceModel, rank: string, file: string) => {
-        const prevPosition = item.position;
-
-        if (possibleMoves.includes(`${file}${rank}`) && (item.color === turn)) {
-            updatePositionHandler(prevPosition, file, rank);
-            setTurn(turn === 'white' ? 'black' : 'white');
-            possibleMoveSetterHandler('reset');
-            activePieceHandler('reset')();
-        } else {
-            alert("Invalid Move");
-            console.log("Move is invalid");
-        }
-    };
-
-
-   
-
-
-
-   
-
-    */
 
     // Handle the possible moves for the selected piece.
     const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => {
