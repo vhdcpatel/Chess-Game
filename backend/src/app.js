@@ -5,17 +5,20 @@ require('dotenv').config();
 
 // local imports.
 const dummyRoutes = require('./routes/dummyRoutes');
+const corsOptions = require('./config/corsOptions');
 
 // Initialize the app
 const app = express();
 
 
+// Enable CORS with options
+app.use(cors(corsOptions));
+
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-
 app.use('/api', dummyRoutes);
 
 // Error handling middleware (example)
