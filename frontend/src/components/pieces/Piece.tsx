@@ -4,14 +4,12 @@ import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
 import isFirefox from '../../utils/detectFireFox';
 
-import { PieceModel } from '../../utils/constants/initialPosition';
-
 interface PieceProps {
   type: PieceType;
   color: PieceColor;
   position: string;
-  setPossibleMove: (PieceInfo: PieceModel) => void;
-  activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceModel) => void;
+  // setPossibleMove: (PieceInfo: PieceModel) => void;
+  // activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceModel) => void;
 }
 
 const Piece: React.FC<PieceProps> = ({ type, color, position,setPossibleMove, activePieceHandler }) => {

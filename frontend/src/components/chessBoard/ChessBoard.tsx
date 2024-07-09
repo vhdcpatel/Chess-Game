@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
 import styles from './ChessBoard.module.css';
-import { INITIALPOSITIONS, PieceModel } from '../../utils/constants/initialPosition';
+import {  PieceModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import getPossibleMoves from '../../utils/getPossibleMoves';
-import { Chess } from 'chess.js';
+import { Chess, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
+import Piece from '../pieces/Piece';
 
 interface ChessBoardProps {
     player: 'white' | 'black';
     initialPosition?: string;
 }
+
+const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const { player, initialPosition } = props;
@@ -23,38 +26,58 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     // const [piecesPositions, setPiecesPosition] = useState<PieceModel[]>(INITIALPOSITIONS);
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
+
     const [turn, setTurn] = useState<'white' | 'black'>('white');
     const [selectedPiece, setSelectedPiece] = useState<PieceModel | null>(null);
-    const [removedPieces, setRemovedPieces] = useState<PieceModel[]>([]);
     const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
 
-    const [game, setGame] = useState(new Chess());
-    const [pgn, setPgn] = useState('');
+    const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
+    const [fen, setFen] = useState<string>(defaultStartFEN);
 
-  useEffect(() => {
-    const newGame = new Chess();
-    
-    if (initialPosition) {
-      newGame.loadPgn(initialPosition);
-    }
-    
-    // while (!newGame.isGameOver()) {
-    // //   const moves = newGame.moves();
-    // //   const move = moves[Math.floor(Math.random() * moves.length)];
-    // //   newGame.move(move);
-    // }
-    
-    setPgn(newGame.pgn());
-    setGame(newGame);
-  }, [initialPosition]);
+    const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
+        // Create a new chess.js instance to not mutate the current game.
+        const newGame = new Chess(game.fen());
 
-  console.log(game.board())
+        const result = newGame.move({from, to, promotion});
+        
+        if (result) {
+          setGame(newGame);
+        }else{
+            alert("Invalid Move");
+        }
+      }, [game]);
 
+
+    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
+        
+        // Logic to handle the promotion of the pawn.
+        let promotion: PieceSymbol = 'q'; // default promotion to queen.
+        if (sourceSquare[1] === '7' && targetSquare[1] === '8' && game.get(sourceSquare)?.type === 'p') {
+          promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
+        } else if (sourceSquare[1] === '2' && targetSquare[1] === '1' && game.get(sourceSquare)?.type === 'p') {
+          promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
+        }
+        
+        // Updating the state of the game.
+        handleMoveUpdate(sourceSquare, targetSquare, promotion);
+    } 
+
+    // const onDrop = (sourceSquare: string, targetSquare: string) => {
+    //     // handleMove(from: sourceSquare as SquareNames, to: targetSquare as SquareNames);
+    // };
+
+
+
+    console.log(game.board())
+    
+    const moves = game.moves({ square:'d1', verbose: true }) as Move[];
+    const possibleMovesMaped = moves.map(move => move.to);
+    console.log(possibleMovesMaped);
 
     const updatePositionHandler = (prevPiecePosition: string, file: string, rank: string) => {
-
-        setLastMove({ from: prevPiecePosition, to: `${file}${rank}` });
+        // setLastMove({ from: prevPiecePosition, to: `${file}${rank}` });
     };
+    /*
 
     const handleClick = (file: string, rank: string) => {
         if (selectedPiece !== null) {
@@ -86,13 +109,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
     };
 
-    const possibleMoveSetterHandler = (state: "set" | "reset", possiblePositions: string[] = []) => {
-        if (state === "set") {
-            setPossibleMoves(possiblePositions);
-        } else {
-            setPossibleMoves([]);
-        }
-    };
 
     const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceModel) => {
         if (type === "set" && PieceInfo) {
@@ -118,14 +134,16 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         possibleUpdateHandler(PieceInfo, piecesPositions);
     };
 
-    const boardPosition = game.board();
+    */
+    const boardPosition = player ==='white' ? game.board() : game.board().reverse();
+
 
     return (
         <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
-            <div className={styles.chessboard}>
+            <div className={styles.mainOuterCtn}>
                 {RanksToRender.map((rank,RankIndex) =>
-                    FilesToRender.map((file,FileIndex) => {
-                        // const piece = piecesPositions.find(p => p.position === `${file}${rank}`);
+                    <div key={rank} className={styles.ranks} >
+                    {FilesToRender.map((file,FileIndex) => {
                         const piece = boardPosition[RankIndex][FileIndex];
                         return (
                             <Square
@@ -133,24 +151,24 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                 file={file}
                                 rank={String(rank)}
                                 // color={squareColor}
-                                onClick={handleClick}
-                                onDrop={handleDrop}
+                                onClick={(file: string, rank: string) => {}}
+                                onDrop={(item: any, rank: string, file: string) => {}}
                                 isPossibleMove={possibleMoves.includes(`${file}${rank}`)}
                             >
-                                {piece && piece.type}
-                                {/* {piece && (
-                                    // <Piece
-                                    //     type={piece.type}
-                                    //     color={piece.color}
-                                    //     position={piece.position}
-                                    //     // active={selectedPiece?.position === piece.position}
-                                    //     // setPossibleMoves={setPossibleMovesHandler}
-                                    //     activePieceHandler={activePieceHandler}
-                                    // />
-                                )} */}
+                                {piece && (
+                                    <Piece
+                                        type={piece.type}
+                                        color={piece.color}
+                                        position={piece.square}
+                                        // active={selectedPiece?.position === piece.position}
+                                        // setPossibleMoves={setPossibleMovesHandler}
+                                        // activePieceHandler={activePieceHandler}
+                                    />
+                                )}
                             </Square>
                         );
-                    })
+                    })}
+                    </div>
                 )}
             </div>
         </DndProvider>
