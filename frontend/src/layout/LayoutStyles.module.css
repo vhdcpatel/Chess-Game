@@ -1,0 +1,11 @@
+.mainOuterCtn {
+  height: 100dvh;
+}
+
+.header {
+  height: 50px;
+}
+
+.mainBody {
+  height: calc(100% - 50px);
+}
