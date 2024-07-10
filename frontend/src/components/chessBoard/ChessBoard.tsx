@@ -36,9 +36,13 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         const newGame = new Chess(game.fen());
 
         const result = newGame.move({from, to, promotion});
+        console.log(result);
         
         if (result) {
-          setGame(newGame);
+            setGame(newGame);
+            possibleMoveSetterHandler('reset')();
+            activePieceHandler('reset')();
+        //   setTurn(newGame.turn() as 'white' | 'black');
         }else{
             alert("Invalid Move");
         }
@@ -47,7 +51,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
         // Logic to handle the promotion of the pawn.
-        let promotion: PieceSymbol = 'q'; // default promotion to queen.
+        let promotion: PieceSymbol | null = null; // default promotion to queen.
         if (sourceSquare[1] === '7' && targetSquare[1] === '8' && game.get(sourceSquare)?.type === 'p') {
           promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
         } else if (sourceSquare[1] === '2' && targetSquare[1] === '1' && game.get(sourceSquare)?.type === 'p') {
@@ -55,8 +59,21 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
         
         // Updating the state of the game.
-        handleMoveUpdate(sourceSquare, targetSquare, promotion);
-    } 
+        handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
+    }
+    
+    const onDropHandler = (item: PieceInfoModel, rank: string, file: string) => {
+        // Handle the same move
+        if(item.square === `${file}${rank}`){
+            alert("Invalid Move");
+            return;
+        }
+        handleMove(item.square, `${file}${rank}` as SquareNames);
+    }
+
+    const handleClick = (file: string, rank: string) => {
+        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames);
+    }
 
     // Handle the possible moves for the selected piece.
     const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => {
@@ -75,6 +92,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
         if(square){   
             const possibleMoves = game.moves({ square, verbose: true }) as Move[];
+            console.log(possibleMoves);
+            
             const possibleMovesModified = possibleMoves.map(move => move.to);
             setPossibleMoves(possibleMovesModified);
         }
@@ -97,9 +116,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                 key={`${file}${rank}`}
                                 file={file}
                                 rank={String(rank)}
-                                // color={squareColor}
-                                onClick={(file: string, rank: string) => {}}
-                                onDrop={(item: any, rank: string, file: string) => {}}
+                                onClick={handleClick}
+                                onDrop={onDropHandler}
                                 isPossibleMove={possibleMoves.includes(`${file}${rank}`)}
                             >
                                 {piece && (

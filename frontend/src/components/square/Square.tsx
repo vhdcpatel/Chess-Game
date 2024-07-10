@@ -2,12 +2,13 @@ import React from 'react';
 import styles from './Square.module.css';
 import { charToNum } from '../../utils/charToNum';
 import { useDrop } from 'react-dnd';
+import { PieceInfoModel } from '../../utils/constants/initialPosition';
 
 interface SquareProps {
   rank: string;
   file: string;
   children?: React.ReactNode;
-  onDrop: (item: any, rank: string, file: string) => void;
+  onDrop: (item: PieceInfoModel, rank: string, file: string) => void;
   onClick: (file: string, rank: string) => void;
   isPossibleMove: boolean;
 }
@@ -20,7 +21,7 @@ const Square: React.FC<SquareProps> = (props) => {
 
   const [{ isOver }, drop] = useDrop({
     accept: 'piece',
-    drop: (item) => onDrop(item, rank, file),
+    drop: (item: PieceInfoModel) => onDrop(item, rank, file),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),

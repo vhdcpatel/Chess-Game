@@ -37,7 +37,7 @@ const Piece: React.FC<PieceProps> = ({ type, color, position, setPossibleMove, a
       const currSquare: PieceInfoModel = { type, color, square: position as Square}
       activePieceHandler('set')(currSquare);
 
-      return { type, color, position }
+      return { type, color, square: position as Square}
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
