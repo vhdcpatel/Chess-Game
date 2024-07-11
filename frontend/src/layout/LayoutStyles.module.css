@@ -7,5 +7,17 @@
 }
 
 .mainBody {
-  height: calc(100% - 50px);
+  height: calc(100% - 4.28125rem);
+}
+
+@media (max-width: 900px) {
+  .mainBody {
+    height: calc(100% - 4rem);
+  }  
+}
+
+@media (max-width: 600px) {
+  .mainBody {
+    height: calc(100% - 3.5rem);
+  }  
 }

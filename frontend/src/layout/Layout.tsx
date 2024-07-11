@@ -1,12 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import styles from './LayoutStyles.module.css'
+import HeaderBar from '../components/header/HeaderBar';
 
 const Layout = () => {
     return (
         <div className={styles.mainOuterCtn}>
-            <header className={styles.header}>
-              <p>This is header text</p>
-            </header>
+            <HeaderBar />
             <main className={styles.mainBody}>
                 <Outlet />
             </main>
