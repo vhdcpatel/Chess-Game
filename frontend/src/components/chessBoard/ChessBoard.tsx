@@ -119,6 +119,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                 onClick={handleClick}
                                 onDrop={onDropHandler}
                                 isPossibleMove={possibleMoves.includes(`${file}${rank}`)}
+                                isActive={activePiece?.square === `${file}${rank}`}
                             >
                                 {piece && (
                                     <Piece

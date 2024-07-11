@@ -25,6 +25,11 @@
   height: 85%;
 }
 
+.activeSquare {
+  filter: brightness(1.5);
+  border: 2px solid rgba(235, 107, 15, 0.8);
+}
+
 .possibleMove::before {
   content: '';
   position: absolute;

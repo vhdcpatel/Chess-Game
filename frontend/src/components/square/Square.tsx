@@ -11,10 +11,11 @@ interface SquareProps {
   onDrop: (item: PieceInfoModel, rank: string, file: string) => void;
   onClick: (file: string, rank: string) => void;
   isPossibleMove: boolean;
+  isActive: boolean;
 }
 
 const Square: React.FC<SquareProps> = (props) => {
-  const {rank,file,children, onDrop,isPossibleMove, onClick} = props;
+  const {rank,file,children, onDrop,isPossibleMove, onClick, isActive} = props;
 
   const isLight = (Number(rank) + charToNum(file)) % 2 !== 0;
 
@@ -33,7 +34,7 @@ const Square: React.FC<SquareProps> = (props) => {
     }
   }
 
-  const squareClasses = `${isLight ? styles.light : styles.dark} ${styles.square} ${isPossibleMove ? styles.possibleMove : ''}`;
+  const squareClasses = `${isLight ? styles.light : styles.dark} ${styles.square} ${isPossibleMove ? styles.possibleMove : ''} ${isActive ? styles.activeSquare : ''}`;
   
   return (
     <React.Fragment>
