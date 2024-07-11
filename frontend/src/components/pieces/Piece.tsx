@@ -33,10 +33,19 @@ const Piece: React.FC<PieceProps> = ({ type, color, position, setPossibleMove, a
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: 'piece',
     item: ()=>{
+      if(active){
+        activePieceHandler('reset')();
+        setPossibleMove('reset')();
+      }
+      // Fix this.
+      // there is bug in the implementation of the active piece handler. with drop 
+      //  which is causing the active piece to be set to the last piece that was dragged.
+      // also dragging is not setting possible moves and active piece correctly.
+      console.log("For black");
+      
       setPossibleMove('set')(position as Square);
       const currSquare: PieceInfoModel = { type, color, square: position as Square}
       activePieceHandler('set')(currSquare);
-
       return { type, color, square: position as Square}
     },
     collect: (monitor) => ({

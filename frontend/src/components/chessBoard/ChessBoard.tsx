@@ -8,18 +8,19 @@ import styles from './ChessBoard.module.css';
 import {   PieceInfoModel, PieceModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import getPossibleMoves from '../../utils/getPossibleMoves';
-import { Chess, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
+import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
 
 interface ChessBoardProps {
     player: 'white' | 'black';
     initialPosition?: string;
+    isMultiPlayer: boolean;
 }
 
 const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
-    const { player, initialPosition } = props;
+    const { player, initialPosition, isMultiPlayer } = props;
 
     const FilesToRender = player === 'white' ? FILES : [...FILES].reverse();
     const RanksToRender = player === 'white' ? RANKS : [...RANKS].reverse();
@@ -28,7 +29,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null)
-    const [turn, setTurn] = useState<'white' | 'black'>('white');
+    const [turn, setTurn] = useState<Color>('w');
     const [fen, setFen] = useState<string>(defaultStartFEN);
 
     const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
@@ -42,7 +43,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setGame(newGame);
             possibleMoveSetterHandler('reset')();
             activePieceHandler('reset')();
-        //   setTurn(newGame.turn() as 'white' | 'black');
+            setTurn(newGame.turn());
         }else{
             alert("Invalid Move");
         }
@@ -81,8 +82,9 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setActivePiece(null);
             return;
         }
-
-        PieceInfo && setActivePiece(PieceInfo);
+        if(PieceInfo?.color === turn){
+            PieceInfo && setActivePiece(PieceInfo);
+        }
     };
 
     const possibleMoveSetterHandler = (option: "set" | "reset")=> (square?: SquareNames) => {
@@ -101,6 +103,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     console.log(activePiece);
     console.log(possibleMoves);
+    console.log(turn);
     
     const boardPosition = player ==='white' ? game.board() : game.board().reverse();
 

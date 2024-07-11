@@ -10,7 +10,7 @@ const Game: React.FC = (props) => {
   return (
     <React.Fragment>
       <div className={styles.mainOuterCtn}>
-        <ChessBoard player='white' initialPosition={DEFAULT_POSITION} />
+        <ChessBoard player='white' initialPosition={DEFAULT_POSITION} isMultiPlayer={true} />
       </div>
     </React.Fragment>
   );
