@@ -15,8 +15,8 @@ interface PieceProps {
   activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => void;
 }
 
-const Piece: React.FC<PieceProps> = ({ type, color, position, setPossibleMove, activePieceHandler,active}) => {
-
+const Piece: React.FC<PieceProps> = (props) => {
+  const { type, color, position, setPossibleMove, activePieceHandler, active} = props;
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -36,13 +36,14 @@ const Piece: React.FC<PieceProps> = ({ type, color, position, setPossibleMove, a
       if(active){
         activePieceHandler('reset')();
         setPossibleMove('reset')();
+        // Instead of return update the logic for the handler based on last updated values. 
+        return;
       }
       // Fix this.
       // there is bug in the implementation of the active piece handler. with drop 
       //  which is causing the active piece to be set to the last piece that was dragged.
       // also dragging is not setting possible moves and active piece correctly.
       console.log("For black");
-      
       setPossibleMove('set')(position as Square);
       const currSquare: PieceInfoModel = { type, color, square: position as Square}
       activePieceHandler('set')(currSquare);
