@@ -21,15 +21,17 @@ const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const { player, initialPosition, isMultiPlayer } = props;
 
+    // Handle the render board based on the player.
     const FilesToRender = player === 'white' ? FILES : [...FILES].reverse();
     const RanksToRender = player === 'white' ? RANKS : [...RANKS].reverse();
 
-    // const [piecesPositions, setPiecesPosition] = useState<PieceModel[]>(INITIALPOSITIONS);
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null)
     const [turn, setTurn] = useState<Color>('w');
-    const [fen, setFen] = useState<string>(defaultStartFEN);
+    
+    // future implementation 
+    // const [fen, setFen] = useState<string>(defaultStartFEN);
 
     const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
         // Create a new chess.js instance to not mutate the current game.
@@ -48,31 +50,40 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
       }, [game]);
 
-
-    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
-        // Logic to handle the promotion of the pawn.
+    const getPromotionPieceHandler = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol) =>{
         let promotion: PieceSymbol | null = null; // default promotion to queen.
-        if (sourceSquare[1] === '7' && targetSquare[1] === '8' && game.get(sourceSquare)?.type === 'p') {
+        // reverse move is not possible for the pawn so not adding color check.
+        if (sourceSquare[1] === '7' && targetSquare[1] === '8' && piece === 'p') {
           promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
-        } else if (sourceSquare[1] === '2' && targetSquare[1] === '1' && game.get(sourceSquare)?.type === 'p') {
+        } else if (sourceSquare[1] === '2' && targetSquare[1] === '1' && piece === 'p') {
           promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
         }
+        return promotion;
+    }
+
+    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol)=>{
+        // Logic to handle the promotion of the pawn.
+        let  promotion = null;
+        if(piece === 'p'){
+            promotion = getPromotionPieceHandler(sourceSquare, targetSquare, piece);
+        } 
         
+        getPromotionPieceHandler(sourceSquare, targetSquare,piece);
         // Updating the state of the game.
         handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
     }
     
     const onDropHandler = (item: PieceInfoModel, rank: string, file: string) => {
         // Handle the same move
-        if(item.square === `${file}${rank}`){
-            alert("Invalid Move");
-            return;
-        }
-        handleMove(item.square, `${file}${rank}` as SquareNames);
+        // if(item.square === `${file}${rank}`){
+        //     alert("Invalid Move");
+        //     return;
+        // }
+        handleMove(item.square, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
     }
 
     const handleClick = (file: string, rank: string) => {
-        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames);
+        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
     }
 
     // Handle the possible moves for the selected piece.
