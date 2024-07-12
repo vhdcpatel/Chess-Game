@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
 import styles from './ChessBoard.module.css';
-import {   PieceInfoModel, PieceModel } from '../../utils/constants/initialPosition';
+import {   PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
-import getPossibleMoves from '../../utils/getPossibleMoves';
 import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
 
