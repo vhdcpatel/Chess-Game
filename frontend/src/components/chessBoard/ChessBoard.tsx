@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
-import styles from './ChessBoard.module.css';
+import styles from './chessBoard.module.css';
 import {   PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
@@ -27,8 +27,9 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
-    const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null)
+    const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
     const [turn, setTurn] = useState<Color>('w');
+    const [history, setHistory] = useState<Move[]>([]); // [from, to, piece, captured, promotion, flags, san, lan, before, after
     
     // future implementation 
     // const [fen, setFen] = useState<string>(defaultStartFEN);
@@ -42,6 +43,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         
         if (result) {
             setGame(newGame);
+            setHistory([...history, result]);
             possibleMoveSetterHandler('reset')();
             activePieceHandler('reset')();
             setTurn(newGame.turn());
