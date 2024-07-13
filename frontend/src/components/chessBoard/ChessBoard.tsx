@@ -9,6 +9,7 @@ import {   PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
+import { getPromotionPieceHandler } from '../../utils/handleMoves/handleMoves';
 
 interface ChessBoardProps {
     player: 'white' | 'black';
@@ -29,10 +30,12 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
     const [turn, setTurn] = useState<Color>('w');
-    const [history, setHistory] = useState<Move[]>([]); // [from, to, piece, captured, promotion, flags, san, lan, before, after
     
-    // future implementation 
-    // const [fen, setFen] = useState<string>(defaultStartFEN);
+    // future implementation
+    // Handle check, stalemate, checkmate or draw state. for the game. 
+    const [history, setHistory] = useState<Move[]>([]); 
+    // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
+   
 
     const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
         // Create a new chess.js instance to not mutate the current game.
@@ -43,6 +46,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         
         if (result) {
             setGame(newGame);
+            const isCheck = newGame.isCheck();
+            console.log(isCheck);
             setHistory([...history, result]);
             possibleMoveSetterHandler('reset')();
             activePieceHandler('reset')();
@@ -52,16 +57,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
       }, [game]);
 
-    const getPromotionPieceHandler = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol) =>{
-        let promotion: PieceSymbol | null = null; // default promotion to queen.
-        // reverse move is not possible for the pawn so not adding color check.
-        if (sourceSquare[1] === '7' && targetSquare[1] === '8' && piece === 'p') {
-          promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
-        } else if (sourceSquare[1] === '2' && targetSquare[1] === '1' && piece === 'p') {
-          promotion = (prompt('Choose promotion piece (q, r, b, n):', 'q') || 'q') as PieceSymbol;
-        }
-        return promotion;
-    }
+
 
     const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol)=>{
         // Logic to handle the promotion of the pawn.
@@ -69,9 +65,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         if(piece === 'p'){
             promotion = getPromotionPieceHandler(sourceSquare, targetSquare, piece);
         } 
-        
         getPromotionPieceHandler(sourceSquare, targetSquare,piece);
-        // Updating the state of the game.
+        // Updating the state of the game based on the move.
         handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
     }
     
@@ -95,7 +90,12 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             return;
         }
         if(PieceInfo?.color === turn){
-            PieceInfo && setActivePiece(PieceInfo);
+            PieceInfo && setActivePiece((prev)=>{
+                if(prev?.square === PieceInfo.square){
+                    return null;
+                }
+                return PieceInfo;
+            });
         }
     };
 
@@ -104,10 +104,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setPossibleMoves([]);
             return;
         }
-        if(square){   
-            const possibleMoves = game.moves({ square, verbose: true }) as Move[];
-            console.log(possibleMoves);
-            
+        if(square){
+            const possibleMoves = game.moves({square, verbose: true});
             const possibleMovesModified = possibleMoves.map(move => move.to);
             setPossibleMoves(possibleMovesModified);
         }
@@ -115,7 +113,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     console.log(activePiece);
     console.log(possibleMoves);
-    console.log(turn);
+    console.log(history);
     
     const boardPosition = player ==='white' ? game.board() : game.board().reverse();
 
@@ -142,7 +140,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         color={piece.color}
                                         position={piece.square}
                                         active={activePiece?.square === piece.square}
-                                        // active={selectedPiece?.position === piece.position}
                                         activePieceHandler={activePieceHandler}
                                         setPossibleMove={possibleMoveSetterHandler}
                                     />

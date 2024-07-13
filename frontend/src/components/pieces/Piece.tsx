@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './Piece.module.css';
 import { getSrc, PieceColor, PieceType } from '../../utils/constants/srcMap';
 import { useDrag } from 'react-dnd';
@@ -32,48 +32,47 @@ const Piece: React.FC<PieceProps> = (props) => {
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: 'piece',
-    item: ()=>{
-      if(active){
+    item: () => {
+      if (active) {
         activePieceHandler('reset')();
         setPossibleMove('reset')();
-        // Instead of return update the logic for the handler based on last updated values. 
+        // Instead of return update the logic for the handler based on 
+        // last updated values. 
         return;
       }
-      // Fix this.
-      // there is bug in the implementation of the active piece handler. with drop 
-      //  which is causing the active piece to be set to the last piece that was dragged.
-      // also dragging is not setting possible moves and active piece correctly.
-      console.log("For black");
+      console.log('drag started.');
+      const currSquare = { type, color, square: position };
+      activePieceHandler('set')(currSquare as PieceInfoModel);
       setPossibleMove('set')(position as Square);
-      const currSquare: PieceInfoModel = { type, color, square: position as Square}
-      activePieceHandler('set')(currSquare);
-      return { type, color, square: position as Square}
+      return { type, color, square: position };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }));
+  // Always add dependency for the drag other wise it will take the old value 
+  // and state management will become inconsistent.
+  }), [type, color, position, active, setPossibleMove, activePieceHandler]);
 
   const handleClick = () => {
-    if(active){
-      activePieceHandler('reset')();
-      setPossibleMove('reset')();
-      return;
-    }
-    
-    const currSquare: PieceInfoModel = { type, color, square: position as Square}
-    activePieceHandler('set')(currSquare);
-    setPossibleMove('set')(position as Square);
+      if(active){
+        activePieceHandler('reset')();
+        setPossibleMove('reset')();
+        return;
+      }
+      
+      const currSquare: PieceInfoModel = { type, color, square: position as Square}
+      activePieceHandler('set')(currSquare);
+      setPossibleMove('set')(position as Square);
   }
   
-  const piecePath = getSrc[color][type];
+  const pieceSrc = getSrc[color][type];
 
   return (
     <div 
       className={`${styles.piece} ${isDragging ? styles.dragging: ''}`}
       >
       <img 
-        src={piecePath}
+        src={pieceSrc}
         alt={`${color} ${type}`}
         ref={drag}
         style={{ opacity: isDragging ? 0.5 : 1 }}
