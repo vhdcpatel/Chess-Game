@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
+const sequelize = require('./models/index');
+const users = require('./models/users');
+
 require('dotenv').config();
 
 // local imports.
@@ -20,6 +24,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api', dummyRoutes);
+
+// Database connection
+sequelize.sync({ force: false })
+.then((res)=>{
+    console.log(res);
+});
 
 // Error handling middleware (example)
 app.use((err, req, res, next) => {
