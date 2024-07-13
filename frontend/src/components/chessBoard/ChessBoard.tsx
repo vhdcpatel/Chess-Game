@@ -42,12 +42,19 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         // Handling the checkMate, staleMate and Draw state currently.
         if(gameStatus === 'CheckMate'){
             alert(`CheckMate ${gameState.turn === 'w' ? 'black':'white'} won the game`);
+            // setGame(new Chess(defaultStartFEN));
         }else if(gameStatus === 'Draw'){
             alert(`Game Draw`);
         }else if(gameStatus === 'StaleMate'){
             alert(`StaleMate Positions for the ${gameState.turn === 'b' ? 'Black':'White'} player.`);
         }
-    },[gameState])
+    },[gameState]);
+
+    // Update the game state based on the game after move completes.
+    useEffect(()=>{
+        const gameStatus = getGameStatus(game);
+        setGameState(gameStatus);
+    },[game])
 
 
     const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
@@ -60,8 +67,9 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         if (result) {
             // If valid move then update the game state.
             setGame(newGame);
-            let gameStatus = getGameStatus(newGame);
-            setGameState(gameStatus);
+            // It was too quick even before moving the piece.
+            // let gameStatus = getGameStatus(newGame);
+            // setGameState(gameStatus);
             setHistory([...history, result]);
             possibleMoveSetterHandler('reset')();
             activePieceHandler('reset')();
@@ -138,6 +146,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                     <div key={rank} className={styles.ranks} >
                     {FilesToRender.map((file,FileIndex) => {
                         const piece = boardPosition[RankIndex][FileIndex];
+                        const isCheckOrMate = (gameState.gameState === "Check" || gameState.gameState==="CheckMate") && gameState.turn === piece?.color && piece?.type === 'k';
                         return (
                             <Square
                                 key={`${file}${rank}`}
@@ -147,6 +156,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                 onDrop={onDropHandler}
                                 isPossibleMove={possibleMoves.includes(`${file}${rank}`)}
                                 isActive={activePiece?.square === `${file}${rank}`}
+                                isCheckOrMate={isCheckOrMate}
                             >
                                 {piece && (
                                     <Piece

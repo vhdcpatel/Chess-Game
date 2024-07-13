@@ -75,7 +75,7 @@ const Piece: React.FC<PieceProps> = (props) => {
         src={pieceSrc}
         alt={`${color} ${type}`}
         ref={drag}
-        style={{ opacity: isDragging ? 0.5 : 1 }}
+        style={{ opacity: isDragging ? 0.5 : 1, zIndex: 2}}
         draggable={false}
         onClick={handleClick}
       ></img>
