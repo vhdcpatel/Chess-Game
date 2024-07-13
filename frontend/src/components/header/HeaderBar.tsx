@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const pages = [{
   name: 'Game',
@@ -56,7 +57,7 @@ const  HeaderBar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <MenuIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <FavoriteIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap

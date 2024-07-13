@@ -1,15 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
 import styles from './chessBoard.module.css';
-import {   PieceInfoModel } from '../../utils/constants/initialPosition';
+import {   GameStatus, initialStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
-import { getPromotionPieceHandler } from '../../utils/handleMoves/handleMoves';
+import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
+import getGameStatus from '../../utils/getGameStatus';
 
 interface ChessBoardProps {
     player: 'white' | 'black';
@@ -29,13 +30,25 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
-    const [turn, setTurn] = useState<Color>('w');
+    const [gameState, setGameState] = useState<GameStatus>(initialStatus);
     
     // future implementation
     // Handle check, stalemate, checkmate or draw state. for the game. 
     const [history, setHistory] = useState<Move[]>([]); 
     // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
    
+    useEffect(()=>{
+        let gameStatus = gameState.gameState;
+        // Handling the checkMate, staleMate and Draw state currently.
+        if(gameStatus === 'CheckMate'){
+            alert(`CheckMate ${gameState.turn === 'w' ? 'black':'white'} won the game`);
+        }else if(gameStatus === 'Draw'){
+            alert(`Game Draw`);
+        }else if(gameStatus === 'StaleMate'){
+            alert(`StaleMate Positions for the ${gameState.turn === 'b' ? 'Black':'White'} player.`);
+        }
+    },[gameState])
+
 
     const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
         // Create a new chess.js instance to not mutate the current game.
@@ -45,13 +58,13 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         console.log(result);
         
         if (result) {
+            // If valid move then update the game state.
             setGame(newGame);
-            const isCheck = newGame.isCheck();
-            console.log(isCheck);
+            let gameStatus = getGameStatus(newGame);
+            setGameState(gameStatus);
             setHistory([...history, result]);
             possibleMoveSetterHandler('reset')();
             activePieceHandler('reset')();
-            setTurn(newGame.turn());
         }else{
             alert("Invalid Move");
         }
@@ -89,7 +102,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setActivePiece(null);
             return;
         }
-        if(PieceInfo?.color === turn){
+        if(PieceInfo?.color === gameState.turn){
             PieceInfo && setActivePiece((prev)=>{
                 if(prev?.square === PieceInfo.square){
                     return null;
@@ -114,6 +127,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     console.log(activePiece);
     console.log(possibleMoves);
     console.log(history);
+    console.log(gameState);
     
     const boardPosition = player ==='white' ? game.board() : game.board().reverse();
 

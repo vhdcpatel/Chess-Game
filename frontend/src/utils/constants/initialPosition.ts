@@ -13,5 +13,15 @@ export interface PieceInfoModel {
   color: Color;
 }
 
+export interface GameStatus {
+  turn: Color;
+  gameState: 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
+}
+
+export const initialStatus:GameStatus = {
+  turn: 'w',
+  gameState: 'OnGoing'
+}
+
 
 export const DEFAULT_POSITION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
