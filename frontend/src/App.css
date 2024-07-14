@@ -1,6 +1,6 @@
 #root {
   /* Set with one more layer for handling of the extra wide screens. */
-  max-width: 1580px;
+  /* max-width: 1580px; */
   width: 100%;
   height: calc(100vh);
   box-sizing: border-box;  
