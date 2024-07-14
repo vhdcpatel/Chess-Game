@@ -42,7 +42,9 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         let gameStatus = gameState.gameState;
         // Handling the checkMate, staleMate and Draw state currently.
         if(gameStatus === 'CheckMate'){
-            alert(`CheckMate ${gameState.turn === 'w' ? 'black':'white'} won the game`);
+            setTimeout(()=>{
+                alert(`CheckMate ${gameState.turn === 'w' ? 'black':'white'} won the game`);
+            },0);
             // setGame(new Chess(defaultStartFEN));
         }else if(gameStatus === 'Draw'){
             alert(`Game Draw`);
@@ -54,21 +56,24 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     // Update the game state based on the game after move completes.
     useEffect(()=>{
         // update the game status based on new game status.
-        const gameStatusUpdated = getGameStatus(game);
-        setGameState(gameStatusUpdated);
+        const gameStatus = getGameStatus(game);
+        setGameState(gameStatus);
 
         // Use min max to get the next move for the black piece for the testing.
-        if(gameStatusUpdated.gameState === "OnGoing" && game.turn() !== 'w'){
-            const bestMove = getBestMove(game,3);
-            if(bestMove){
-                console.log(bestMove);
-                const newGame = new Chess(game.fen());
-                let res = newGame.move(bestMove);
-                if(res){
-                    setGame(newGame);
-                    setHistory([...history, res]);
+        if(!isMultiPlayer){
+            if(gameStatus.gameState === "OnGoing" && game.turn() !== 'w'){
+                const bestMove = getBestMove(game,3);
+                if(bestMove){
+                    console.log(bestMove);
+                    const newGame = new Chess(game.fen());
+                    let res = newGame.move(bestMove);
+                    if(res){
+                        setGame(newGame);
+                        setHistory([...history, res]);
+                    }
                 }
             }
+
         }
     },[game])
 
@@ -83,9 +88,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         if (result) {
             // If valid move then update the game state.
             setGame(newGame);
-            // It was too quick even before moving the piece.
-            // let gameStatus = getGameStatus(newGame);
-            // setGameState(gameStatus);
             setHistory([...history, result]);
             possibleMoveSetterHandler('reset')();
             activePieceHandler('reset')();

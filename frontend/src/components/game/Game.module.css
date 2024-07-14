@@ -9,3 +9,30 @@
 
 }
 
+.outerCtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column ;
+}
+
+.innerCtn {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.actionBox {
+  margin-top: 0.75rem;
+}
+
+.actionBoxInner {
+  display: flex;
+  justify-content: center;
+}
+
+.icons {
+  width: 1.5625rem;
+  height: 1.5625rem;
+}
