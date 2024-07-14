@@ -11,6 +11,7 @@ import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js
 import Piece from '../pieces/Piece';
 import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
 import getGameStatus from '../../utils/getGameStatus';
+import { getBestMove } from '../../utils/minMax/minMax';
 
 interface ChessBoardProps {
     player: 'white' | 'black';
@@ -52,8 +53,23 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     // Update the game state based on the game after move completes.
     useEffect(()=>{
-        const gameStatus = getGameStatus(game);
-        setGameState(gameStatus);
+        // update the game status based on new game status.
+        const gameStatusUpdated = getGameStatus(game);
+        setGameState(gameStatusUpdated);
+
+        // Use min max to get the next move for the black piece for the testing.
+        if(gameStatusUpdated.gameState === "OnGoing" && game.turn() !== 'w'){
+            const bestMove = getBestMove(game,3);
+            if(bestMove){
+                console.log(bestMove);
+                const newGame = new Chess(game.fen());
+                let res = newGame.move(bestMove);
+                if(res){
+                    setGame(newGame);
+                    setHistory([...history, res]);
+                }
+            }
+        }
     },[game])
 
 

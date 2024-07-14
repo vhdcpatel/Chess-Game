@@ -14,6 +14,11 @@ const getGameStatus = (game: Chess): GameStatus => {
     if (game.isCheck()) {
         return {turn: game.turn() as Color, gameState: 'Check'};
     }
+    // Future implementation
+    // isInsufficientMaterial(): boolean;
+    // isThreefoldRepetition(): boolean;
+    // isDraw(): boolean;
+    // isGameOver(): boolean;
 
     return {turn: game.turn() as Color, gameState: 'OnGoing'};
 }
