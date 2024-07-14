@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../Game.module.css';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from '@mui/material';
 import { getSrc } from '../../../utils/constants/srcMap';
+import PersonIcon from '@mui/icons-material/Person';
+import ComputerIcon from '@mui/icons-material/Computer';
 import { gameInfoModel } from '../Game';
 
 interface StartGameDialogBoxProps {
@@ -32,23 +34,26 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
         aria-describedby="alert-dialog-description"
         maxWidth='xl'
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" className={styles.headerText}>
           {"Please Select the Game Mode"}
         </DialogTitle>
-        <DialogContent>
+        <Divider/>
+        <div className={styles.dialogCtn}>
             <div className={styles.outerCtn}>
-              <h3>Please select mode to play.</h3>
+              <h3 className={styles.titleText}>Please select mode to play.</h3>
               <div className={styles.innerCtn}>
-                <Button onClick={handleUpdates('mode')(false)}  variant={!(gameInfoLocal.isMultiPlayer) ? 'contained' : 'outlined'} startIcon={<img className={styles.icons} src={getSrc['w']['k']}/>}>
+                <Button onClick={handleUpdates('mode')(false)}  variant={!(gameInfoLocal.isMultiPlayer) ? 'contained' : 'outlined'} startIcon={<ComputerIcon/>}>
                   Single Player
                 </Button>
-                <Button onClick={handleUpdates('mode')(true)} variant={(gameInfoLocal.isMultiPlayer) ? 'contained' : 'outlined'} startIcon={<img className={styles.icons}  src={getSrc['b']['k']}/>}>
+                <Button onClick={handleUpdates('mode')(true)} variant={(gameInfoLocal.isMultiPlayer) ? 'contained' : 'outlined'} startIcon={<PersonIcon/>}>
                   Multi Player
                 </Button>
               </div>
             </div>
             <div className={styles.outerCtn}>
-              <h3>Please select side to play.</h3>
+              <h3 className={styles.titleText}>
+                Please select side to play.
+              </h3>
               <div className={styles.innerCtn}>
               <Button onClick={handleUpdates('color')('white')}  variant={gameInfoLocal.player === "white" ? 'contained' : 'outlined'} startIcon={<img className={styles.icons} src={getSrc['w']['k']}/>}>
                   White
@@ -65,7 +70,7 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
                 </Button>
               </div>
             </div>
-        </DialogContent>
+        </div>
       </Dialog>
     </React.Fragment>
   );

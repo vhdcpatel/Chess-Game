@@ -9,6 +9,21 @@
 
 }
 
+.dialogCtn {
+  padding: 0.625rem 0.9375rem;
+}
+
+.headerText {
+  font-weight: 600;
+}
+
+.titleText {
+  margin-block-start: 0.5rem ;
+  margin-block-end: 0.75rem ;
+  font-weight: 500;
+  /* padding: 0.625rem; */
+}
+
 .outerCtn {
   width: 100%;
   display: flex;
@@ -24,7 +39,7 @@
 }
 
 .actionBox {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
 }
 
 .actionBoxInner {
