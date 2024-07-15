@@ -11,13 +11,15 @@ import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js
 import Piece from '../pieces/Piece';
 import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
 import getGameStatus from '../../utils/getGameStatus';
-import { getBestMove } from '../../utils/minMax/minMax';
+import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
 
 interface ChessBoardProps {
     player: 'white' | 'black';
     initialPosition?: string;
     isMultiPlayer: boolean;
 }
+// For test latter move in the state.
+let globalSum = 0;
 
 const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -60,21 +62,23 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         setGameState(gameStatus);
 
         // Use min max to get the next move for the black piece for the testing.
-        if(!isMultiPlayer){
+        // if(!isMultiPlayer){
             if(gameStatus.gameState === "OnGoing" && game.turn() !== 'w'){
-                const bestMove = getBestMove(game,3);
-                if(bestMove){
-                    console.log(bestMove);
-                    const newGame = new Chess(game.fen());
-                    let res = newGame.move(bestMove);
-                    if(res){
-                        setGame(newGame);
-                        setHistory([...history, res]);
-                    }
-                }
+                let move = getBestMoveNew(game,'b',1,0)[0];
+                console.log(move);
+                
+                // if(bestMove){
+                //     console.log(bestMove);
+                //     const newGame = new Chess(game.fen());
+                //     let res = newGame.move(bestMove);
+                //     if(res){
+                //         setGame(newGame);
+                //         setHistory([...history, res]);
+                //     }
+                // }
             }
 
-        }
+        // }
     },[game])
 
 

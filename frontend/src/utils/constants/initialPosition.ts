@@ -16,11 +16,13 @@ export interface PieceInfoModel {
 export interface GameStatus {
   turn: Color;
   gameState: 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
+  globalSum: number;
 }
 
 export const initialStatus:GameStatus = {
   turn: 'w',
-  gameState: 'OnGoing'
+  gameState: 'OnGoing',
+  globalSum: 0
 }
 
 
