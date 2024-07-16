@@ -47,7 +47,8 @@ function minimax(game:Chess, depth:number, alpha:number, beta:number, isMaximizi
     var currPrettyMove = game.move(currMove);
     var newSum = evaluateBoard(game, currPrettyMove, sum, color);
     // Removed the child refer code for more info.
-    var [ childValue ] = minimax(
+    // @ts-ignore (Getting some error in evaluation if removed childBestMove)
+    let [childBestMove, childValue] = minimax(
       game,
       depth - 1,
       alpha,
