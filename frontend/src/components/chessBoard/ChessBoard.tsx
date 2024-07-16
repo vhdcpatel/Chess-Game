@@ -57,7 +57,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         if(isSinglePlayer){
             if(gameStatus === "OnGoing" && game.turn() !== player){
                 // CPU intensive task.
-                let moveInfo = getBestMoveNew(game,player,2,gameState.globalSum);
+                let moveInfo = getBestMoveNew(game,player,3,gameState.globalSum);
                 setGameState((prev)=>({...prev, globalSum: moveInfo[2]}));
                 
                 let bestMove = moveInfo[0];
