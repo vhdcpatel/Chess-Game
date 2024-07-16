@@ -1,3 +1,7 @@
+/*
+* This file is responsible for generating all possible moves for a given piece from board info *
+* But In the newer version we are using the chess.js library for getting all possible moves. * 
+
 import { PieceModel } from './constants/initialPosition';
 import { PieceTypes, PieceType } from './constants/srcMap';
 import { FILES, RANKS } from './constants/ranksAndFiles';
@@ -241,3 +245,4 @@ const getPossibleMoves = (piece: PieceModel, piecesPositions: PieceModel[], chec
 };
 
 export default getPossibleMoves;
+*/

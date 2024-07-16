@@ -26,7 +26,7 @@ function minimax(game:Chess, depth:number, alpha:number, beta:number, isMaximizi
   let children = game.moves({ verbose: true });
 
   // Sort moves randomly, so the same move isn't always picked on ties
-  children.sort(function (a, b) {
+  children.sort(function () {
     return 0.5 - Math.random();
   });
 
@@ -46,7 +46,8 @@ function minimax(game:Chess, depth:number, alpha:number, beta:number, isMaximizi
     // Note: in our case, the 'children' are simply modified game states
     var currPrettyMove = game.move(currMove);
     var newSum = evaluateBoard(game, currPrettyMove, sum, color);
-    var [childBestMove, childValue] = minimax(
+    // Removed the child refer code for more info.
+    var [ childValue ] = minimax(
       game,
       depth - 1,
       alpha,

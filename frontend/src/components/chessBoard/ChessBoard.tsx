@@ -7,7 +7,7 @@ import Square from '../square/Square';
 import styles from './chessBoard.module.css';
 import { GameStatus, initialStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
-import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
+import { Chess, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
 import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
 import getGameStatus from '../../utils/getGameStatus';
@@ -22,7 +22,7 @@ interface ChessBoardProps {
 const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
-    const { player, initialPosition, isSinglePlayer } = props;
+    const { player, isSinglePlayer } = props;
     console.log(props);
     
 

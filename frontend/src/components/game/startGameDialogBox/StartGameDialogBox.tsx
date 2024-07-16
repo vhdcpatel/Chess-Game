@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../Game.module.css';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from '@mui/material';
+import { Button, Dialog, DialogTitle, Divider } from '@mui/material';
 import { getSrc } from '../../../utils/constants/srcMap';
 import PersonIcon from '@mui/icons-material/Person';
 import ComputerIcon from '@mui/icons-material/Computer';

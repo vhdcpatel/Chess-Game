@@ -1,4 +1,4 @@
-import { Chess, Move, PieceSymbol } from "chess.js";
+import { Chess, Move } from "chess.js";
 import { pstOpponent, pstSelf, weights } from "./weights";
 
 function evaluateBoard(game: Chess, move:Move, prevSum:number, color:'w' | 'b'):number {
@@ -43,6 +43,7 @@ function evaluateBoard(game: Chess, move:Move, prevSum:number, color:'w' | 'b'):
   if (prevSum < -1500) {
     if (move.piece === 'k') {
       // Check I don't know ?
+      // @ts-ignore
       move.piece = 'k_e';
     }
     // Kings can never be captured

@@ -21,7 +21,7 @@ const Square: React.FC<SquareProps> = (props) => {
   const isLight = (Number(rank) + charToNum(file)) % 2 !== 0;
 
 
-  const [{ isOver }, drop] = useDrop({
+  const [{ }, drop] = useDrop({
     accept: 'piece',
     drop: (item: PieceInfoModel) => onDrop(item, rank, file),
     collect: (monitor) => ({

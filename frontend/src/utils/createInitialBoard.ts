@@ -1,3 +1,6 @@
+/*
+* This file was used in creating the initial board for the chess game. *
+* In newer version we are using the chess.js for getting board state. *
 import { INITIALPOSITIONS, PieceModel } from "./constants/initialPosition";
 
 const pieceToSymbol = (type: string, color: string): string => {
@@ -32,4 +35,4 @@ const createInitialBoard = (pieces: PieceModel[]): (string | null)[][] => {
 };
 
 const initialBoard = createInitialBoard(INITIALPOSITIONS);
-console.log(initialBoard);
+*/
