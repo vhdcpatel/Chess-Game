@@ -159,8 +159,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     console.log(history);
     console.log(gameState);
     
-    const boardPosition = player ==='white' ? game.board() : game.board().reverse();
-
+    const boardPosition = player ==='white' ? game.board() : (game.board().map((row)=>(row.reverse()))).reverse();
+    
     return (
         <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <div className={styles.mainOuterCtn}>
