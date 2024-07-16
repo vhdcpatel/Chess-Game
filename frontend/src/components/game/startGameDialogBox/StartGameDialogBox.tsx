@@ -42,11 +42,11 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
             <div className={styles.outerCtn}>
               <h3 className={styles.titleText}>Please select mode to play.</h3>
               <div className={styles.innerCtn}>
-                <Button onClick={handleUpdates('mode')(true)}  variant={(gameInfoLocal.isSinglePlayer) ? 'contained' : 'outlined'} startIcon={<ComputerIcon/>}>
-                  Single Player
-                </Button>
                 <Button onClick={handleUpdates('mode')(false)} variant={!(gameInfoLocal.isSinglePlayer) ? 'contained' : 'outlined'} startIcon={<PersonIcon/>}>
                   Multi Player
+                </Button>
+                <Button onClick={handleUpdates('mode')(true)}  variant={(gameInfoLocal.isSinglePlayer) ? 'contained' : 'outlined'} startIcon={<ComputerIcon/>}>
+                  Single Player
                 </Button>
               </div>
             </div>
