@@ -25,11 +25,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api', dummyRoutes);
 
+
 // Database connection
-sequelize.sync({ force: false })
-.then((res)=>{
-    console.log(res);
-});
+sequelize.sync({})
+  .then((res) => {
+    console.log('Database synchronized successfully.',res);
+  })
+  .catch((err) => {
+    console.error('Error synchronizing the database:', err);
+  });
 
 // Error handling middleware (example)
 app.use((err, req, res, next) => {
