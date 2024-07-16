@@ -12,7 +12,6 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const pages = [{
   name: 'Game',
@@ -57,12 +56,11 @@ const  HeaderBar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <FavoriteIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="#vhdc"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -73,7 +71,7 @@ const  HeaderBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Chess.JS
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -112,12 +110,11 @@ const  HeaderBar = () => {
               ))}
             </Menu>
           </Box>
-          <MenuIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="#vhdc"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -129,7 +126,7 @@ const  HeaderBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Chess.JS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
