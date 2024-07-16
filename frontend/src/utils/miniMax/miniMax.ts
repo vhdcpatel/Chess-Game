@@ -22,7 +22,7 @@ import evaluateBoard from "./evalutions";
  * Modified from the original code of the Zhang Zeyu.
  */
 
-function minimax(game:Chess, depth:number, alpha:number, beta:number, isMaximizingPlayer:boolean, sum:number, color:'w' | 'b'):[Move | null | undefined, Number] {
+function minimax(game:Chess, depth:number, alpha:number, beta:number, isMaximizingPlayer:boolean, sum:number, color:'w' | 'b'):[Move | null | undefined, number] {
   let children = game.moves({ verbose: true });
 
   // Sort moves randomly, so the same move isn't always picked on ties

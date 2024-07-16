@@ -16,11 +16,11 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
   const {isOpen, handleClose,gameInfo } = props;
   const [gameInfoLocal, setGameInfoLocal] = useState(gameInfo);
 
-  const handleUpdates = (type: 'mode' | 'color')=>(value: 'white' | 'black' | boolean)=>()=>{
+  const handleUpdates = (type: 'mode' | 'color')=>(value: 'w' | 'b' | boolean)=>()=>{
     if(type === 'mode'){
-      setGameInfoLocal({...gameInfoLocal, isMultiPlayer: value as boolean});
+      setGameInfoLocal({...gameInfoLocal, isSinglePlayer: value as boolean});
     }else if(type === 'color'){
-      setGameInfoLocal({...gameInfoLocal, player: value as 'white' | 'black'});
+      setGameInfoLocal({...gameInfoLocal, player: value as 'w' | 'b'});
     }
   }
   
@@ -42,10 +42,10 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
             <div className={styles.outerCtn}>
               <h3 className={styles.titleText}>Please select mode to play.</h3>
               <div className={styles.innerCtn}>
-                <Button onClick={handleUpdates('mode')(false)}  variant={!(gameInfoLocal.isMultiPlayer) ? 'contained' : 'outlined'} startIcon={<ComputerIcon/>}>
+                <Button onClick={handleUpdates('mode')(true)}  variant={(gameInfoLocal.isSinglePlayer) ? 'contained' : 'outlined'} startIcon={<ComputerIcon/>}>
                   Single Player
                 </Button>
-                <Button onClick={handleUpdates('mode')(true)} variant={(gameInfoLocal.isMultiPlayer) ? 'contained' : 'outlined'} startIcon={<PersonIcon/>}>
+                <Button onClick={handleUpdates('mode')(false)} variant={!(gameInfoLocal.isSinglePlayer) ? 'contained' : 'outlined'} startIcon={<PersonIcon/>}>
                   Multi Player
                 </Button>
               </div>
@@ -55,10 +55,10 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
                 Please select side to play.
               </h3>
               <div className={styles.innerCtn}>
-              <Button onClick={handleUpdates('color')('white')}  variant={gameInfoLocal.player === "white" ? 'contained' : 'outlined'} startIcon={<img className={styles.icons} src={getSrc['w']['k']}/>}>
+              <Button onClick={handleUpdates('color')('w')}  variant={gameInfoLocal.player === "w" ? 'contained' : 'outlined'} startIcon={<img className={styles.icons} src={getSrc['w']['k']}/>}>
                   White
                 </Button>
-                <Button onClick={handleUpdates('color')('black')} variant={gameInfoLocal.player === "black" ? 'contained' : 'outlined'} startIcon={<img className={styles.icons}  src={getSrc['b']['k']}/>}>
+                <Button onClick={handleUpdates('color')('b')} variant={gameInfoLocal.player === "b" ? 'contained' : 'outlined'} startIcon={<img className={styles.icons}  src={getSrc['b']['k']}/>}>
                   Black
                 </Button>
               </div>

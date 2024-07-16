@@ -13,10 +13,12 @@ interface PieceProps {
   active: boolean;
   setPossibleMove: (option: "set" | "reset") => (square?: Square) => void;
   activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => void;
+  isSinglePlayer: boolean;
+  player: 'w' | 'b';
 }
 
 const Piece: React.FC<PieceProps> = (props) => {
-  const { type, color, position, setPossibleMove, activePieceHandler, active} = props;
+  const { type, color, position, setPossibleMove, activePieceHandler, active, isSinglePlayer, player} = props;
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -40,7 +42,9 @@ const Piece: React.FC<PieceProps> = (props) => {
         // last updated values. 
         return;
       }
-      console.log('drag started.');
+      if(isSinglePlayer && player !== color){
+        return;
+      }
       const currSquare = { type, color, square: position };
       activePieceHandler('set')(currSquare as PieceInfoModel);
       setPossibleMove('set')(position as Square);
@@ -59,7 +63,9 @@ const Piece: React.FC<PieceProps> = (props) => {
         setPossibleMove('reset')();
         return;
       }
-      
+      if(isSinglePlayer && player !== color){
+        return;
+      }
       const currSquare: PieceInfoModel = { type, color, square: position as Square}
       activePieceHandler('set')(currSquare);
       setPossibleMove('set')(position as Square);

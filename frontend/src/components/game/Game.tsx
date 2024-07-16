@@ -5,9 +5,9 @@ import styles from './Game.module.css';
 import StartGameDialogBox from './startGameDialogBox/StartGameDialogBox';
 
 export interface gameInfoModel {
-  player: 'white' | 'black';
+  player: 'w' | 'b';
   initialPosition?: string;
-  isMultiPlayer: boolean;
+  isSinglePlayer: boolean;
 
 }
 
@@ -15,9 +15,9 @@ const Game: React.FC = (props) => {
   const {} = props;
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [gameInfo, setGameInfo] = useState<gameInfoModel>({
-    player: 'white',
+    player: 'w',
     initialPosition: DEFAULT_POSITION,
-    isMultiPlayer: true
+    isSinglePlayer: false
   });
 
   useEffect(()=>{
@@ -29,17 +29,11 @@ const Game: React.FC = (props) => {
     setGameInfo(FinalGameInfo);
   };
 
-  const handleGameInfoUpdate = ()=>{
-
-  };
-
-
-
   return (
     <React.Fragment>
       <StartGameDialogBox isOpen={dialogOpen} handleClose={handleCloseDialog} gameInfo={gameInfo} />
       <div className={styles.mainOuterCtn}>
-        <ChessBoard player={gameInfo.player} initialPosition={DEFAULT_POSITION} isMultiPlayer={true} />
+        <ChessBoard player={gameInfo.player} initialPosition={DEFAULT_POSITION} isSinglePlayer={gameInfo.isSinglePlayer} />
       </div>
     </React.Fragment>
   );

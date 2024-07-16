@@ -1,7 +1,9 @@
 import { Chess, Color } from "chess.js";
 import { GameStatus } from "./constants/initialPosition";
 
-const getGameStatus = (game: Chess): GameStatus => {
+interface gameCurrInfoModel extends Omit<GameStatus, 'globalSum'> {}
+
+const getGameStatus = (game: Chess): gameCurrInfoModel => {
     if (game.isCheckmate()) {
         return {turn: game.turn() as Color, gameState: 'CheckMate'};
     }

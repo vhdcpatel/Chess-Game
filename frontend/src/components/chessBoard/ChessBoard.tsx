@@ -5,7 +5,7 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
 import styles from './chessBoard.module.css';
-import {   GameStatus, initialStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
+import { GameStatus, initialStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import { Chess, Color, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
@@ -14,29 +14,27 @@ import getGameStatus from '../../utils/getGameStatus';
 import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
 
 interface ChessBoardProps {
-    player: 'white' | 'black';
+    player: 'w' | 'b';
     initialPosition?: string;
-    isMultiPlayer: boolean;
+    isSinglePlayer: boolean;
 }
-// For test latter move in the state.
-let globalSum = 0;
 
 const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
-    const { player, initialPosition, isMultiPlayer } = props;
+    const { player, initialPosition, isSinglePlayer } = props;
+    console.log(props);
+    
 
     // Handle the render board based on the player.
-    const FilesToRender = player === 'white' ? FILES : [...FILES].reverse();
-    const RanksToRender = player === 'white' ? RANKS : [...RANKS].reverse();
+    const FilesToRender = player === 'w' ? FILES : [...FILES].reverse();
+    const RanksToRender = player === 'w' ? RANKS : [...RANKS].reverse();
 
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
     const [gameState, setGameState] = useState<GameStatus>(initialStatus);
     
-    // future implementation
-    // Handle check, stalemate, checkmate or draw state. for the game. 
     const [history, setHistory] = useState<Move[]>([]); 
     // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
    
@@ -53,32 +51,36 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }else if(gameStatus === 'StaleMate'){
             alert(`StaleMate Positions for the ${gameState.turn === 'b' ? 'Black':'White'} player.`);
         }
-    },[gameState]);
 
-    // Update the game state based on the game after move completes.
-    useEffect(()=>{
-        // update the game status based on new game status.
-        const gameStatus = getGameStatus(game);
-        setGameState(gameStatus);
-
-        // Use min max to get the next move for the black piece for the testing.
-        // if(!isMultiPlayer){
-            if(gameStatus.gameState === "OnGoing" && game.turn() !== 'w'){
-                let move = getBestMoveNew(game,'b',1,0)[0];
-                console.log(move);
+        // If single player then find the move for the computer.
+        // (putting here so it can not block state update of the other side.)
+        if(isSinglePlayer){
+            if(gameStatus === "OnGoing" && game.turn() !== player){
+                // CPU intensive task.
+                let moveInfo = getBestMoveNew(game,player,2,gameState.globalSum);
+                setGameState((prev)=>({...prev, globalSum: moveInfo[2]}));
                 
-                // if(bestMove){
-                //     console.log(bestMove);
-                //     const newGame = new Chess(game.fen());
-                //     let res = newGame.move(bestMove);
-                //     if(res){
-                //         setGame(newGame);
-                //         setHistory([...history, res]);
-                //     }
-                // }
+                let bestMove = moveInfo[0];
+                if(bestMove){
+                    const newGame = new Chess(game.fen());
+                    let res = newGame.move(bestMove);
+                    if(res){
+                        setGame(newGame);
+                        setHistory([...history, res]);
+                    }
+                }
             }
+        }
+    },[gameState, isSinglePlayer, player]);
 
-        // }
+    useEffect(()=>{
+        const gameStatus = getGameStatus(game);
+        setGameState((prev)=>({
+            ...prev,
+            turn: gameStatus.turn,
+            gameState: gameStatus.gameState,
+            globalSum: prev.globalSum
+        }));
     },[game])
 
 
@@ -87,7 +89,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         const newGame = new Chess(game.fen());
 
         const result = newGame.move({from, to, promotion});
-        console.log(result);
         
         if (result) {
             // If valid move then update the game state.
@@ -114,11 +115,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     }
     
     const onDropHandler = (item: PieceInfoModel, rank: string, file: string) => {
-        // Handle the same move
-        // if(item.square === `${file}${rank}`){
-        //     alert("Invalid Move");
-        //     return;
-        // }
         handleMove(item.square, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
     }
 
@@ -132,7 +128,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setActivePiece(null);
             return;
         }
-        if(PieceInfo?.color === gameState.turn){
+        if(PieceInfo?.color === gameState.turn && (!isSinglePlayer || player === PieceInfo.color)){
             PieceInfo && setActivePiece((prev)=>{
                 if(prev?.square === PieceInfo.square){
                     return null;
@@ -153,13 +149,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setPossibleMoves(possibleMovesModified);
         }
     };
-
-    console.log(activePiece);
-    console.log(possibleMoves);
-    console.log(history);
-    console.log(gameState);
     
-    const boardPosition = player ==='white' ? game.board() : (game.board().map((row)=>(row.reverse()))).reverse();
+    const boardPosition = player ==='w' ? game.board() : (game.board().map((row)=>(row.reverse()))).reverse();
     
     return (
         <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
@@ -186,6 +177,8 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         color={piece.color}
                                         position={piece.square}
                                         active={activePiece?.square === piece.square}
+                                        isSinglePlayer={isSinglePlayer}
+                                        player={player}
                                         activePieceHandler={activePieceHandler}
                                         setPossibleMove={possibleMoveSetterHandler}
                                     />
