@@ -13,23 +13,31 @@ describe('Square component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+  
+  const defaultProps = {
+    isActive: false,
+    isPossibleMove: false,
+    isCheckOrMate: false,
+    onDrop: vi.fn(),
+    onClick: vi.fn(),
+  };
 
   it('should render correctly', () => {
     (charToNum as Mock).mockReturnValue(1); 
-    const { getByText } = render(<Square rank="A" file="1" />);
+    const { getByText } = render(<Square {...defaultProps} rank="A" file="1" />);
     expect(getByText('A1')).toBeInTheDocument();
   });
 
   it('should apply light class for light squares', () => {
     (charToNum as Mock).mockReturnValue(1);
-    const { container } = render(<Square rank="A" file="8" />);
+    const { container } = render(<Square {...defaultProps} rank="A" file="8" />);
     expect(container.firstChild).toHaveClass(styles.light);
     expect(container.firstChild).toHaveClass(styles.square);
   });
 
   it('should apply dark class for dark squares', () => {
     (charToNum as Mock).mockReturnValue(2); 
-    const { container } = render(<Square rank="A" file="2" />);
+    const { container } = render(<Square {...defaultProps} rank="A" file="2" />);
     expect(container.firstChild).toHaveClass(styles.dark);
     expect(container.firstChild).toHaveClass(styles.square);
   });

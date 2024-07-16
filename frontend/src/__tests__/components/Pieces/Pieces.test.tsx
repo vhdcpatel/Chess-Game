@@ -22,14 +22,21 @@ vi.mock('../../utils/constants/srcMap', () => ({
 
 describe('Should render the piece component correctly.', () => {
   
+
+
   const defaultProps = {
-    type: 'king' as PieceType,
-    color: 'white' as PieceColor,
-    position: 'e4'
+    type: "p" as PieceType,
+    color: "w" as PieceColor,
+    position: "a1" ,
+    active: false,
+    setPossibleMove: vi.fn(),
+    activePieceHandler: vi.fn(),
+    isSinglePlayer: false,
+    player: 'w' as 'w' | 'b',
   };
 
   it('renders correctly with given props', () => {
-    render(<Piece {...defaultProps} />);
+    render(<Piece  {...defaultProps} />);
     const pieceElement = screen.getByRole('img');
 
     expect(pieceElement).toHaveAttribute('src', getSrc[defaultProps.color][defaultProps.type]);

@@ -24,14 +24,14 @@ describe("For proper rendering of the chess board", () => {
 
 
   it("Should render the chess board", () => {
-    render(<ChessBoard player="white" />);
+    render(<ChessBoard player="w" isSinglePlayer={false} />);
     const chessBoard = screen.getAllByTestId('square');
     expect(chessBoard).toHaveLength(64);
   });
 
   // Not using the content so use class or some other workaround.
   it("Should render squares with correct ranks and files fow white player.", () => {
-    render(<ChessBoard player="white" />);
+    render(<ChessBoard player="w" isSinglePlayer={false} />);
     const squares = screen.getAllByTestId('square');
 
     const ranks = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -44,7 +44,7 @@ describe("For proper rendering of the chess board", () => {
   });
 
   it("Should render squares with correct ranks and files fow black player.", () => {
-    render(<ChessBoard player="black" />);
+    render(<ChessBoard player="b" isSinglePlayer={false}/>);
     const squares = screen.getAllByTestId('square');
 
     const ranks = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse();
