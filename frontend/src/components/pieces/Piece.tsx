@@ -39,8 +39,6 @@ const Piece: React.FC<PieceProps> = (props) => {
       if (active) {
         activePieceHandler('reset')();
         setPossibleMove('reset')();
-        // Instead of return update the logic for the handler based on 
-        // last updated values. 
         return;
       }
       if(isSinglePlayer && player !== color){
