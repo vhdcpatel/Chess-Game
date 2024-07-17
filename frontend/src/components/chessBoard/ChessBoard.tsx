@@ -124,7 +124,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     // Handle the possible moves for the selected piece.
     const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => {
-        if (type === "reset") {
+            if (type === "reset") {
             setActivePiece(null);
             return;
         }
@@ -143,7 +143,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setPossibleMoves([]);
             return;
         }
-        if(square){
+        if(square && (gameState.turn === game.get(square)?.color)){
             const possibleMoves = game.moves({square, verbose: true});
             const possibleMovesModified = possibleMoves.map(move => move.to);
             setPossibleMoves(possibleMovesModified);

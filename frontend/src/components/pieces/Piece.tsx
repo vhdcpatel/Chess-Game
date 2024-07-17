@@ -5,6 +5,7 @@ import { useDrag } from 'react-dnd';
 import isFirefox from '../../utils/detectFireFox';
 import { Square } from 'chess.js';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
+import { useMediaQuery } from '@mui/material';
 
 interface PieceProps {
   type: PieceType;
@@ -38,8 +39,6 @@ const Piece: React.FC<PieceProps> = (props) => {
       if (active) {
         activePieceHandler('reset')();
         setPossibleMove('reset')();
-        // Instead of return update the logic for the handler based on 
-        // last updated values. 
         return;
       }
       if(isSinglePlayer && player !== color){
@@ -72,6 +71,8 @@ const Piece: React.FC<PieceProps> = (props) => {
   }
   
   const pieceSrc = getSrc[color][type];
+  const isMobileScreen = useMediaQuery('(max-width: 1000px)');
+
 
   return (
     <div 
@@ -80,7 +81,7 @@ const Piece: React.FC<PieceProps> = (props) => {
       <img 
         src={pieceSrc}
         alt={`${color} ${type}`}
-        ref={drag}
+        ref={isMobileScreen ? null :  drag}
         style={{ opacity: isDragging ? 0.5 : 1, zIndex: 2}}
         draggable={false}
         onClick={handleClick}
