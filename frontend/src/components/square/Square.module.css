@@ -55,6 +55,14 @@
   /* pointer-events: none; */
 }
 
+@media (max-width: 600px) {
+  .possibleMove::before {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+
 @media (max-width: 1200px) {
   .square {
     width: 3.75rem; 
