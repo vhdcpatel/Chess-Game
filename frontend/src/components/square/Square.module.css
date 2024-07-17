@@ -26,7 +26,7 @@
 }
 
 .activeSquare {
-  filter: brightness(1.5);
+  filter: brightness(1.25);
   border: 2px solid rgba(235, 107, 15, 0.8);
 }
 
@@ -54,6 +54,14 @@
   z-index: 3;
   /* pointer-events: none; */
 }
+
+@media (max-width: 600px) {
+  .possibleMove::before {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 
 @media (max-width: 1200px) {
   .square {
