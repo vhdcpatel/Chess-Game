@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const sequelize = require('./models/index');
 const users = require('./models/users');
+const authRoutes = require('./routes/auth');
 
 require('dotenv').config();
 
@@ -18,18 +19,23 @@ const app = express();
 // Enable CORS with options
 app.use(cors(corsOptions));
 
-// Middleware
+// Middleware for parsing request data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
+app.use('/api/auth', authRoutes)
+
 app.use('/api', dummyRoutes);
 
 
 // Database connection
-sequelize.sync({})
+sequelize.sync({
+    force: true,
+})
   .then((res) => {
     console.log('Database synchronized successfully.',res);
+    //
   })
   .catch((err) => {
     console.error('Error synchronizing the database:', err);
