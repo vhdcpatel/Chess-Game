@@ -1,20 +1,30 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./index');
 
-const users = sequelize.define('users',{
+const Users = sequelize.define('users',{
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
-  name:{
+  firstName:{
     type: Sequelize.STRING,
     allowNull:false,
+  },
+  lastName:{
+    type: Sequelize.STRING,
+    allowNull:false,
+  },
+  userName:{
+    type: Sequelize.STRING,
+    allowNull:false,
+    unique: true,
   },
   email:{
     type: Sequelize.STRING,
     allowNull: false,
+    unique: true,
   },
   password: {
     type: Sequelize.STRING,
@@ -22,4 +32,4 @@ const users = sequelize.define('users',{
   }
 })
 
-module.exports = users;
+module.exports = Users;
