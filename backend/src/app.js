@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const sequelize = require('./models/index');
 const users = require('./models/users');
@@ -18,6 +19,7 @@ const app = express();
 
 // Enable CORS with options
 app.use(cors(corsOptions));
+app.use(cookieParser())
 
 // Middleware for parsing request data
 app.use(bodyParser.json());
@@ -31,7 +33,7 @@ app.use('/api', dummyRoutes);
 
 // Database connection
 sequelize.sync({
-    force: true,
+    // force: true,
 })
   .then((res) => {
     console.log('Database synchronized successfully.',res);

@@ -1,0 +1,24 @@
+POST http://localhost:5000/api/auth/signup
+Content-Type: application/json
+
+{
+    "firstName": "Vraj",
+    "lastName": "Patel",
+    "userName": "vhdcpatel",
+    "email": "vhdcpatel69@gmail.com",
+    "password": "vhdc5321"
+}
+
+### Login 
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "vhdcpatel69@gmail.com",
+    "password":"vhdc5321"
+}
+
+###
+
+GET http://localhost:5000/api/auth/signup
+Content-Type: application/json
