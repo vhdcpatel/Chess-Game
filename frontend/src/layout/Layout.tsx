@@ -1,30 +1,19 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import styles from './LayoutStyles.module.css'
 import HeaderBar from '../components/header/HeaderBar';
-import { useUser } from '../context/userContext/userContext';
 import { useEffect } from 'react';
+import { useAuth } from '../context/authContext/authContext';
 
 const Layout = () => {
-    const { user, setUser } = useUser();
-
+    const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+    
+    // Redirect to login page if user is not authenticated
     useEffect(() => {
-        console.log(user);
-    }, [user])
-
-
-    useEffect(()=>{
-        // const user = localStorage.getItem('user');
-        // if(user){
-        //     setUser(JSON.parse(user));
-        console.log("Test");
-        
-        setUser({
-            name: 'John Doe',
-            email: 'test@g.com',
-            isLogged: true,
-            isDarkMode: false
-        })
-    },[setUser])
+      if (!isAuthenticated) {
+        navigate('/login');
+      }
+    }, [isAuthenticated, navigate]);
     
     return (
         <div className={styles.mainOuterCtn}>
