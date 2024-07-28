@@ -1,7 +1,11 @@
+export interface UserInfo {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export interface AuthResponse {
   token: string;
-  user: {
-    id: string;
-    username: string;
-  };
+  user: UserInfo;
 }

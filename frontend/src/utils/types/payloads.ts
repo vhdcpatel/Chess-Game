@@ -1,4 +1,4 @@
-export interface singUpCallPayLoad {
+export interface SingUpCallPayLoad {
   firstName: string,
   lastName: string,
   userName: string,
