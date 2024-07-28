@@ -5,7 +5,11 @@ const bcrypt = require("bcryptjs/dist/bcrypt");
 const { Op } = require('sequelize');
 
 const Users = require("../models/users");
+const getResponse = require('../utils/getResponse');
+const pick = require('../utils/pick');
+const { signToken } = require('../utils/jwtUtils');
 
+const userInfo = ['firstName','lastName','userName','email']
 
 exports.signUpUser = async (req, res) => {
   try{
@@ -36,10 +40,21 @@ exports.signUpUser = async (req, res) => {
       userName ,
       email,password:hashedPassword
     });
+    const userResponse = pick(user.dataValues,userInfo);
+    signToken
+    const token = signToken(userResponse);
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'None'
+    });
 
-    res.status(201).json({message: 'User created successfully',user});
+    // Sending back the final response.
+    res.status(201).json(getResponse(null,userResponse,token));
 
   }catch(err){
+    console.error('Error details:', err); 
     res.status(500).json({ message: 'Something went wrong', err });
   }
 }
@@ -74,7 +89,12 @@ exports.login = async (req,res)=>{
       sameSite: 'None'
     });
 
-    res.status(200).json({ message: 'Logged in successfully' });
+    const response = {
+      token: token,
+      user: user,
+      error: null
+    }
+    res.status(200).json(response);
   }catch(err){
     res.status(500).json({message: err});
   }
