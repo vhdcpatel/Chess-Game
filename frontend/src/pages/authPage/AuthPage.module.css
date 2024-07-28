@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100%;
+  background-color: var(--color-background-default);
+  box-sizing: border-box;
+}
+
+.headerWrapper {
+  width: 100%;
+}
+
+.formWrapper {
+  /* Update the following styles latter to remove two cards on the login page. */
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-background-paper);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow-y: auto;
+  margin-top: 20px;
+   /* Adding some space below the header */
+}
+
+
+
+/* .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 4.28125rem);
+  padding: 20px;
+  background-color: var(--color-background-default);
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-background-paper);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} */
+
+
+@media (max-width: 900px) {
+  /* .container {
+    height: calc(100% - 4rem);
+  }   */
+}
+
+@media (max-width: 600px) {
+  /* .container {
+    height: calc(100% - 3.5rem);
+  }   */
+}
