@@ -6,9 +6,10 @@ import { UserInfo } from '../../utils/types/response';
 interface AuthContextType {
   isAuthenticated: boolean;
   user: UserInfo | null;
-  login: (loginPayload: LoginCallPayLoad) => Promise<void>  
-  signUp: (userInfo: SingUpCallPayLoad) => Promise<void>
-  logout: () => void
+  login: (loginPayload: LoginCallPayLoad) => Promise<void>;  
+  signUp: (userInfo: SingUpCallPayLoad) => Promise<void>;
+  logout: () => void;
+  authToken: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<UserInfo | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const login = async (loginPayload: LoginCallPayLoad) => {
     try {
@@ -25,6 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       const userData = response.data.user;
       const token = response.data.token;
+      setAuthToken(token);
       setUser(userData);
       setIsAuthenticated(true);
     } catch (error) {
@@ -41,34 +44,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       const token = response.data.token;
       const userData = response.data.user;
-      
+
+      setAuthToken(token);
       setIsAuthenticated(true);
       setUser(userData);
       
     } catch (error) {
       console.log(error);
-      throw new Error('Signup failed');
+      throw new Error('SignUp failed');
     }
   };
-
-  // Implement in the future.
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     try {
-  //       const response = await axios.get('/api/auth/check'); // Your endpoint to check auth
-  //       setAuthState({
-  //         isAuthenticated: true,
-  //         user: response.data.user,
-  //       });
-  //     } catch (error) {
-  //       setAuthState({
-  //         isAuthenticated: false,
-  //         user: null,
-  //       });
-  //     }
-  //   };
-  //   checkAuth();
-  // }, []);
 
   const logout = () => {
     setUser(null);
@@ -76,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, signUp, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, signUp, logout, authToken}}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { UserProvider } from "./userContext/userContext";
 import { AuthProvider } from "./authContext/authContext";
 
 interface AppProviderProps {
@@ -9,11 +8,9 @@ interface AppProviderProps {
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return (
     <>
-      <UserProvider>
         <AuthProvider>
           {children}
         </AuthProvider>
-      </UserProvider>
     </>
   )
 }
