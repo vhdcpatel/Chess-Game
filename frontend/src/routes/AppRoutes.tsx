@@ -2,11 +2,11 @@ import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Layout from '../layout/Layout';
 import Loader from '../components/uxComponents/loader/Loader';
-import PageNotFound from '../components/uxComponents/pageNotFound/PageNotFound';
-import AuthPage from '../pages/authPage/AuthPage';
 import ProtectedRoutes from './ProtectedRoutes';
 
 const Game = React.lazy(() => import('../components/game/Game'));
+const AuthPage = React.lazy(() => import('../pages/authPage/AuthPage'));
+const PageNotFound = React.lazy(() => import('../components/uxComponents/pageNotFound/PageNotFound'));
 
 const AppRoutes: React.FC = () => {
 
