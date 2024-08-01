@@ -1,6 +1,12 @@
-module.exports.initialize = (socket) => {
+module.exports.socketController = (socket) => {
+  console.log("A user connected", socket.id);
+  
   socket.on('move', (data) => {
     handleMove(socket, data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log("A user disconnected", socket.id);
   });
 };
 

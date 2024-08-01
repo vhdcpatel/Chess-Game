@@ -1,4 +1,4 @@
-module.export.authenticate = (socket, next) => {
+module.exports.authenticateSocket = (socket, next) => {
   const token = socket.handshake.auth.token;
 
   if (!token) {
