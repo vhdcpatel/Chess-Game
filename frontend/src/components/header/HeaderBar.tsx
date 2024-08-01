@@ -30,7 +30,10 @@ const loginPage = [{
   url: '/login'
 }]
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+// Latter add all other types.
+const settings = [
+  // 'Profile', 'Account', 'Dashboard', 
+  'Logout'];
 
 const AnonymousUserSetting = ['Login']
 
@@ -39,7 +42,7 @@ const  HeaderBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -56,6 +59,14 @@ const  HeaderBar = () => {
     setAnchorElUser(null);
   };
 
+  const handleMenuClick = (option: string) => () =>{
+    handleCloseUserMenu();
+    if (option === 'Logout') {
+      logout();
+    }
+
+  }
+
   
   const navigationHandler = (url: string) => () => {
     navigate(url);
@@ -63,7 +74,7 @@ const  HeaderBar = () => {
   }
 
   const pagesToShow = isAuthenticated ? pages : loginPage;
-  const settingToDisplay = isAuthenticated ? settings : AnonymousUserSetting;
+  const menuOptions = isAuthenticated ? settings : AnonymousUserSetting;
 
   return (
     <AppBar position="static">
@@ -179,9 +190,9 @@ const  HeaderBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settingToDisplay.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {menuOptions.map((option) => (
+                <MenuItem key={option} onClick={handleMenuClick(option)}>
+                  <Typography textAlign="center">{option}</Typography>
                 </MenuItem>
               ))}
             </Menu>
