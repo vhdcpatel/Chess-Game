@@ -1,0 +1,106 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--color-background-paper);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: auto;
+}
+
+.formTitle {
+  font-size: 24px;
+  color: var(--color-text-primary);
+  margin-bottom: 20px;
+}
+
+.inputLabel {
+  width: 100%;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--color-text-disabled);
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: var(--color-primary-main);
+  color: var(--color-primary-contrastText);
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: var(--color-primary-light);
+}
+
+.toggleMessage {
+  cursor: pointer;
+  color: var(--color-secondary-main);
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.toggleMessage:hover {
+  color: var(--color-secondary-light);
+  text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .formContainer {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  .formTitle {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .inputField, .submitButton {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .toggleMessage {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .formTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .inputField, .submitButton {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .toggleMessage {
+    font-size: 10px;
+  }
+}

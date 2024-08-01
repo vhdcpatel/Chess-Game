@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { UserProvider } from "./userContext/userContext";
+import { AuthProvider } from "./authContext/authContext";
+import { SocketProvider } from "./authContext/SocketContext";
 
 interface AppProviderProps {
   children: ReactNode;
@@ -8,9 +9,11 @@ interface AppProviderProps {
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return (
     <>
-      <UserProvider>
-        {children}
-      </UserProvider>
+        <AuthProvider>
+          <SocketProvider>
+            {children}
+          </SocketProvider>
+        </AuthProvider>
     </>
   )
 }

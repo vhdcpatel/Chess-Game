@@ -12,6 +12,7 @@ import Piece from '../pieces/Piece';
 import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
 import getGameStatus from '../../utils/getGameStatus';
 import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
+import useSocket from '../../context/authContext/SocketContext';
 
 interface ChessBoardProps {
     player: 'w' | 'b';
@@ -23,8 +24,9 @@ const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 
 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     const { player, isSinglePlayer } = props;
-    console.log(props);
     
+    const { socket } = useSocket();
+
 
     // Handle the render board based on the player.
     const FilesToRender = player === 'w' ? FILES : [...FILES].reverse();
@@ -37,6 +39,25 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     
     const [history, setHistory] = useState<Move[]>([]); 
     // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
+
+    // For Handling the Socket.io for the multiplayer game.
+    useEffect(() => {
+        if (socket) {
+            socket.on('connect', () => {
+                console.log('Connected to socket server');
+            });
+
+            socket.on('move', (move) => {
+                console.log('Received move:', move);
+            });
+
+            return () => {
+                socket.off('connect');
+                socket.off('move');
+            };
+        }
+    }, [socket]);
+
    
     useEffect(()=>{
         let gameStatus = gameState.gameState;
