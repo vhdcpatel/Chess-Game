@@ -26,6 +26,14 @@ export const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
       })
 
+      socket.current.on('connect', () => {
+        console.log('Socket Connected');
+      });
+
+      socket.current.on('connect_error', (err) => {
+        console.error('Connection Error:', err.message);
+      });
+      
       return ()=>{
         if(socket.current){
           socket.current.disconnect();
