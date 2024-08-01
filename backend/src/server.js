@@ -1,7 +1,7 @@
 const { Server } = require('socket.io');
 const app = require('./app');
 const http = require('http');
-const { socketAuth } = require('./middlewares/socketMiddleware');
+const { authenticationSocket } = require('./middlewares/socketMiddleware');
 const { socketController } = require('./controllers/socketController');
 
 // Not using the Normal Express server for socket.
@@ -11,11 +11,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
-io.use(socketAuth);
+io.use(authenticationSocket);
 
 io.on('connection',socketController);
 

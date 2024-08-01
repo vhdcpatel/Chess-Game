@@ -1,4 +1,6 @@
-module.exports.authenticateSocket = (socket, next) => {
+const jwt = require('jsonwebtoken');
+
+function  authenticationSocket(socket, next){
   const token = socket.handshake.auth.token;
 
   if (!token) {
@@ -15,12 +17,14 @@ module.exports.authenticateSocket = (socket, next) => {
   return next();
 }
 
-function verifyToken(token){
-  // Verify the token from JWT and return the user object
+function verifyToken(token) {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_JWT);
     return decoded;
   } catch (error) {
+    console.error('Token verification error:', error.message);
     return null;
   }
 }
+
+module.exports = { authenticationSocket };
