@@ -10,19 +10,25 @@ interface AuthContextType {
   signUp: (userInfo: SingUpCallPayLoad) => Promise<void>;
   logout: () => void;
   authToken: string | null;
+  authError: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
+
 
   const login = async (loginPayload: LoginCallPayLoad) => {
     try {
       const response = await loginHandler(loginPayload);
-      if(response.status !== 200 || !response.data.user ){
+      if((response.status !== 200 || !response.data.user)){
+        if(response.data.error){
+          setAuthError(response.data.error)
+        }
         throw new Error('Login failed');
       }
       const userData = response.data.user;
@@ -30,6 +36,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setAuthToken(token);
       setUser(userData);
       setIsAuthenticated(true);
+      setAuthError(null);
     } catch (error) {
       throw new Error('Login failed');
     }
@@ -40,6 +47,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const response = await signupHandler(userInfo);
 
       if(response.status !== 201 || !response.data.user){
+        if(response.data.error){
+          setAuthError(response.data.error)
+        }
         throw new Error('Login failed');
       }
       const token = response.data.token;
@@ -48,7 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setAuthToken(token);
       setIsAuthenticated(true);
       setUser(userData);
-      
+      setAuthError(null);
     } catch (error) {
       console.log(error);
       throw new Error('SignUp failed');
@@ -61,7 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, signUp, logout, authToken}}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, signUp, logout, authToken, authError}}>
       {children}
     </AuthContext.Provider>
   );

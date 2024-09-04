@@ -5,6 +5,7 @@ import { getSrc } from '../../../utils/constants/srcMap';
 import PersonIcon from '@mui/icons-material/Person';
 import ComputerIcon from '@mui/icons-material/Computer';
 import { gameInfoModel } from '../Game';
+import { startGame } from '../../../services/apis/auth';
 
 interface StartGameDialogBoxProps {
   isOpen: boolean
@@ -22,6 +23,11 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
     }else if(type === 'color'){
       setGameInfoLocal({...gameInfoLocal, player: value as 'w' | 'b'});
     }
+  }
+
+  const handleStartGame =async ()=>{
+    const response = await startGame();
+    console.log(response);
   }
   
 
@@ -67,6 +73,13 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
               <div className={styles.actionBoxInner}>
                 <Button variant="contained" onClick={()=>{handleClose(gameInfoLocal)}}>
                   Start Game
+                </Button>
+              </div>
+            </div>
+            <div className={`${styles.outerCtn} ${styles.actionBox}`}>
+              <div className={styles.actionBoxInner}>
+                <Button variant="contained" onClick={handleStartGame}>
+                  Start Game Online
                 </Button>
               </div>
             </div>

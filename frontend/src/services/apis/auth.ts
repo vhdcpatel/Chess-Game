@@ -10,3 +10,7 @@ export const loginHandler = async (loginPayLoad: LoginCallPayLoad): Promise<Axio
 export const signupHandler = async (signPayload: SingUpCallPayLoad): Promise<AxiosResponse<AuthResponse>> => {
   return api.post<AuthResponse>('/auth/signup', signPayload);
 };
+
+export const startGame = async (): Promise<AxiosResponse<AuthResponse>> => {
+  return api.get<AuthResponse>('/game/start');
+};

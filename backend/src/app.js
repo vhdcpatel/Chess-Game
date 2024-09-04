@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/auth');
+const gameRoutes = require('./routes/games');
 
 require('dotenv').config();
 
@@ -25,13 +26,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/auth', authRoutes)
+app.use('/api/auth', authRoutes);
+app.use('/api/game', gameRoutes);
 
 app.use('/api', dummyRoutes);
 
 
 // Database connection
-syncDatabase()
+syncDatabase();
 // Error handling middleware (example)
 app.use((err, req, res, next) => {
     res.status(err.status || 500).json({ error: err.message || 'An error occurred' });

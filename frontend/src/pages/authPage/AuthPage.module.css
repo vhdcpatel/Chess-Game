@@ -13,17 +13,11 @@
 }
 
 .formWrapper {
-  /* Update the following styles latter to remove two cards on the login page. */
   width: 100%;
   max-width: 400px;
-  background-color: var(--color-background-paper);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   overflow-y: auto;
   margin-top: 20px;
-   /* Adding some space below the header */
 }
 
 

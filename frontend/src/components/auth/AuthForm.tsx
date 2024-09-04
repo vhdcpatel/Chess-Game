@@ -4,7 +4,7 @@ import { useAuth } from '../../context/authContext/authContext';
 import styles from './authForm.module.css';
 
 const AuthForm: React.FC = () => {
-  const { login, signUp } = useAuth();
+  const { login, signUp, authError } = useAuth();
   const location = useLocation();
   const isLogin = location.pathname === '/login';
   const navigator = useNavigate();
@@ -113,6 +113,9 @@ const AuthForm: React.FC = () => {
        <p onClick={() => handledNavigation(isLogin ? 'signUp' : 'logIn')} className={styles.toggleMessage}>
         {message}
       </p>
+      {authError && <p className={styles.toggleMessage}>
+        {authError}
+      </p>}
       <button type="submit" className={styles.submitButton}>
         {isLogin ? 'Log In' : 'Sign Up'}
       </button>
