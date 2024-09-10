@@ -2,12 +2,19 @@ const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req,res,next)=>{
   // const token = req.cookies.accessToken;
-  console.log(req.headers);
+  console.log(req.headers.cookie);
   
 
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const cookieHeader = req.headers['cookie'];
+  let token = null;
 
+  if (cookieHeader) {
+    const cookies = cookieHeader.split('; ');
+    const accessTokenCookie = cookies.find(cookie => cookie.startsWith('accessToken='));
+    if (accessTokenCookie) {
+      token = accessTokenCookie.split('=')[1];
+    }
+  }
 
   if(!token){
     return res.status(401).json({message: "No token, authorization denied."})
