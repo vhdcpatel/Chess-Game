@@ -11,6 +11,10 @@ export const signupHandler = async (signPayload: SingUpCallPayLoad): Promise<Axi
   return api.post<AuthResponse>('/auth/signup', signPayload);
 };
 
-export const startGame = async (): Promise<AxiosResponse<AuthResponse>> => {
-  return api.get<AuthResponse>('/game/start');
+export const startGame = async (payload={}): Promise<AxiosResponse<AuthResponse>> => {
+  return api.post<AuthResponse>('/game/start',payload);
 };
+
+export const joinGame = async (payload:any): Promise<AxiosResponse<AuthResponse>> => {
+  return api.post<AuthResponse>('/game/join',payload);
+}

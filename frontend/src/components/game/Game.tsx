@@ -8,7 +8,7 @@ export interface gameInfoModel {
   player: 'w' | 'b';
   initialPosition?: string;
   isSinglePlayer: boolean;
-
+  isOnline?: boolean;
 }
 
 const Game: React.FC = (props) => {
@@ -17,7 +17,8 @@ const Game: React.FC = (props) => {
   const [gameInfo, setGameInfo] = useState<gameInfoModel>({
     player: 'w',
     initialPosition: DEFAULT_POSITION,
-    isSinglePlayer: false
+    isSinglePlayer: false,
+    isOnline: false
   });
 
   useEffect(()=>{
