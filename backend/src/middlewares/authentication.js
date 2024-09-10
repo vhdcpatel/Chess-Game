@@ -22,7 +22,8 @@ const authenticateToken = (req,res,next)=>{
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_JWT);
-    req.user = decoded;
+    console.log(decoded);
+    req.user = decoded.user;
     next();
   } catch (err) {
     res.status(401).json({ message: 'Token is not valid' });
