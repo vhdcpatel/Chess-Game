@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { loginHandler, signupHandler } from '../../services/apis/auth';
-import { LoginCallPayLoad, SingUpCallPayLoad } from '../../utils/types/payloads';
-import { UserInfo } from '../../utils/types/response';
+import { LoginCallPayLoad, SingUpCallPayLoad } from '../../models/types/payloads';
+import { UserInfo } from '../../models/types/response';
 
 interface AuthContextType {
   isAuthenticated: boolean;

@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { AuthResponse } from '../../utils/types/response';
+import { AuthResponse } from '../../models/types/response';
 import api from './api';
-import { LoginCallPayLoad, SingUpCallPayLoad } from '../../utils/types/payloads';
+import { LoginCallPayLoad, SingUpCallPayLoad } from '../../models/types/payloads';
 
 export const loginHandler = async (loginPayLoad: LoginCallPayLoad): Promise<AxiosResponse<AuthResponse>> => {
   return api.post<AuthResponse>('/auth/login', loginPayLoad);
