@@ -1,12 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-type stringOrNull = string | null;
-
-export interface UserInfo {
-  id: stringOrNull;
-  name: stringOrNull;
-  rating: number;
-}
+import { UserInfo } from "./userInfoModel";
 
 const InitialState: UserInfo = {
   id: null,
@@ -18,17 +11,13 @@ const userInfoSlice = createSlice({
   name:'UserInfo',
   initialState: InitialState,
   reducers:{
-    setUserInfo: (state, action) => {
+    setUserInfo: (state, action: PayloadAction<UserInfo>) => {
       const { id, name, rating } = action.payload;
       state.id = id;
       state.name = name;
       state.rating = rating;
     },
-    resetUserInfo: (state) => {
-      state.id = null;
-      state.name = null;
-      state.rating = 0;
-    },
+    resetUserInfo: () => InitialState,
     updateRating: (state, action: PayloadAction<number>) => {
       const rating  = action.payload;
       state.rating = rating;
@@ -36,6 +25,6 @@ const userInfoSlice = createSlice({
   }
 });
 
-export const {setUserInfo, resetUserInfo} = userInfoSlice.actions;
+export const { setUserInfo, resetUserInfo } = userInfoSlice.actions;
 export default userInfoSlice.reducer;
 
