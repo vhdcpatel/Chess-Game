@@ -177,8 +177,10 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                 {RanksToRender.map((rank,RankIndex) =>
                     <div key={rank} className={styles.ranks} >
                     {FilesToRender.map((file,FileIndex) => {
+
                         const piece = boardPosition[RankIndex][FileIndex];
                         const isCheckOrMate = (gameState.gameState === "Check" || gameState.gameState==="CheckMate") && gameState.turn === piece?.color && piece?.type === 'k';
+
                         return (
                             <Square
                                 key={`${file}${rank}`}

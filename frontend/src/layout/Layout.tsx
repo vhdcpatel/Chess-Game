@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import styles from './LayoutStyles.module.css'
 import HeaderBar from '../components/header/HeaderBar';
 
