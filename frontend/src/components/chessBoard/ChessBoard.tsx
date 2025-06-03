@@ -23,20 +23,15 @@ interface ChessBoardProps {
 const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const ChessBoard: React.FC<ChessBoardProps> = (props) => {
+
     const { player, isSinglePlayer } = props;
     
     const { socket } = useSocket();
-
-
-    // Handle the render board based on the player.
-    const FilesToRender = player === 'w' ? FILES : [...FILES].reverse();
-    const RanksToRender = player === 'w' ? RANKS : [...RANKS].reverse();
 
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
     const [gameState, setGameState] = useState<GameStatus>(initialStatus);
-    
     const [history, setHistory] = useState<Move[]>([]); 
     // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
 
@@ -60,7 +55,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
    
     useEffect(()=>{
-        let gameStatus = gameState.gameState;
+        const gameStatus = gameState.gameState;
         // Handling the checkMate, staleMate and Draw state currently.
         if(gameStatus === 'CheckMate'){
             setTimeout(()=>{
@@ -78,13 +73,13 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         if(isSinglePlayer){
             if(gameStatus === "OnGoing" && game.turn() !== player){
                 // CPU intensive task.
-                let moveInfo = getBestMoveNew(game,player,3,gameState.globalSum);
+                const moveInfo = getBestMoveNew(game,player,3,gameState.globalSum);
                 setGameState((prev)=>({...prev, globalSum: moveInfo[2]}));
                 
-                let bestMove = moveInfo[0];
+                const bestMove = moveInfo[0];
                 if(bestMove){
                     const newGame = new Chess(game.fen());
-                    let res = newGame.move(bestMove);
+                    const res = newGame.move(bestMove);
                     if(res){
                         setGame(newGame);
                         setHistory([...history, res]);
@@ -170,7 +165,10 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
             setPossibleMoves(possibleMovesModified);
         }
     };
-    
+
+    // Handle the render board based on the player.
+    const FilesToRender = player === 'w' ? FILES : [...FILES].reverse();
+    const RanksToRender = player === 'w' ? RANKS : [...RANKS].reverse();
     const boardPosition = player ==='w' ? game.board() : (game.board().map((row)=>(row.reverse()))).reverse();
     
     return (
