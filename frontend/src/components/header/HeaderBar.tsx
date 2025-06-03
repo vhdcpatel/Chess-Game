@@ -40,6 +40,7 @@ const AnonymousUserSetting = ['Login']
 const  HeaderBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
   const navigate = useNavigate();
 
   const { isAuthenticated, logout } = useAuth();
@@ -47,6 +48,7 @@ const  HeaderBar = () => {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -64,9 +66,7 @@ const  HeaderBar = () => {
     if (option === 'Logout') {
       logout();
     }
-
   }
-
   
   const navigationHandler = (url: string) => () => {
     navigate(url);

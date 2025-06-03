@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import { store } from './features';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
   <>
     <Analytics/>
     <Provider store={store}>
@@ -21,5 +20,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </AppProvider>
     </Provider>
   </>
-  // </React.StrictMode>,
 )

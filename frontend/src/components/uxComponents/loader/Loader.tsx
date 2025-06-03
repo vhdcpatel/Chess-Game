@@ -8,10 +8,17 @@ const Loader: React.FC = () => {
         <React.Fragment>
             <div className={styles.mainOuterDiv}>
                 <div className={styles.progressContainer}>
-                    <CircularProgress size={60} thickness={2.5} />
+                    <CircularProgress
+                        size={60}
+                        thickness={2.5}
+                    />
                     <div className={styles.overlay}>
                         <div className={styles.imgCtn}>
-                            <img className={styles.logoImg} src={logo} alt="Chess Logo" />
+                            <img
+                                className={styles.logoImg}
+                                src={logo}
+                                alt="Chess Logo"
+                            />
                         </div>
                     </div>
                 </div>
