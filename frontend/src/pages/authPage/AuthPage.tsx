@@ -5,6 +5,7 @@ import styles from './AuthPage.module.css';
 import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
+
   // If user already logged in then redirect to HomePage.
   const { isAuthenticated }= useAuth();
   const navigator = useNavigate();
