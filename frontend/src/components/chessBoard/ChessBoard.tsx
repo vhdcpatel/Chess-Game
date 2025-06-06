@@ -13,6 +13,7 @@ import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
 import getGameStatus from '../../utils/getGameStatus';
 import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
 import useSocket from '../../context/authContext/SocketContext';
+// import { useAppDispatch, useAppSelector } from '../../features';
 
 interface ChessBoardProps {
     player: 'w' | 'b';
@@ -28,12 +29,22 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     
     const { socket } = useSocket();
 
+    // const dispatch = useAppDispatch();
+
+    // const game = useSelector((state)=> state.chess.game);
+    // const gameState = useSelector((state)=> state.chess.gameState);
+    // const activePiece = useSelector((state)=> state.chess.activePiece);
+
+    // dispatch(setActivePiece(activePiece));
+    // dispacth(setPossibleMoves(possibleMoves));
+    // dispacth(setGameState(newGameState));
+
     const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
     const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
     const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
     const [gameState, setGameState] = useState<GameStatus>(initialStatus);
     const [history, setHistory] = useState<Move[]>([]); 
-    // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
+    // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this thing.
 
     // For Handling the Socket.io for the multiplayer game.
     useEffect(() => {
