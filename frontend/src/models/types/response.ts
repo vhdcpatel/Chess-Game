@@ -1,9 +1,4 @@
-export interface UserInfo {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+import { UserInfo } from '../../features/auth/authTypes';
 
 export interface AuthResponse {
   token: string;
