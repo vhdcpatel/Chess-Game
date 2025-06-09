@@ -12,7 +12,7 @@ import Piece from '../pieces/Piece';
 import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
 import getGameStatus from '../../utils/getGameStatus';
 import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
-import useSocket from '../../context/authContext/SocketContext';
+// import useSocket from '../../context/authContext/SocketContext';
 // import { useAppDispatch, useAppSelector } from '../../features';
 
 interface ChessBoardProps {
@@ -27,7 +27,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
 
     const { player, isSinglePlayer } = props;
     
-    const { socket } = useSocket();
+    // const { socket } = useSocket();
 
     // const dispatch = useAppDispatch();
 
@@ -47,22 +47,23 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this thing.
 
     // For Handling the Socket.io for the multiplayer game.
-    useEffect(() => {
-        if (socket) {
-            socket.on('connect', () => {
-                console.log('Connected to socket server');
-            });
-
-            socket.on('move', (move) => {
-                console.log('Received move:', move);
-            });
-
-            return () => {
-                socket.off('connect');
-                socket.off('move');
-            };
-        }
-    }, [socket]);
+    // Making Socket Disable Now.
+    // useEffect(() => {
+    //     if (socket) {
+    //         socket.on('connect', () => {
+    //             console.log('Connected to socket server');
+    //         });
+    //
+    //         socket.on('move', (move) => {
+    //             console.log('Received move:', move);
+    //         });
+    //
+    //         return () => {
+    //             socket.off('connect');
+    //             socket.off('move');
+    //         };
+    //     }
+    // }, [socket]);
 
    
     useEffect(()=>{
@@ -177,17 +178,27 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
     };
 
-    // Handle the render board based on the player.
-    const FilesToRender = player === 'w' ? FILES : [...FILES].reverse();
-    const RanksToRender = player === 'w' ? RANKS : [...RANKS].reverse();
-    const boardPosition = player ==='w' ? game.board() : (game.board().map((row)=>(row.reverse()))).reverse();
+    // Handle the render board based on the player. (Memorize to save compute on each render.)
+    const { filesToRender, ranksToRender, boardPosition } = React.useMemo(() => {
+        const files = player === 'w' ? FILES : [...FILES].reverse();
+        const ranks = player === 'w' ? RANKS : [...RANKS].reverse();
+        const position = player === 'w'
+            ? game.board()
+            : game.board().map(row => row.reverse()).reverse();
+
+        return {
+            filesToRender: files,
+            ranksToRender: ranks,
+            boardPosition: position
+        };
+    }, [game, player]);
     
     return (
         <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <div className={styles.mainOuterCtn}>
-                {RanksToRender.map((rank,RankIndex) =>
+                {ranksToRender.map((rank,RankIndex) =>
                     <div key={rank} className={styles.ranks} >
-                    {FilesToRender.map((file,FileIndex) => {
+                    {filesToRender.map((file,FileIndex) => {
 
                         const piece = boardPosition[RankIndex][FileIndex];
                         const isCheckOrMate = (gameState.gameState === "Check" || gameState.gameState==="CheckMate") && gameState.turn === piece?.color && piece?.type === 'k';
