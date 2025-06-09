@@ -5,7 +5,7 @@ interface gameCurrInfoModel extends Omit<GameStatus, 'globalSum'> {}
 
 const getGameStatus = (game: Chess): gameCurrInfoModel => {
     if (game.isCheckmate()) {
-        return {turn: game.turn() as Color, gameState: 'CheckMate'};
+        return {turn: game.turn(), gameState: 'CheckMate'};
     }
     if (game.isDraw()) {
         return {turn: game.turn() as Color, gameState: 'Draw'};

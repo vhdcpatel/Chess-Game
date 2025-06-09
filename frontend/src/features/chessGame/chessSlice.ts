@@ -1,9 +1,40 @@
-import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
-import { Chess, PieceSymbol, } from 'chess.js';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Chess, Move, PieceSymbol, } from 'chess.js';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
-import { makeMovePayload } from './chessModel';
-import getGameStatus from '../../utils/getGameStatus';
+import { ChessState, makeMovePayload } from './chessModel';
+import getGameStatus from '../../utils/getFullGameStatus';
 import { defaultStartFEN, initialState } from "./ChessConstant";
+
+const updateGameStateAfterMove = (state: ChessState, lastMove?: Move) => {
+    if(!state.game) return;
+
+    const newGameState = getGameStatus(state.game);
+    state.gameState = newGameState;
+
+    if(lastMove){
+        // state.lastmMove = moveResult;
+    }
+
+    if(newGameState.isGameOver){
+        if (newGameState.gameState === 'CheckMate') {
+            const winner = newGameState.turn === 'w' ? 'Black' : 'White';
+            state.gameEndReason = `Checkmate! ${winner} wins.`;
+
+        } else if (newGameState.gameState === 'StaleMate') {
+            state.gameEndReason = 'Draw by stalemate.';
+        } else if (newGameState.gameState === 'Draw') {
+            // Check specific draw reasons
+            if (state.game.isInsufficientMaterial()) {
+                state.gameEndReason = 'Draw by insufficient material.';
+            } else if (state.game.isThreefoldRepetition()) {
+                state.gameEndReason = 'Draw by threefold repetition.';
+            } else {
+                state.gameEndReason = 'Draw by 50-move rule.';
+            }
+        }
+    }
+}
+
 
 const chessSlice = createSlice({
     name: 'chess',

@@ -5,6 +5,7 @@ export type playerColor = 'w' | 'b';
 export interface GameStatus {
     turn: Color;
     gameState: 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
+    isGameOver: boolean;
 }
 
 export interface PieceInfoModel {
@@ -28,6 +29,7 @@ export interface ChessState {
     activePiece: PieceInfoModel | null;
     possibleMoves: string[];
     promotionInfo: PromotionInfoModel | null;
+    gameEndReason: null | string;
 }
 
 export interface makeMovePayload {

@@ -16,4 +16,5 @@ export const initialState: ChessState = {
     activePiece: null,
     history: [],
     promotionInfo: null,
+    gameEndReason: null,
 };

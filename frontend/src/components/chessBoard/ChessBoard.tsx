@@ -65,7 +65,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
     //     }
     // }, [socket]);
 
-   
+    // This will run after update of game. (After each move.)
     useEffect(()=>{
         const gameStatus = gameState.gameState;
         // Handling the checkMate, staleMate and Draw state currently.
@@ -101,6 +101,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
         }
     },[gameState, isSinglePlayer, player]);
 
+    // After game update status.
     useEffect(()=>{
         const gameStatus = getGameStatus(game);
         setGameState((prev)=>({
