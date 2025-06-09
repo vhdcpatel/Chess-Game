@@ -5,12 +5,17 @@ export type playerColor = 'w' | 'b';
 export interface GameStatus {
     turn: Color;
     gameState: 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
-    globalSum: number;
 }
 
 export interface PieceInfoModel {
     square: Square;
     type: PieceSymbol;
+    color: Color;
+}
+
+export interface PromotionInfoModel {
+    from: Square;
+    to: Square;
     color: Color;
 }
 
@@ -22,6 +27,7 @@ export interface ChessState {
     history: Move[];
     activePiece: PieceInfoModel | null;
     possibleMoves: string[];
+    promotionInfo: PromotionInfoModel | null;
 }
 
 export interface makeMovePayload {

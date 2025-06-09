@@ -1,152 +1,195 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Chess, Move } from 'chess.js';
-import { GameStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
-import { ChessState, makeMovePayload } from './chessModel';
+import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
+import { Chess, PieceSymbol, } from 'chess.js';
+import { PieceInfoModel } from '../../utils/constants/initialPosition';
+import { makeMovePayload } from './chessModel';
 import getGameStatus from '../../utils/getGameStatus';
-import { clearActivePieceState } from "./customUtils";
-import { defaultStartFEN, InitialGameState } from "./ChessConstant";
-
-const initialState: ChessState = {
-    player: 'w',
-    isSinglePlayer: true,
-    game: null,
-    possibleMoves: [],
-    gameState: InitialGameState,
-    activePiece: null,
-    history: [],
-};
+import { defaultStartFEN, initialState } from "./ChessConstant";
 
 const chessSlice = createSlice({
     name: 'chess',
     initialState,
     reducers: {
-
         initGame(state, action: PayloadAction<string | undefined>) {
-
             const fen = action.payload || defaultStartFEN;
-            state.game = new Chess(fen);
+            const gameState = new Chess(fen);
 
-            state.gameState = getGameStatus(state.game);
+            state.game = gameState;
+            state.gameState = getGameStatus(gameState);
             state.history = [];
             state.activePiece = null;
             state.possibleMoves = [];
         },
 
-        makeMove(state, action: PayloadAction<makeMovePayload>){
+        // Handle all moves expect promotion case.
+        attemptMove(state,action: PayloadAction<makeMovePayload>){
+            const {
+                from,
+                to
+            } = action.payload;
 
+            // Check for not null;
+            if(!state.game) return;
+
+            const piece = state.game.get(from);
+
+            if(!piece) return;
+
+            const isPromotion = (piece.type === 'p') &&
+                ((piece.color === 'w' && to[1] ==="8") ||
+                    (piece.color === 'b' && to[1] ==="1")
+                );
+
+            if(isPromotion){
+                // Handle the promotion model for new pawn.
+
+            }else{
+                // Try to localize use of try catch at the place where you think changes of error are maximum.
+                try{
+                    // Regular move:
+                    const moveResults = state.game.move({from, to});
+                    if(moveResults){
+                        state.history.push(moveResults); // Might not need in future will drop in the future.
+                        // Update the game state (Safe as you are not updating game inside getGameStatus.)
+                        state.gameState = getGameStatus(state.game as Chess);
+                        state.activePiece = null;
+                        state.possibleMoves = [];
+                    }
+                }catch (e) {
+                    console.error("Error attempting move: ",e);
+                }
+            }
+
+        },
+
+        executePromotion(state, action: PayloadAction<PieceSymbol>){
+            if(!state.promotionInfo || !state.game) return;
+
+            const promotion = action.payload;
             const {
                 from,
                 to,
-                promotion
-            } = action.payload;
+            } = state.promotionInfo;
 
+            if(!from || !to) return; // validation for move;
 
             try{
-                const moveResult = state.game.move({
-                    from,
-                    to,
-                    promotion
-                });
+                // create util in future by passing draft.
+                const moveResults = state.game.move({from, to, promotion});
+                if(moveResults){
+                    state.history.push(moveResults);
+                    state.gameState = getGameStatus(state.game as Chess);
+                }
+            } catch(e){
+                console.error("Error attempting move with promotion ",e);
+            }
 
-                if(moveResult){
-                    // Add to history.
+            state.promotionInfo = null;
+            state.activePiece = null;
+            state.possibleMoves = [];
+        },
+
+        cancelPromotion(state){
+            state.promotionInfo = null;
+        },
+
+        makeMove(state, action: PayloadAction<makeMovePayload>) {
+            if(!state.game) return;
+
+            const { from, to, promotion } = action.payload;
+
+            try {
+                const moveResult = state.game.move({ from, to, promotion });
+                if (moveResult) {
                     state.history.push(moveResult);
-
-                    state.gameState = getGameStatus(state.game)
-
+                    state.gameState = getGameStatus(state.game as Chess);
                     state.activePiece = null;
                     state.possibleMoves = [];
-                } else {
-                    console.error('Invalid move Attempted', {
-                        from,to, promotion
-                    });
                 }
-            }catch(e){
-                console.log("Error making move:", e);
+            } catch (error) {
+                console.error('Invalid move:', error);
             }
         },
 
         loadGameFromFEN(state, action: PayloadAction<string>){
             try{
-                const newGame = new Chess(action.payload)
-                state.game = newGame;
-                state.gameState = getGameStatus(newGame)
+                state.game = new Chess(action.payload);
+                state.gameState = getGameStatus(state.game as Chess)
 
             }catch(e){
                 console.log("Error loading game from FEN:", e);
             }
         },
 
+        // Undo last move;
         undoMove (state){
-            if(state.history.length > 0){
+            if(!state.game) return;
+
+            const moveHistory = state.game.history();
+            if(moveHistory.length > 0){
                 state.game.undo();
-                state.history.pop();
-                state.gameState = getGameStatus(state.game);
+                state.gameState = getGameStatus(state.game as Chess);
+                state.promotionInfo = null;
                 state.activePiece = null;
                 state.possibleMoves = [];
+
             }
         },
 
         setActivePiece(state, action: PayloadAction<PieceInfoModel>){
             const piece = action.payload;
-
             if(!piece){
                 state.activePiece = null;
                 state.possibleMoves = [];
                 return;
             }
 
-            // Toggle is the same piece is clicked
-            if(state.activePiece?.type == piece.square){
+            if(!state.activePiece || !state.activePiece.type) return;
+
+            // Toggle active piece.
+            if(state.activePiece.square == piece.square){
                 state.activePiece = null;
                 state.possibleMoves = [];
                 return;
             }
 
+            if(!state.game) return;
+
             if(piece.color === state.gameState.turn){
                 state.activePiece = piece;
 
-                const moves = state.game.move({
+                const moves = state.game.moves({
                     square: piece.square,
                     verbose: true
                 });
+                // Just use the squares.
                 state.possibleMoves = moves.map(move => move.to);
             }
-
         },
 
         clearActivePiece(state){
-            clearActivePieceState(state.game);
+            state.activePiece = null;
+            state.possibleMoves = [];
+            return;
         },
 
-        setGame(state, action: PayloadAction<Chess>) {
-            state.game = action.payload;
-        },
-        setGameState(state, action: PayloadAction<GameStatus>) {
-            state.gameState = action.payload;
-        },
-        addMove(state, action: PayloadAction<Move>) {
-            state.history.push(action.payload);
-        },
-        resetHistory(state) {
-            state.history = [];
+        resetFullGame(){
+          return initialState;
         },
 
-        setPossibleMoves(state, action: PayloadAction<string[]>) {
-            state.possibleMoves = action.payload;
-        },
     },
 });
 
 export const {
-    setGame,
-    setGameState,
-    addMove,
-    resetHistory,
-    setActivePiece,
-    setPossibleMoves,
     initGame,
+    attemptMove,
+    executePromotion,
+    cancelPromotion,
     makeMove,
+    loadGameFromFEN,
+    undoMove,
+    setActivePiece,
+    clearActivePiece,
+    resetFullGame
 } = chessSlice.actions;
 
 export default chessSlice.reducer;
