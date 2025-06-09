@@ -11,8 +11,7 @@ export interface gameInfoModel {
 
 }
 
-const Game: React.FC = (props) => {
-  const {} = props;
+const Game: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [gameInfo, setGameInfo] = useState<gameInfoModel>({
     player: 'w',
@@ -31,9 +30,17 @@ const Game: React.FC = (props) => {
 
   return (
     <React.Fragment>
-      <StartGameDialogBox isOpen={dialogOpen} handleClose={handleCloseDialog} gameInfo={gameInfo} />
+      <StartGameDialogBox
+          isOpen={dialogOpen}
+          handleClose={handleCloseDialog}
+          gameInfo={gameInfo}
+      />
       <div className={styles.mainOuterCtn}>
-        <ChessBoard player={gameInfo.player} initialPosition={DEFAULT_POSITION} isSinglePlayer={gameInfo.isSinglePlayer} />
+        <ChessBoard
+            player={gameInfo.player}
+            initialPosition={DEFAULT_POSITION}
+            isSinglePlayer={gameInfo.isSinglePlayer}
+        />
       </div>
     </React.Fragment>
   );

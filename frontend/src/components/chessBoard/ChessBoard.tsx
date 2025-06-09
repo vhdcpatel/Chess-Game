@@ -130,10 +130,10 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
       }, [game]);
 
 
-
     const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol)=>{
         // Logic to handle the promotion of the pawn.
         let  promotion = null;
+        // Add one more reducer with name attempt to move where you try to move if
         if(piece === 'p'){
             promotion = getPromotionPieceHandler(sourceSquare, targetSquare, piece);
         } 

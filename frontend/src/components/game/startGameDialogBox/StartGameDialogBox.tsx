@@ -16,11 +16,13 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
   const {isOpen, handleClose,gameInfo } = props;
   const [gameInfoLocal, setGameInfoLocal] = useState(gameInfo);
 
-  const handleUpdates = (type: 'mode' | 'color')=>(value: 'w' | 'b' | boolean)=>()=>{
+  const handleUpdates =
+      (type: 'mode' | 'color')=>
+          (value: 'w' | 'b' | boolean)=>()=> {
     if(type === 'mode'){
       setGameInfoLocal({...gameInfoLocal, isSinglePlayer: value as boolean});
-    }else if(type === 'color'){
-      setGameInfoLocal({...gameInfoLocal, player: value as 'w' | 'b'});
+    }else if(type === 'color' && typeof value === 'string'){
+      setGameInfoLocal({...gameInfoLocal, player: value});
     }
   }
   
@@ -30,8 +32,8 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
       <Dialog
         open={isOpen}
         onClose={() => { }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="Game Start Dialog"
+        aria-describedby="Dialog box to select the start of the game."
         maxWidth='xl'
       >
         <DialogTitle id="alert-dialog-title" className={styles.headerText}>

@@ -1,27 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Chess, Move, Square as SquareName, PieceSymbol } from 'chess.js';
-import { GameStatus, initialStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
-import {ChessState} from './chessModel';
+import { Chess, Move } from 'chess.js';
+import { GameStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
+import { ChessState, makeMovePayload } from './chessModel';
 import getGameStatus from '../../utils/getGameStatus';
 import { clearActivePieceState } from "./customUtils";
-
-const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+import { defaultStartFEN, InitialGameState } from "./ChessConstant";
 
 const initialState: ChessState = {
-    game: new Chess(defaultStartFEN),
-    gameState: initialStatus,
-    history: [],
-    activePiece: null,
+    player: 'w',
+    isSinglePlayer: true,
+    game: null,
     possibleMoves: [],
+    gameState: InitialGameState,
+    activePiece: null,
+    history: [],
 };
-
-type  makeMovePayload = {
-    from: SquareName;
-    to: SquareName;
-    promotion?: PieceSymbol;
-}
-
-
 
 const chessSlice = createSlice({
     name: 'chess',
@@ -29,8 +22,10 @@ const chessSlice = createSlice({
     reducers: {
 
         initGame(state, action: PayloadAction<string | undefined>) {
+
             const fen = action.payload || defaultStartFEN;
             state.game = new Chess(fen);
+
             state.gameState = getGameStatus(state.game);
             state.history = [];
             state.activePiece = null;
@@ -137,9 +132,6 @@ const chessSlice = createSlice({
             state.history = [];
         },
 
-        // setActivePiece(state, action: PayloadAction<PieceInfoModel | null>) {
-        //     state.activePiece = action.payload;
-        // },
         setPossibleMoves(state, action: PayloadAction<string[]>) {
             state.possibleMoves = action.payload;
         },
