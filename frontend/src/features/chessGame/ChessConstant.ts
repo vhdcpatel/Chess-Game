@@ -5,6 +5,7 @@ export const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ
 export const InitialGameState: GameStatus = {
     turn: 'w',
     gameState: 'OnGoing',
+    isGameOver: false,
 }
 
 export const initialState: ChessState = {

@@ -7,22 +7,20 @@ import Square from '../square/Square';
 import styles from './chessBoard.module.css';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
-import { Chess, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
+import { PieceSymbol, Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
-import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
-import getGameStatus from '../../utils/getGameStatus';
-import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
 import { useAppDispatch, useAppSelector } from "../../features";
 import {
     attemptMove, cancelPromotion,
     clearPossibleMoves,
     executePromotion,
-    initGame,
+    initGame, resetFullGame,
     setActivePiece
 } from "../../features/chessGame/chessSlice";
 import { generateEmptyBoard } from "../../utils/getEmptyArray";
 import PromotionDialog from "./PromotionDialog/PromotionDialog";
 import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
+import GameOverDialog from "./GameOverDialog/GameOverDialog";
 // import useSocket from '../../context/authContext/SocketContext';
 // import { useAppDispatch, useAppSelector } from '../../features';
 
@@ -46,6 +44,10 @@ const ChessBoard: React.FC = () => {
     const player = useAppSelector((state)=> state.chess.player);
     const isSinglePlayer = useAppSelector((state)=>state.chess.isSinglePlayer);
     const promotionInfo = useAppSelector((state)=> state.chess.promotionInfo);
+    const gameStatus = useAppSelector((state)=> state.chess.gameState);
+    const gameEndReason = useAppSelector((state)=> state.chess.gameEndReason);
+
+    const isGameOver = gameStatus.isGameOver ?? false;
 
     // dispatch(setActivePiece(activePiece));
     // dispacth(setPossibleMoves(possibleMoves));
@@ -186,6 +188,23 @@ const ChessBoard: React.FC = () => {
         dispatch(cancelPromotion());
     };
 
+    const handleNewGame = () => {
+        dispatch(resetFullGame());
+        // Any additional logic for starting a new game
+    };
+
+    const handleMainMenu = () => {
+        // future implementation.
+        // dispatch(returnToMainMenu());
+        // Navigate to main menu or reset to initial state
+    };
+
+    const handleCloseGameOver = () => {
+        // Optional: if you want to allow closing without action
+        // You might want to just show the final board state
+        console.log('Game over dialog closed');
+    };
+
 
     // Handle the render board based on the player. (Memorize to save compute on each render.)
     const { filesToRender, ranksToRender } = React.useMemo(() => {
@@ -209,6 +228,15 @@ const ChessBoard: React.FC = () => {
                     onCancel={handlePromotionCancel}
                 />
             }
+            {(isGameOver && gameEndReason !== null) && <GameOverDialog
+                isOpen={isGameOver}
+                gameStatus={gameStatus}
+                gameEndReason={gameEndReason}
+                onNewGame={handleNewGame}
+                onMainMenu={handleMainMenu}
+                onClose={handleCloseGameOver}
+            />}
+
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <div className={styles.mainOuterCtn}>
                 {ranksToRender.map((rank,RankIndex) =>

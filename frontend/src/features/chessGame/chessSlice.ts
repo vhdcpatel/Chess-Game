@@ -4,14 +4,16 @@ import { PieceInfoModel } from '../../utils/constants/initialPosition';
 import { ChessState, makeMovePayload, pieceTypeForPromotion } from './chessModel';
 import getGameStatus from '../../utils/getFullGameStatus';
 import { defaultStartFEN, initialState } from "./ChessConstant";
+import { WritableDraft } from 'immer';
 
-const updateGameStateAfterMove = (state: ChessState, lastMove?: Move) => {
+const updateGameStateAfterMove = (state: WritableDraft<ChessState>, lastMove?: Move) => {
     if(!state.game) return;
 
-    const newGameState = getGameStatus(state.game);
+    const newGameState = getGameStatus(state.game as Chess);
     state.gameState = newGameState;
 
     if(lastMove){
+        // For Showing why Getting checkMate.
         // state.lastmMove = moveResult;
     }
 
@@ -45,7 +47,7 @@ const chessSlice = createSlice({
             const gameState = new Chess(fen);
 
             state.game = gameState;
-            state.gameState = getGameStatus(gameState);
+            updateGameStateAfterMove(state);
             state.history = [];
             state.activePiece = null;
             state.possibleMoves = [];
@@ -81,7 +83,8 @@ const chessSlice = createSlice({
                     if(moveResults){
                         state.history.push(moveResults); // Might not need in future will drop in the future.
                         // Update the game state (Safe as you are not updating game inside getGameStatus.)
-                        state.gameState = getGameStatus(state.game as Chess);
+                        // state.gameState = getGameStatus(state.game as Chess);
+                        updateGameStateAfterMove(state);
                         state.activePiece = null;
                         state.possibleMoves = [];
                     }
@@ -108,7 +111,8 @@ const chessSlice = createSlice({
                 const moveResults = state.game.move({from, to, promotion});
                 if(moveResults){
                     state.history.push(moveResults);
-                    state.gameState = getGameStatus(state.game as Chess);
+                    updateGameStateAfterMove(state);
+                    // state.gameState = getGameStatus(state.game as Chess);
                 }
             } catch(e){
                 console.error("Error attempting move with promotion ",e);
@@ -132,7 +136,8 @@ const chessSlice = createSlice({
                 const moveResult = state.game.move({ from, to, promotion });
                 if (moveResult) {
                     state.history.push(moveResult);
-                    state.gameState = getGameStatus(state.game as Chess);
+                    updateGameStateAfterMove(state);
+                    // state.gameState = getGameStatus(state.game as Chess);
                     state.activePiece = null;
                     state.possibleMoves = [];
                 }
@@ -144,7 +149,8 @@ const chessSlice = createSlice({
         loadGameFromFEN(state, action: PayloadAction<string>){
             try{
                 state.game = new Chess(action.payload);
-                state.gameState = getGameStatus(state.game as Chess)
+                updateGameStateAfterMove(state);
+                // state.gameState = getGameStatus(state.game as Chess)
 
             }catch(e){
                 console.log("Error loading game from FEN:", e);
@@ -158,7 +164,8 @@ const chessSlice = createSlice({
             const moveHistory = state.game.history();
             if(moveHistory.length > 0){
                 state.game.undo();
-                state.gameState = getGameStatus(state.game as Chess);
+                // state.gameState = getGameStatus(state.game as Chess);
+                updateGameStateAfterMove(state);
                 state.promotionInfo = null;
                 state.activePiece = null;
                 state.possibleMoves = [];
