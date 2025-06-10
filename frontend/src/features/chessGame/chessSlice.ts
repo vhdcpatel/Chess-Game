@@ -185,10 +185,8 @@ const chessSlice = createSlice({
                 return;
             }
 
-            if(!state.activePiece || !state.activePiece.type) return;
-
             // Toggle active piece.
-            if(state.activePiece.square == piece.square){
+            if(state.activePiece && state.activePiece.square === piece.square){
                 state.activePiece = null;
                 state.possibleMoves = [];
                 return;

@@ -14,7 +14,8 @@ const AppRoutes: React.FC = () => {
 		<Suspense fallback={<Loader/>}>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route path={["/login", "/signup"]} element={<AuthPage />} />
+					<Route path={"/login"} element={<AuthPage />} />
+					<Route path={"/signup"} element={<AuthPage />} />
 					<Route path="/" element={<ProtectedRoutes />}>
 						<Route index element={<Game />} />
 						<Route path="*" element={<PageNotFound />} />

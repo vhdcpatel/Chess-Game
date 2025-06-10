@@ -1,6 +1,5 @@
 import React from 'react';
 import { Dialog, DialogTitle, Divider } from '@mui/material';
-import styles from '../Game.module.css';
 
 interface GenericDialogProps {
     isOpen?: boolean;
@@ -28,11 +27,11 @@ const GenericDialog: React.FC<GenericDialogProps> = (props) => {
             aria-describedby="dialog-content"
             maxWidth={maxWidth}
         >
-            <DialogTitle id="dialog-title" className={styles.headerText}>
+            <DialogTitle id="dialog-title">
                 {title}
             </DialogTitle>
             <Divider />
-            <div className={styles.dialogCtn}>
+            <div>
                 {children}
             </div>
         </Dialog>
