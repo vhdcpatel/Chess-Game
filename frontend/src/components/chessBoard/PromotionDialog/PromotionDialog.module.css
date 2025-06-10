@@ -1,0 +1,99 @@
+/* Header text styling */
+.headerText {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #2c3e50;
+    text-align: center;
+    padding: 16px 24px;
+    margin: 0;
+}
+
+/* Main dialog container */
+.dialogCtn {
+    padding: 24px;
+    min-width: 400px;
+    background-color: #ffffff;
+}
+
+/* Outer container for each section */
+.outerCtn {
+    margin-bottom: 24px;
+}
+
+.outerCtn:last-child {
+    margin-bottom: 0;
+}
+
+/* Title text for each section */
+.titleText {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Inner container for buttons */
+.innerCtn {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Action box container */
+.actionBox {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+    margin-top: 24px;
+}
+
+/* Inner action box container */
+.actionBoxInner {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Icon styling */
+.icons {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* Promotion button specific styling */
+.promotionButton {
+    min-width: 120px;
+    padding: 12px 16px;
+    text-transform: capitalize;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.promotionButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .dialogCtn {
+        padding: 16px;
+        min-width: 300px;
+    }
+
+    .innerCtn {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .promotionButton {
+        min-width: 200px;
+    }
+
+    .actionBoxInner {
+        flex-direction: column;
+        align-items: center;
+    }
+}

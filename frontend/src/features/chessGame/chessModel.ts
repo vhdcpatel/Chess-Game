@@ -2,6 +2,8 @@ import { Chess, Color, Move, PieceSymbol, Square, Square as SquareName } from "c
 
 export type playerColor = 'w' | 'b';
 
+export type pieceTypeForPromotion = 'q' | 'r' | 'b' | 'n';
+
 export interface GameStatus {
     turn: Color;
     gameState: 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';

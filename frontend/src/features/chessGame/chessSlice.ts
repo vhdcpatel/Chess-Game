@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Chess, Move, PieceSymbol, } from 'chess.js';
+import { Chess, Move } from 'chess.js';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
-import { ChessState, makeMovePayload } from './chessModel';
+import { ChessState, makeMovePayload, pieceTypeForPromotion } from './chessModel';
 import getGameStatus from '../../utils/getFullGameStatus';
 import { defaultStartFEN, initialState } from "./ChessConstant";
 
@@ -92,7 +92,7 @@ const chessSlice = createSlice({
 
         },
 
-        executePromotion(state, action: PayloadAction<PieceSymbol>){
+        executePromotion(state, action: PayloadAction<pieceTypeForPromotion>){
             if(!state.promotionInfo || !state.game) return;
 
             const promotion = action.payload;
@@ -200,7 +200,10 @@ const chessSlice = createSlice({
         clearActivePiece(state){
             state.activePiece = null;
             state.possibleMoves = [];
-            return;
+        },
+
+        clearPossibleMoves(state){
+            state.possibleMoves = [];
         },
 
         resetFullGame(){
@@ -220,6 +223,7 @@ export const {
     undoMove,
     setActivePiece,
     clearActivePiece,
+    clearPossibleMoves,
     resetFullGame
 } = chessSlice.actions;
 

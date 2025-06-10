@@ -21,6 +21,7 @@ const Game: React.FC = () => {
 
   useEffect(()=>{
     setDialogOpen(true);
+    // Should Load board with dummy data. better UX.
   },[]);
 
   const handleCloseDialog = (FinalGameInfo: gameInfoModel)=>{
@@ -36,11 +37,7 @@ const Game: React.FC = () => {
           gameInfo={gameInfo}
       />
       <div className={styles.mainOuterCtn}>
-        <ChessBoard
-            player={gameInfo.player}
-            initialPosition={DEFAULT_POSITION}
-            isSinglePlayer={gameInfo.isSinglePlayer}
-        />
+        <ChessBoard />
       </div>
     </React.Fragment>
   );
