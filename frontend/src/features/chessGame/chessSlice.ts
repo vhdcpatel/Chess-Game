@@ -14,7 +14,7 @@ const updateGameStateAfterMove = (state: WritableDraft<ChessState>, lastMove?: M
 
     if(lastMove){
         // For Showing why Getting checkMate.
-        // state.lastmMove = moveResult;
+        // state.lastMove = moveResult;
     }
 
     if(newGameState.isGameOver){
