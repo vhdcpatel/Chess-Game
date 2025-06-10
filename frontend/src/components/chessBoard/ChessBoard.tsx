@@ -4,7 +4,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
-import styles from './chessBoard.module.css';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
 import { PieceSymbol, Square as  SquareNames} from 'chess.js';
@@ -15,7 +14,6 @@ import {
     cancelPromotion,
     clearActivePiece,
     executePromotion,
-    initGame,
     resetFullGame,
     setActivePiece
 } from "../../features/chessGame/chessSlice";
@@ -23,19 +21,12 @@ import { generateEmptyBoard } from "../../utils/getEmptyArray";
 import PromotionDialog from "./PromotionDialog/PromotionDialog";
 import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
 import GameOverDialog from "./GameOverDialog/GameOverDialog";
-
-
+import styles from './chessBoard.module.css';
 
 const ChessBoard: React.FC = () => {
 
     // const { socket } = useSocket();
     const dispatch = useAppDispatch();
-
-
-    useEffect(() => {
-        // At the start of the game.
-        dispatch(initGame());
-    }, []);
 
     const game = useAppSelector((state)=> state.chess.game);
     const gameState = useAppSelector((state)=> state.chess.gameState);

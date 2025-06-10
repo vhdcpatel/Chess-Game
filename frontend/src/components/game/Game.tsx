@@ -3,6 +3,8 @@ import ChessBoard from '../chessBoard/ChessBoard';
 import { DEFAULT_POSITION } from '../../utils/constants/initialPosition';
 import styles from './Game.module.css';
 import StartGameDialogBox from './startGameDialogBox/StartGameDialogBox';
+import { initGame, startGame } from "../../features/chessGame/chessSlice";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 export interface gameInfoModel {
   player: 'w' | 'b';
@@ -19,14 +21,18 @@ const Game: React.FC = () => {
     isSinglePlayer: false
   });
 
+  const dispatch = useAppDispatch();
+
   useEffect(()=>{
+    dispatch(initGame());
     setDialogOpen(true);
     // Should Load board with dummy data. better UX.
   },[]);
 
   const handleCloseDialog = (FinalGameInfo: gameInfoModel)=>{
     setDialogOpen(false);
-    setGameInfo(FinalGameInfo);
+    dispatch(startGame({isSinglePlayer: FinalGameInfo.isSinglePlayer, player:  FinalGameInfo.player}));
+    // setGameInfo(FinalGameInfo);
   };
 
   return (

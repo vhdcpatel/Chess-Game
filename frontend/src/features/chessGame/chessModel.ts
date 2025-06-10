@@ -39,3 +39,8 @@ export interface makeMovePayload {
     to: SquareName;
     promotion?: PieceSymbol;
 }
+
+export interface StartGamePayload {
+    player: playerColor;
+    isSinglePlayer: boolean;
+}

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Chess, Move } from 'chess.js';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
-import { ChessState, makeMovePayload, pieceTypeForPromotion } from './chessModel';
+import { ChessState, makeMovePayload, pieceTypeForPromotion, StartGamePayload } from './chessModel';
 import getGameStatus from '../../utils/getFullGameStatus';
 import { defaultStartFEN, initialState } from "./ChessConstant";
 import { WritableDraft } from 'immer';
@@ -44,13 +44,17 @@ const chessSlice = createSlice({
     reducers: {
         initGame(state, action: PayloadAction<string | undefined>) {
             const fen = action.payload || defaultStartFEN;
-            const gameState = new Chess(fen);
-
-            state.game = gameState;
+            state.game = new Chess(fen);
             updateGameStateAfterMove(state);
             state.history = [];
             state.activePiece = null;
             state.possibleMoves = [];
+        },
+
+        startGame(state, action: PayloadAction<StartGamePayload>) {
+            const {  player, isSinglePlayer } = action.payload;
+            state.player = player;
+            state.isSinglePlayer = isSinglePlayer;
         },
 
         // Handle all moves expect promotion case.
@@ -231,7 +235,8 @@ export const {
     setActivePiece,
     clearActivePiece,
     clearPossibleMoves,
-    resetFullGame
+    resetFullGame,
+    startGame,
 } = chessSlice.actions;
 
 export default chessSlice.reducer;
