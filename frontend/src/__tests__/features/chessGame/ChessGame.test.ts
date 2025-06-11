@@ -60,7 +60,8 @@ describe('Chess Slice', () => {
         ...overrides,
     });
 
-    const createPiece = (type: PieceSymbol = 'p', color: Color  = 'w', square: Square = 'e2') => ({
+    const createPiece =
+        (type: PieceSymbol = 'p', color: Color  = 'w', square: Square = 'e2') => ({
         type: type,
         color: color,
         square: square,
