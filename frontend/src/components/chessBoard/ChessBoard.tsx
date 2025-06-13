@@ -159,7 +159,7 @@ const ChessBoard: React.FC = () => {
 
                         return (
                             <Square
-                                key={`${file}${rank}`}
+                                key={`${rank}${file}`}
                                 file={file}
                                 rank={String(rank)}
                                 onClick={handleClick}

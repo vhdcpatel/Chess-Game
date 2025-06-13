@@ -21,9 +21,6 @@ vi.mock('../../utils/constants/srcMap', () => ({
 }));
 
 describe('Should render the piece component correctly.', () => {
-  
-
-
   const defaultProps = {
     type: "p" as PieceType,
     color: "w" as PieceColor,

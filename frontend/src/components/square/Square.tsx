@@ -40,7 +40,8 @@ const Square: React.FC<SquareProps> = (props) => {
   return (
     <React.Fragment>
       <div 
-          ref={drop} 
+          ref={drop}
+          data-testid="square"
           className={squareClasses}
           style={{cursor: isPossibleMove ? 'pointer' : 'default'}}
           onClick={clickHandler}
