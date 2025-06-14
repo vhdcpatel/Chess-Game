@@ -78,7 +78,11 @@ const chessSlice = createSlice({
 
             if(isPromotion){
                 // Handle the promotion model for new pawn.
-
+                state.promotionInfo = {
+                    from: from,
+                    to: to,
+                    color: piece.color,
+                }
             }else{
                 // Try to localize use of try catch at the place where you think changes of error are maximum.
                 try{

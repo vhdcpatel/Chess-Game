@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { Chess, PieceSymbol } from 'chess.js';
+import { Chess, PieceSymbol, Move } from 'chess.js';
 import chessReducer, {
     initGame,
     startGame,
@@ -14,7 +14,7 @@ import chessReducer, {
     clearPossibleMoves,
     resetFullGame,
 } from '../../../features/chessGame/chessSlice';
-import { ChessState } from '../../../features/chessGame/chessModel';
+import { ChessState, PieceInfoModel } from '../../../features/chessGame/chessModel';
 import { initialState, defaultStartFEN } from '../../../features/chessGame/ChessConstant';
 import getGameStatus from '../../../utils/getFullGameStatus';
 import { Color, Square } from "chess.js/src/chess";
@@ -53,9 +53,11 @@ describe('Chess Slice', () => {
         isGameOver: vi.fn().mockReturnValue(false),
     });
 
+    let mockChessInstance: ReturnType<typeof createMockChessInstance>;
+
     const createStateWithGame = (overrides = {}) => ({
         ...initialState,
-        game: createMockChessInstance(),
+        game: mockChessInstance,
         gameState: createMockGameState(),
         ...overrides,
     });
@@ -67,12 +69,10 @@ describe('Chess Slice', () => {
         square: square,
     });
 
-    let mockChessInstance: ReturnType<typeof createMockChessInstance>;
 
     beforeEach(() => {
         // Reset all mocks before each test
         vi.clearAllMocks();
-
         // Create fresh mock instance
         mockChessInstance = createMockChessInstance();
         mockGetGameStatus.mockReturnValue(createMockGameState());
@@ -109,7 +109,17 @@ describe('Chess Slice', () => {
         it('should reset all game state properties to initial values', () => {
             const modifiedState: ChessState = {
                 ...initialState,
-                history: [{ from: 'e2', to: 'e4', san: 'e4' }],
+                history: [{
+                    from: 'e2',
+                    to: 'e4',
+                    san: 'e4',
+                    color: 'b',
+                    piece: 'q',
+                    flags: '',
+                    lan: '',
+                    before: '',
+                    after: ''
+                }],
                 activePiece: createPiece(),
                 possibleMoves: ['e3', 'e4'],
             };
@@ -141,11 +151,11 @@ describe('Chess Slice', () => {
         });
     });
 
-    describe('attemptMove', () => {
+    describe('attemptMove should work fine.', () => {
         let testState: ChessState;
 
         beforeEach(() => {
-            testState = createStateWithGame() as ChessState;
+            testState = createStateWithGame() as unknown as ChessState;
         });
 
         it('should execute regular move successfully when piece exists', () => {
@@ -182,6 +192,8 @@ describe('Chess Slice', () => {
             const state = chessReducer(testState, action);
 
             expect(mockChessInstance.move).not.toHaveBeenCalled();
+            expect(state.promotionInfo).toEqual({ from: 'e7', to: 'e8', color: 'w' });
+            expect(state.promotionInfo).not.toBeNull();
         });
 
         it('should handle pawn promotion for black pawn moving to 1st rank', () => {
@@ -192,6 +204,7 @@ describe('Chess Slice', () => {
             const state = chessReducer(testState, action);
 
             expect(mockChessInstance.move).not.toHaveBeenCalled();
+            expect(state.promotionInfo).toEqual({ from: 'e2', to: 'e1', color: 'b' });
         });
 
         it('should handle invalid move gracefully and log error', () => {
@@ -234,7 +247,7 @@ describe('Chess Slice', () => {
                 promotionInfo: { from: 'e7', to: 'e8', color: 'w' },
                 activePiece: createPiece('p', 'w', 'e7'),
                 possibleMoves: ['e8'],
-            } as ChessState;
+            } as unknown as ChessState;
         });
 
         it('should execute promotion successfully with specified piece', () => {
@@ -276,7 +289,7 @@ describe('Chess Slice', () => {
             const stateWithoutPromotion: ChessState = {
                 ...createStateWithGame(),
                 promotionInfo: null,
-            } as ChessState;
+            } as unknown as ChessState;
 
             const action = executePromotion('q');
             const state = chessReducer(stateWithoutPromotion, action);
@@ -335,7 +348,7 @@ describe('Chess Slice', () => {
                 ...createStateWithGame(),
                 activePiece: createPiece(),
                 possibleMoves: ['e3', 'e4'],
-            } as ChessState;
+            } as unknown as ChessState;
         });
 
         it('should execute move and update state successfully', () => {
@@ -432,7 +445,7 @@ describe('Chess Slice', () => {
                 activePiece: createPiece('p', 'w', 'e4'),
                 possibleMoves: ['e5'],
                 promotionInfo: { from: 'e7', to: 'e8', color: 'w' },
-            } as ChessState;
+            } as unknown as ChessState;
         });
 
         it('should undo move when move history exists', () => {
@@ -475,7 +488,7 @@ describe('Chess Slice', () => {
             testState = {
                 ...createStateWithGame(),
                 gameState: createMockGameState({ turn: 'w' }),
-            } as ChessState;
+            } as unknown as ChessState;
         });
 
         it('should set active piece and calculate possible moves', () => {
@@ -505,7 +518,7 @@ describe('Chess Slice', () => {
                 possibleMoves: ['e3', 'e4'],
             };
 
-            const action = setActivePiece(null as any);
+            const action = setActivePiece(null as unknown as PieceInfoModel);
             const state = chessReducer(stateWithActivePiece, action);
 
             expect(state.activePiece).toBeNull();
@@ -608,12 +621,12 @@ describe('Chess Slice', () => {
         it('should reset all state to initial values', () => {
             const modifiedState: ChessState = {
                 ...initialState,
-                game: mockChessInstance as any,
+                game: mockChessInstance as unknown as Chess,
                 player: 'b',
                 isSinglePlayer: false,
                 activePiece: createPiece(),
                 possibleMoves: ['e3', 'e4'],
-                history: [{ from: 'e2', to: 'e4' } as any],
+                history: [{ from: 'e2', to: 'e4' } as unknown as Move],
                 gameEndReason: 'Test end reason',
             };
 
@@ -628,7 +641,7 @@ describe('Chess Slice', () => {
         let testState: ChessState;
 
         beforeEach(() => {
-            testState = createStateWithGame() as ChessState;
+            testState = createStateWithGame() as unknown as ChessState;
         });
 
         it('should set checkmate message when white wins', () => {
