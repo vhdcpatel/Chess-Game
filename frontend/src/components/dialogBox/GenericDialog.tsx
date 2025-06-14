@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, Divider } from '@mui/material';
+import styles from './GenericDialogStyles.module.css';
 
 interface GenericDialogProps {
     isOpen?: boolean;
@@ -26,6 +27,11 @@ const GenericDialog: React.FC<GenericDialogProps> = (props) => {
             aria-labelledby="dialog-title"
             aria-describedby="dialog-content"
             maxWidth={maxWidth}
+            slotProps={{
+                paper: {
+                    className: styles.dialogPaper
+                }
+            }}
         >
             <DialogTitle id="dialog-title">
                 {title}
