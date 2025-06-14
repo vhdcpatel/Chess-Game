@@ -6,7 +6,7 @@ import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
-import { PieceSymbol, Square as  SquareNames} from 'chess.js';
+import { Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
 import { useAppDispatch, useAppSelector } from "../../features";
 import {
@@ -14,8 +14,9 @@ import {
     cancelPromotion,
     clearActivePiece,
     executePromotion,
-    resetFullGame,
-    setActivePiece
+    initGame,
+    setActivePiece,
+    startGame
 } from "../../features/chessGame/chessSlice";
 import { generateEmptyBoard } from "../../utils/getEmptyArray";
 import PromotionDialog from "./PromotionDialog/PromotionDialog";
@@ -59,7 +60,7 @@ const ChessBoard: React.FC = () => {
     //     }
     // }, [socket]);
 
-    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol)=>{
+    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
         // Updating the state of the game based on the move.
         // handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
         dispatch(attemptMove({
@@ -69,11 +70,11 @@ const ChessBoard: React.FC = () => {
     }
     
     const onDropHandler = (item: PieceInfoModel, rank: string, file: string) => {
-        handleMove(item.square, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
+        handleMove(item.square, `${file}${rank}` as SquareNames);
     }
 
     const handleClick = (file: string, rank: string) => {
-        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
+        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames);
     }
 
     // No need for useCallBack as we are calling it from 32 components only.
@@ -100,7 +101,8 @@ const ChessBoard: React.FC = () => {
     };
 
     const handleNewGame = () => {
-        dispatch(resetFullGame());
+        dispatch(initGame());
+        dispatch(startGame({player, isSinglePlayer}));
         // Any additional logic for starting a new game
     };
 

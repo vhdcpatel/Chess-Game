@@ -220,6 +220,7 @@ const chessSlice = createSlice({
         },
 
         resetFullGame(){
+            // Not needed just clear complete board which is not need.
           return initialState;
         },
 
