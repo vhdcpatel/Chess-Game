@@ -1,0 +1,198 @@
+:root {
+    --color-bg-light: #f8f9fa;
+    --color-bg-lighter: #e9ecef;
+    --color-border: #dee2e6;
+    --color-border-dark: #6c757d;
+    --color-success: #28a745;
+    --color-success-bg1: #d4edda;
+    --color-success-bg2: #c3e6cb;
+    --color-warning: #ffc107;
+    --color-warning-bg1: #fff3cd;
+    --color-warning-bg2: #ffeaa7;
+    --color-default: #6c757d;
+    --color-text-main: #495057;
+    --color-text-dark: #212529;
+    --color-white: #fff;
+}
+
+/* Main containers */
+.outerCtn {
+    margin-bottom: 1.5rem;
+}
+
+.outerCtn:last-child {
+    margin-bottom: 0;
+}
+
+/* Result container */
+.resultContainer {
+    text-align: center;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-lighter) 100%);
+    border: 0.125rem solid var(--color-border);
+    margin-bottom: 0.5rem;
+}
+
+/* Result title styling */
+.resultTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+}
+
+/* Different result type colors */
+.winResult {
+    color: var(--color-success);
+    background: linear-gradient(135deg, var(--color-success-bg1) 0%, var(--color-success-bg2) 100%);
+}
+
+.drawResult {
+    color: var(--color-warning);
+    background: linear-gradient(135deg, var(--color-warning-bg1) 0%, var(--color-warning-bg2) 100%);
+}
+
+.defaultResult {
+    color: var(--color-default);
+}
+
+/* Result message */
+.resultMessage {
+    font-size: 1.1rem;
+    color: var(--color-text-main);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Reason text */
+.reasonText {
+    font-size: 0.9rem;
+    color: var(--color-default);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+/* Stats container */
+.statsContainer {
+    background-color: var(--color-bg-light);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 0.0625rem solid var(--color-bg-lighter);
+}
+
+.statLabel {
+    font-weight: 500;
+    color: var(--color-text-main);
+}
+
+.statValue {
+    font-weight: 600;
+    color: var(--color-text-dark);
+}
+
+/* Action box */
+.actionBox {
+    border-top: 0.125rem solid var(--color-bg-lighter);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+.actionBoxInner {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Button styling */
+.primaryButton {
+    min-width: 7.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-transform: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.primaryButton:hover {
+    transform: translateY(-0.0625rem);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+.secondaryButton {
+    min-width: 7.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    text-transform: none;
+    border: 0.125rem solid var(--color-border-dark);
+    color: var(--color-border-dark);
+    transition: all 0.2s ease-in-out;
+}
+
+.secondaryButton:hover {
+    background-color: var(--color-border-dark);
+    color: var(--color-white);
+    transform: translateY(-0.0625rem);
+}
+
+.textButton {
+    min-width: 5rem;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    text-transform: none;
+    color: var(--color-border-dark);
+    transition: all 0.2s ease-in-out;
+}
+
+.textButton:hover {
+    background-color: rgba(108, 117, 125, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 30rem) {
+    .resultContainer {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .resultTitle {
+        font-size: 1.3rem;
+    }
+
+    .resultMessage {
+        font-size: 1rem;
+    }
+
+    .actionBoxInner {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        min-width: 12.5rem;
+    }
+
+    .statsContainer {
+        padding: 0.75rem;
+    }
+}
+
+/* Animation for dialog entrance */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-1.25rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.resultContainer {
+    animation: slideIn 0.3s ease-out;
+}

@@ -1,189 +1,167 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import Square from '../square/Square';
-import styles from './chessBoard.module.css';
-import { GameStatus, initialStatus, PieceInfoModel } from '../../utils/constants/initialPosition';
+import { PieceInfoModel } from '../../utils/constants/initialPosition';
 import { FILES, RANKS } from '../../utils/constants/ranksAndFiles';
-import { Chess, Move, PieceSymbol, Square as  SquareNames} from 'chess.js';
+import { Square as  SquareNames} from 'chess.js';
 import Piece from '../pieces/Piece';
-import { getPromotionPieceHandler } from '../../utils/constants/handleMoves';
-import getGameStatus from '../../utils/getGameStatus';
-import { getBestMoveNew } from '../../utils/miniMax/getBestMove';
-import useSocket from '../../context/authContext/SocketContext';
+import { useAppDispatch, useAppSelector } from "../../features";
+import {
+    attemptMove,
+    cancelPromotion,
+    clearActivePiece,
+    executePromotion,
+    initGame,
+    setActivePiece,
+    startGame
+} from "../../features/chessGame/chessSlice";
+import { generateEmptyBoard } from "../../utils/getEmptyArray";
+import PromotionDialog from "./PromotionDialog/PromotionDialog";
+import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
+import GameOverDialog from "./GameOverDialog/GameOverDialog";
+import styles from './chessBoard.module.css';
 
-interface ChessBoardProps {
-    player: 'w' | 'b';
-    initialPosition?: string;
-    isSinglePlayer: boolean;
-}
+const ChessBoard: React.FC = () => {
 
-const defaultStartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    // const { socket } = useSocket();
+    const dispatch = useAppDispatch();
 
-const ChessBoard: React.FC<ChessBoardProps> = (props) => {
-    const { player, isSinglePlayer } = props;
-    
-    const { socket } = useSocket();
+    const game = useAppSelector((state)=> state.chess.game);
+    const gameState = useAppSelector((state)=> state.chess.gameState);
+    const activePiece = useAppSelector((state)=> state.chess.activePiece);
+    const possibleMoves = useAppSelector((state)=> state.chess.possibleMoves);
+    const player = useAppSelector((state)=> state.chess.player);
+    const isSinglePlayer = useAppSelector((state)=>state.chess.isSinglePlayer);
+    const promotionInfo = useAppSelector((state)=> state.chess.promotionInfo);
+    const gameStatus = useAppSelector((state)=> state.chess.gameState);
+    const gameEndReason = useAppSelector((state)=> state.chess.gameEndReason);
 
-
-    // Handle the render board based on the player.
-    const FilesToRender = player === 'w' ? FILES : [...FILES].reverse();
-    const RanksToRender = player === 'w' ? RANKS : [...RANKS].reverse();
-
-    const [game, setGame] = useState<Chess>(new Chess(defaultStartFEN));
-    const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
-    const [activePiece, setActivePiece] = useState<PieceInfoModel | null>(null);
-    const [gameState, setGameState] = useState<GameStatus>(initialStatus);
-    
-    const [history, setHistory] = useState<Move[]>([]); 
-    // [from, to, piece, captured, promotion, flags, san, lan, before(fen), after*(fen)] array of all this things.
+    const isGameOver = gameStatus.isGameOver ?? false;
 
     // For Handling the Socket.io for the multiplayer game.
-    useEffect(() => {
-        if (socket) {
-            socket.on('connect', () => {
-                console.log('Connected to socket server');
-            });
+    // Making Socket Disable Now.
+    // useEffect(() => {
+    //     if (socket) {
+    //         socket.on('connect', () => {
+    //             console.log('Connected to socket server');
+    //         });
+    //
+    //         socket.on('move', (move) => {
+    //             console.log('Received move:', move);
+    //         });
+    //
+    //         return () => {
+    //             socket.off('connect');
+    //             socket.off('move');
+    //         };
+    //     }
+    // }, [socket]);
 
-            socket.on('move', (move) => {
-                console.log('Received move:', move);
-            });
-
-            return () => {
-                socket.off('connect');
-                socket.off('move');
-            };
-        }
-    }, [socket]);
-
-   
-    useEffect(()=>{
-        let gameStatus = gameState.gameState;
-        // Handling the checkMate, staleMate and Draw state currently.
-        if(gameStatus === 'CheckMate'){
-            setTimeout(()=>{
-                alert(`CheckMate ${gameState.turn === 'w' ? 'black':'white'} won the game`);
-            },0);
-            // setGame(new Chess(defaultStartFEN));
-        }else if(gameStatus === 'Draw'){
-            alert(`Game Draw`);
-        }else if(gameStatus === 'StaleMate'){
-            alert(`StaleMate Positions for the ${gameState.turn === 'b' ? 'Black':'White'} player.`);
-        }
-
-        // If single player then find the move for the computer.
-        // (putting here so it can not block state update of the other side.)
-        if(isSinglePlayer){
-            if(gameStatus === "OnGoing" && game.turn() !== player){
-                // CPU intensive task.
-                let moveInfo = getBestMoveNew(game,player,3,gameState.globalSum);
-                setGameState((prev)=>({...prev, globalSum: moveInfo[2]}));
-                
-                let bestMove = moveInfo[0];
-                if(bestMove){
-                    const newGame = new Chess(game.fen());
-                    let res = newGame.move(bestMove);
-                    if(res){
-                        setGame(newGame);
-                        setHistory([...history, res]);
-                    }
-                }
-            }
-        }
-    },[gameState, isSinglePlayer, player]);
-
-    useEffect(()=>{
-        const gameStatus = getGameStatus(game);
-        setGameState((prev)=>({
-            ...prev,
-            turn: gameStatus.turn,
-            gameState: gameStatus.gameState,
-            globalSum: prev.globalSum
-        }));
-    },[game])
-
-
-    const handleMoveUpdate = useCallback((from: SquareNames, to: SquareNames, promotion?: PieceSymbol) => {
-        // Create a new chess.js instance to not mutate the current game.
-        const newGame = new Chess(game.fen());
-
-        const result = newGame.move({from, to, promotion});
-        
-        if (result) {
-            // If valid move then update the game state.
-            setGame(newGame);
-            setHistory([...history, result]);
-            possibleMoveSetterHandler('reset')();
-            activePieceHandler('reset')();
-        }else{
-            alert("Invalid Move");
-        }
-      }, [game]);
-
-
-
-    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames, piece: PieceSymbol)=>{
-        // Logic to handle the promotion of the pawn.
-        let  promotion = null;
-        if(piece === 'p'){
-            promotion = getPromotionPieceHandler(sourceSquare, targetSquare, piece);
-        } 
-        getPromotionPieceHandler(sourceSquare, targetSquare,piece);
+    const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
         // Updating the state of the game based on the move.
-        handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
+        // handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
+        dispatch(attemptMove({
+            from: sourceSquare,
+            to: targetSquare,
+        }))
     }
     
     const onDropHandler = (item: PieceInfoModel, rank: string, file: string) => {
-        handleMove(item.square, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
+        handleMove(item.square, `${file}${rank}` as SquareNames);
     }
 
     const handleClick = (file: string, rank: string) => {
-        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames, activePiece?.type as PieceSymbol);
+        handleMove(activePiece?.square as SquareNames, `${file}${rank}` as SquareNames);
     }
 
-    // Handle the possible moves for the selected piece.
-    const activePieceHandler = (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => {
-            if (type === "reset") {
-            setActivePiece(null);
+    // No need for useCallBack as we are calling it from 32 components only.
+    const activePieceHandler = (type: "set" | "reset") => (pieceInfo?: PieceInfoModel) => {
+        if (type === "reset") {
+            dispatch(clearActivePiece());
             return;
         }
-        if(PieceInfo?.color === gameState.turn && (!isSinglePlayer || player === PieceInfo.color)){
-            PieceInfo && setActivePiece((prev)=>{
-                if(prev?.square === PieceInfo.square){
-                    return null;
-                }
-                return PieceInfo;
-            });
+
+        // Only allow setting active piece if it's the current player's turn
+        // and in single player mode, only allow if it's the human player's piece
+        if (pieceInfo?.color === gameState.turn && (!isSinglePlayer || player === pieceInfo.color)) {
+            dispatch(setActivePiece(pieceInfo));
         }
     };
 
-    const possibleMoveSetterHandler = (option: "set" | "reset")=> (square?: SquareNames) => {
-        if(option === "reset"){
-            setPossibleMoves([]);
-            return;
-        }
-        if(square && (gameState.turn === game.get(square)?.color)){
-            const possibleMoves = game.moves({square, verbose: true});
-            const possibleMovesModified = possibleMoves.map(move => move.to);
-            setPossibleMoves(possibleMovesModified);
-        }
+    // Handlers for promotion dialog
+    const handlePromotion = (piece: pieceTypeForPromotion) => {
+        dispatch(executePromotion(piece));
     };
-    
-    const boardPosition = player ==='w' ? game.board() : (game.board().map((row)=>(row.reverse()))).reverse();
+
+    const handlePromotionCancel = () => {
+        dispatch(cancelPromotion());
+    };
+
+    const handleNewGame = () => {
+        dispatch(initGame());
+        dispatch(startGame({player, isSinglePlayer}));
+        // Any additional logic for starting a new game
+    };
+
+    const handleMainMenu = () => {
+        // future implementation.
+        // dispatch(returnToMainMenu());
+        // Navigate to main menu or reset to initial state
+    };
+
+    const handleCloseGameOver = () => {
+        // Optional: if you want to allow closing without action
+        // You might want to just show the final board state
+        console.log('Game over dialog closed');
+    };
+
+    // Handle the render board based on the player. (Memorize to save compute on each render.)
+    const { filesToRender, ranksToRender } = React.useMemo(() => {
+        const files = player === 'w' ? FILES : [...FILES].reverse();
+        const ranks = player === 'w' ? RANKS : [...RANKS].reverse();
+        return { filesToRender: files, ranksToRender: ranks };
+    }, [player]);
+
+    const boardPosition = !game
+        ? generateEmptyBoard()
+        : player === 'w'
+            ? game.board()
+            : game.board().map(row => row.reverse()).reverse();
     
     return (
-        <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
+        <React.Fragment>
+            {(promotionInfo!== null) &&
+                <PromotionDialog
+                    promotionInfo={promotionInfo}
+                    onPromote={handlePromotion}
+                    onCancel={handlePromotionCancel}
+                />
+            }
+            {(isGameOver && gameEndReason !== null) && <GameOverDialog
+                isOpen={isGameOver}
+                gameStatus={gameStatus}
+                gameEndReason={gameEndReason}
+                onNewGame={handleNewGame}
+                onMainMenu={handleMainMenu}
+                onClose={handleCloseGameOver}
+            />}
+
+            <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <div className={styles.mainOuterCtn}>
-                {RanksToRender.map((rank,RankIndex) =>
+                {ranksToRender.map((rank,RankIndex) =>
                     <div key={rank} className={styles.ranks} >
-                    {FilesToRender.map((file,FileIndex) => {
+                    {filesToRender.map((file,FileIndex) => {
                         const piece = boardPosition[RankIndex][FileIndex];
-                        const isCheckOrMate = (gameState.gameState === "Check" || gameState.gameState==="CheckMate") && gameState.turn === piece?.color && piece?.type === 'k';
+                        const isCheckOrMate =
+                            (gameState.gameState === "Check" || gameState.gameState==="CheckMate") &&
+                            gameState.turn === piece?.color && piece?.type === 'k';
+
                         return (
                             <Square
-                                key={`${file}${rank}`}
+                                key={`${rank}${file}`}
                                 file={file}
                                 rank={String(rank)}
                                 onClick={handleClick}
@@ -201,7 +179,6 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                                         isSinglePlayer={isSinglePlayer}
                                         player={player}
                                         activePieceHandler={activePieceHandler}
-                                        setPossibleMove={possibleMoveSetterHandler}
                                     />
                                 )}
                             </Square>
@@ -211,6 +188,7 @@ const ChessBoard: React.FC<ChessBoardProps> = (props) => {
                 )}
             </div>
         </DndProvider>
+        </React.Fragment>
     );
 };
 

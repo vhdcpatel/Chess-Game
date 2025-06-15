@@ -3,6 +3,8 @@ import ChessBoard from '../chessBoard/ChessBoard';
 import { DEFAULT_POSITION } from '../../utils/constants/initialPosition';
 import styles from './Game.module.css';
 import StartGameDialogBox from './startGameDialogBox/StartGameDialogBox';
+import { initGame, startGame } from "../../features/chessGame/chessSlice";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 export interface gameInfoModel {
   player: 'w' | 'b';
@@ -11,29 +13,37 @@ export interface gameInfoModel {
 
 }
 
-const Game: React.FC = (props) => {
-  const {} = props;
+const Game: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [gameInfo, setGameInfo] = useState<gameInfoModel>({
+  const gameInfo:gameInfoModel = {
     player: 'w',
     initialPosition: DEFAULT_POSITION,
     isSinglePlayer: false
-  });
+  };
+
+  const dispatch = useAppDispatch();
 
   useEffect(()=>{
+    dispatch(initGame());
     setDialogOpen(true);
+    // Should Load board with dummy data. better UX.
   },[]);
 
   const handleCloseDialog = (FinalGameInfo: gameInfoModel)=>{
     setDialogOpen(false);
-    setGameInfo(FinalGameInfo);
+    dispatch(startGame({isSinglePlayer: FinalGameInfo.isSinglePlayer, player:  FinalGameInfo.player}));
+    // setGameInfo(FinalGameInfo);
   };
 
   return (
     <React.Fragment>
-      <StartGameDialogBox isOpen={dialogOpen} handleClose={handleCloseDialog} gameInfo={gameInfo} />
+      <StartGameDialogBox
+          isOpen={dialogOpen}
+          handleClose={handleCloseDialog}
+          gameInfo={gameInfo}
+      />
       <div className={styles.mainOuterCtn}>
-        <ChessBoard player={gameInfo.player} initialPosition={DEFAULT_POSITION} isSinglePlayer={gameInfo.isSinglePlayer} />
+        <ChessBoard />
       </div>
     </React.Fragment>
   );

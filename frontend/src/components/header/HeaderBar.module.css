@@ -1,0 +1,59 @@
+.logo {
+  margin-right: 2rem;
+  display: none;
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.3rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.logo.md {
+  display: flex;
+}
+
+.logo.sm {
+  display: flex;
+  flex-grow: 1;
+  margin-right: 2rem;
+}
+
+.navBox {
+  flex-grow: 1;
+  display: flex;
+}
+
+.navBox.sm {
+  display: flex;
+}
+
+.navBox.md {
+  display: flex;
+}
+
+.menu {
+  display: block;
+}
+
+.menu.md {
+  display: none;
+}
+
+.menu.sm {
+  display: block;
+}
+
+.menuButton {
+  margin: 0.5rem 0;
+  color: white;
+  display: block;
+}
+
+.avatarButton {
+  padding: 0;
+}
+
+.menuPaper {
+  margin-top: 2.8rem;
+}
+

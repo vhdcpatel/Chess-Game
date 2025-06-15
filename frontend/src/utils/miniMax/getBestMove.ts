@@ -5,7 +5,7 @@ import evaluateBoard from "./evalutions";
 export const getBestMoveNew = (game:Chess, color:'w' | 'b', depth = 3, score:number):[Move | null | undefined, number,number] => {
 
 
-  let [bestMove, bestMoveValue] = minimax(
+  const [bestMove, bestMoveValue] = minimax(
     game,
     depth,
     Number.NEGATIVE_INFINITY,
@@ -14,7 +14,7 @@ export const getBestMoveNew = (game:Chess, color:'w' | 'b', depth = 3, score:num
     score,
     color
   );
-  let currScore = evaluateBoard(game, bestMove as Move, score, color);
+  const currScore = evaluateBoard(game, bestMove as Move, score, color);
 
   return [bestMove, bestMoveValue,currScore];
 }

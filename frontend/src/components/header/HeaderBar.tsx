@@ -8,38 +8,44 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext/authContext';
+import styles from './HeaderBar.module.css';
 
-const pages = [{
+const pages = [
+    {
   name: 'Game',
   url: '/'
-}, {
+  },
+  {
   name: 'Blogs',
   url: '/blogs'
-}, {
+  },
+  {
   name: 'Past Games',
   url: '/past-games'
-}];
+  }
+];
 
-const loginPage = [{
-  name: "login",
-  url: '/login'
-}]
+// const loginPage = [{
+//   name: "login",
+//   url: '/login'
+// }]
 
 // Latter add all other types.
 const settings = [
   // 'Profile', 'Account', 'Dashboard', 
   'Logout'];
 
-const AnonymousUserSetting = ['Login']
+const AnonymousUserSetting = ["Bazinga!"]
 
 const  HeaderBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
   const navigate = useNavigate();
 
   const { isAuthenticated, logout } = useAuth();
@@ -47,6 +53,7 @@ const  HeaderBar = () => {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -64,16 +71,14 @@ const  HeaderBar = () => {
     if (option === 'Logout') {
       logout();
     }
-
   }
-
   
   const navigationHandler = (url: string) => () => {
     navigate(url);
     handleCloseNavMenu();
   }
 
-  const pagesToShow = isAuthenticated ? pages : loginPage;
+  // const pagesToShow = isAuthenticated ? pages : loginPage;
   const menuOptions = isAuthenticated ? settings : AnonymousUserSetting;
 
   return (
@@ -85,21 +90,12 @@ const  HeaderBar = () => {
             noWrap
             component="a"
             href="#vhdc"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            className={styles.logo + ' ' + styles.md}
           >
             Chess.JS
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            
+          <Box className={styles.navBox + ' ' + styles.sm} sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             {isAuthenticated && (
               <>
                 <IconButton
@@ -126,9 +122,8 @@ const  HeaderBar = () => {
                   }}
                   open={Boolean(anchorElNav)}
                   onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: 'block', md: 'none' },
-                  }}
+                  classes={{ paper: styles.menuPaper }}
+                  sx={{ display: { xs: 'block', md: 'none' } }}
                 >
                   {pages.map((page) => (
                     <MenuItem key={page.name} onClick={navigationHandler(page.url)}>
@@ -136,13 +131,15 @@ const  HeaderBar = () => {
                     </MenuItem>
                   ))}
                 </Menu>
-              </>)}
+              </>
+            )}
           </Box>
           <Typography
             variant="h5"
             noWrap
             component="a"
             href="#vhdc"
+            className="logo sm"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -156,26 +153,26 @@ const  HeaderBar = () => {
           >
             Chess.JS
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-
-            {pagesToShow.map((page) => (
-              <Button
-                key={page.name}
-                onClick={navigationHandler(page.url)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page.name}
-              </Button>
-            ))}
-          </Box>
+          {/*<Box className={styles.navBox + ' ' + styles.md} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>*/}
+          {/*  {pagesToShow.map((page) => (*/}
+          {/*    <Button*/}
+          {/*      key={page.name}*/}
+          {/*      onClick={navigationHandler(page.url)}*/}
+          {/*      className={styles.menuButton}*/}
+          {/*      sx={{ my: 2, color: 'white', display: 'block' }}*/}
+          {/*    >*/}
+          {/*      {page.name}*/}
+          {/*    </Button>*/}
+          {/*  ))}*/}
+          {/*</Box>*/}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} className={styles.avatarButton}>
                 <Avatar alt="M" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              classes={{ paper: styles.menuPaper }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{

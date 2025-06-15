@@ -1,0 +1,111 @@
+:root {
+    --color-header-text: #2c3e50;
+    --color-title-text: #34495e;
+    --color-bg-dialog: #ffffff;
+    --spacing-xs: 0.75rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --dialog-min-width: 25rem;
+    --font-header: 1.25rem;
+    --font-title: 1.1rem;
+    --border-radius: 0.5rem;
+}
+
+/* Header text styling */
+.headerText {
+    font-weight: 600;
+    font-size: var(--font-header);
+    color: var(--color-header-text);
+    text-align: center;
+    padding: var(--spacing-xs) var(--spacing-md);
+    margin: 0;
+}
+
+/* Main dialog container */
+.dialogCtn {
+    padding: var(--spacing-md);
+    min-width: var(--dialog-min-width);
+    background-color: var(--color-bg-dialog);
+    border-radius: var(--border-radius);
+}
+
+/* Outer container for each section */
+.outerCtn {
+    margin-bottom: var(--spacing-md);
+}
+
+.outerCtn:last-child {
+    margin-bottom: 0;
+}
+
+/* Title text for each section */
+.titleText {
+    font-size: var(--font-title);
+    font-weight: 500;
+    color: var(--color-title-text);
+    margin-bottom: var(--spacing-xs);
+    text-align: center;
+}
+
+/* Inner container for buttons */
+.innerCtn {
+    display: flex;
+    gap: 0.75rem; /* 12px -> 0.75rem */
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Action box container */
+.actionBox {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1.25rem; /* 20px -> 1.25rem */
+    margin-top: 1.5rem; /* 24px -> 1.5rem */
+}
+
+/* Inner action box container */
+.actionBoxInner {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem; /* 12px -> 0.75rem */
+}
+
+/* Icon styling */
+.icons {
+    width: 1.5rem; /* 24px -> 1.5rem */
+    height: 1.5rem; /* 24px -> 1.5rem */
+    object-fit: contain;
+}
+
+/* Promotion button specific styling */
+.promotionButton {
+    min-width: 7.5rem; /* 120px -> 7.5rem */
+    padding: 0.75rem 1rem; /* 12px 16px -> 0.75rem 1rem */
+    text-transform: capitalize;
+    border-radius: 0.5rem; /* 8px -> 0.5rem */
+    transition: all 0.2s ease-in-out;
+}
+
+.promotionButton:hover {
+    transform: translateY(-0.125rem); /* -2px -> -0.125rem */
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); /* 0 4px 8px -> 0 0.25rem 0.5rem */
+}
+
+/* Responsive design */
+@media (max-width: 30rem) { /* 480px -> 30rem */
+    .dialogCtn {
+        padding: 1rem; /* 16px -> 1rem */
+        min-width: 18.75rem; /* 300px -> 18.75rem */
+    }
+    .innerCtn {
+        flex-direction: column;
+        align-items: center;
+    }
+    .promotionButton {
+        min-width: 12.5rem; /* 200px -> 12.5rem */
+    }
+    .actionBoxInner {
+        flex-direction: column;
+        align-items: center;
+    }
+}

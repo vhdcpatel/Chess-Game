@@ -20,14 +20,21 @@ const Square: React.FC<SquareProps> = (props) => {
 
   const isLight = (Number(rank) + charToNum(file)) % 2 !== 0;
 
-
-  const [{ }, drop] = useDrop({
+  // Fix: use a ref and pass it to drop
+  const divRef = React.useRef<HTMLDivElement>(null);
+  const [, drop] = useDrop({
     accept: 'piece',
     drop: (item: PieceInfoModel) => onDrop(item, rank, file),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
   });
+
+  React.useEffect(() => {
+    if (divRef.current) {
+      drop(divRef.current);
+    }
+  }, [drop]);
 
   const clickHandler = ()=>{
     if(isPossibleMove && onClick){
@@ -39,8 +46,9 @@ const Square: React.FC<SquareProps> = (props) => {
   
   return (
     <React.Fragment>
-      <div 
-          ref={drop} 
+      <div
+          ref={divRef}
+          data-testid="square"
           className={squareClasses}
           style={{cursor: isPossibleMove ? 'pointer' : 'default'}}
           onClick={clickHandler}

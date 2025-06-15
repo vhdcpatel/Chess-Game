@@ -19,11 +19,10 @@ export interface GameStatus {
   globalSum: number;
 }
 
-export const initialStatus:GameStatus = {
+export const initialStatus: GameStatus = {
   turn: 'w',
   gameState: 'OnGoing',
   globalSum: 0
 }
-
 
 export const DEFAULT_POSITION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'

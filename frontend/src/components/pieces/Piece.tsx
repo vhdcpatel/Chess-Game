@@ -12,14 +12,15 @@ interface PieceProps {
   color: PieceColor;
   position: string;
   active: boolean;
-  setPossibleMove: (option: "set" | "reset") => (square?: Square) => void;
   activePieceHandler: (type: "set" | "reset") => (PieceInfo?: PieceInfoModel) => void;
   isSinglePlayer: boolean;
   player: 'w' | 'b';
 }
 
 const Piece: React.FC<PieceProps> = (props) => {
-  const { type, color, position, setPossibleMove, activePieceHandler, active, isSinglePlayer, player} = props;
+  const { type, color, position, activePieceHandler, active, isSinglePlayer, player} = props;
+
+  const imgRef = React.useRef<HTMLImageElement>(null);
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -38,7 +39,6 @@ const Piece: React.FC<PieceProps> = (props) => {
     item: () => {
       if (active) {
         activePieceHandler('reset')();
-        setPossibleMove('reset')();
         return;
       }
       if(isSinglePlayer && player !== color){
@@ -46,7 +46,6 @@ const Piece: React.FC<PieceProps> = (props) => {
       }
       const currSquare = { type, color, square: position };
       activePieceHandler('set')(currSquare as PieceInfoModel);
-      setPossibleMove('set')(position as Square);
       return { type, color, square: position };
     },
     collect: (monitor) => ({
@@ -54,12 +53,11 @@ const Piece: React.FC<PieceProps> = (props) => {
     }),
   // Always add dependency for the drag other wise it will take the old value 
   // and state management will become inconsistent.
-  }), [type, color, position, active, setPossibleMove, activePieceHandler]);
+  }), [type, color, position, active, activePieceHandler]);
 
   const handleClick = () => {
       if(active){
         activePieceHandler('reset')();
-        setPossibleMove('reset')();
         return;
       }
       if(isSinglePlayer && player !== color){
@@ -67,21 +65,27 @@ const Piece: React.FC<PieceProps> = (props) => {
       }
       const currSquare: PieceInfoModel = { type, color, square: position as Square}
       activePieceHandler('set')(currSquare);
-      setPossibleMove('set')(position as Square);
   }
   
-  const pieceSrc = getSrc[color][type];
   const isMobileScreen = useMediaQuery('(max-width: 1000px)');
 
+  // Use a ref for the img and attach drag to it in useEffect for type safety
+  useEffect(() => {
+    if (!isMobileScreen && imgRef.current) {
+      drag(imgRef.current);
+    }
+  }, [isMobileScreen, drag]);
+
+  const pieceSrc = getSrc[color][type];
 
   return (
     <div 
       className={`${styles.piece} ${isDragging ? styles.dragging: ''}`}
       >
-      <img 
+      <img
         src={pieceSrc}
         alt={`${color} ${type}`}
-        ref={isMobileScreen ? null :  drag}
+        ref={imgRef}
         style={{ opacity: isDragging ? 0.5 : 1, zIndex: 2}}
         draggable={false}
         onClick={handleClick}
