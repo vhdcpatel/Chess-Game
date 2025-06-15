@@ -20,6 +20,8 @@ interface PieceProps {
 const Piece: React.FC<PieceProps> = (props) => {
   const { type, color, position, activePieceHandler, active, isSinglePlayer, player} = props;
 
+  const imgRef = React.useRef<HTMLImageElement>(null);
+
   // For prevention of getting background on the image tag.
   useEffect(() => {
     if(!isFirefox()){    
@@ -65,18 +67,25 @@ const Piece: React.FC<PieceProps> = (props) => {
       activePieceHandler('set')(currSquare);
   }
   
-  const pieceSrc = getSrc[color][type];
   const isMobileScreen = useMediaQuery('(max-width: 1000px)');
 
+  // Use a ref for the img and attach drag to it in useEffect for type safety
+  useEffect(() => {
+    if (!isMobileScreen && imgRef.current) {
+      drag(imgRef.current);
+    }
+  }, [isMobileScreen, drag]);
+
+  const pieceSrc = getSrc[color][type];
 
   return (
     <div 
       className={`${styles.piece} ${isDragging ? styles.dragging: ''}`}
       >
-      <img 
+      <img
         src={pieceSrc}
         alt={`${color} ${type}`}
-        ref={isMobileScreen ? null :  drag}
+        ref={imgRef}
         style={{ opacity: isDragging ? 0.5 : 1, zIndex: 2}}
         draggable={false}
         onClick={handleClick}
