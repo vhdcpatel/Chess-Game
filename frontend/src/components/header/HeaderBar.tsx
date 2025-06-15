@@ -78,7 +78,7 @@ const  HeaderBar = () => {
     handleCloseNavMenu();
   }
 
-  const pagesToShow = isAuthenticated ? pages : loginPage;
+  // const pagesToShow = isAuthenticated ? pages : loginPage;
   const menuOptions = isAuthenticated ? settings : AnonymousUserSetting;
 
   return (
