@@ -15,11 +15,11 @@ export interface gameInfoModel {
 
 const Game: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [gameInfo, setGameInfo] = useState<gameInfoModel>({
+  const gameInfo:gameInfoModel = {
     player: 'w',
     initialPosition: DEFAULT_POSITION,
     isSinglePlayer: false
-  });
+  };
 
   const dispatch = useAppDispatch();
 

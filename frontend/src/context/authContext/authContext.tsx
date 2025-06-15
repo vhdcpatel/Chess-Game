@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { loginHandler, signupHandler } from '../../services/apis/auth';
 import { LoginCallPayLoad, SingUpCallPayLoad } from '../../models/types/payloads';
-import { UserInfo } from '../../models/types/response';
+import { UserInfo } from '../../features/auth/authTypes';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -26,12 +26,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         throw new Error('Login failed');
       }
       const userData = response.data.user;
-      const token = response.data.token;
+      const token = response.data.authToken;
       setAuthToken(token);
       setUser(userData);
       setIsAuthenticated(true);
     } catch (error) {
-      throw new Error('Login failed');
+      throw new Error(error+'Login failed');
     }
   };
 
@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if(response.status !== 201 || !response.data.user){
         throw new Error('Login failed');
       }
-      const token = response.data.token;
+      const token = response.data.authToken
       const userData = response.data.user;
 
       setAuthToken(token);
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
     } catch (error) {
       console.log(error);
-      throw new Error('SignUp failed');
+      throw new Error(error+'SignUp failed');
     }
   };
 

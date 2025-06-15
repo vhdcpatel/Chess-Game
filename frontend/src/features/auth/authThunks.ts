@@ -3,7 +3,7 @@ import { loginHandler, signupHandler } from "../../services/apis/auth";
 import { LoginCallPayLoad, SingUpCallPayLoad, AuthState } from "./authTypes";
 
 export const loginUser = createAsyncThunk<
-    authToken,
+    AuthState,
     LoginCallPayLoad,
     { rejectValue: string }
 >(
@@ -19,7 +19,7 @@ export const loginUser = createAsyncThunk<
                 authToken: response.data.authToken,
             };
         } catch (err) {
-            return thunkAPI.rejectWithValue("Login failed");
+            return thunkAPI.rejectWithValue(err+" Login failed");
         }
     }
 );
@@ -42,7 +42,7 @@ export const signupUser = createAsyncThunk<
                 authToken: response.data.authToken
             };
         } catch (err) {
-            return thunkAPI.rejectWithValue("Signup failed");
+            return thunkAPI.rejectWithValue(err+" Signup failed");
         }
     }
 );
