@@ -1,47 +1,60 @@
+:root {
+  --color-background-paper: #fff;
+  --color-text-primary: #222;
+  --color-text-secondary: #666;
+  --color-text-disabled: #ccc;
+  --color-primary-main: #007bff;
+  --color-primary-light: #0056b3;
+  --color-primary-contrastText: #fff;
+  --border-radius: 0.5rem;
+  --box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  --max-width-form: 25rem;
+}
+
 .formContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 1.25rem;
   background-color: var(--color-background-paper);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  max-width: var(--max-width-form);
   margin: auto;
 }
 
 .formTitle {
-  font-size: 24px;
+  font-size: 1.5rem;
   color: var(--color-text-primary);
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
 .inputLabel {
   width: 100%;
-  margin: 10px 0 5px;
-  font-size: 14px;
+  margin: 0.625rem 0 0.3125rem;
+  font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
 
 .inputField {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid var(--color-text-disabled);
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 0.625rem;
+  margin: 0.625rem 0;
+  border: 0.0625rem solid var(--color-text-disabled);
+  border-radius: 0.25rem;
+  font-size: 1rem;
 }
 
 .submitButton {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 0.625rem;
+  margin: 0.625rem 0;
   background-color: var(--color-primary-main);
   color: var(--color-primary-contrastText);
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 0.25rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -53,8 +66,8 @@
 .toggleMessage {
   cursor: pointer;
   color: var(--color-secondary-main);
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
 }
 
 .toggleMessage:hover {
@@ -65,42 +78,42 @@
 /* Responsive Styles */
 @media (max-width: 768px) {
   .formContainer {
-    padding: 15px;
+    padding: 1rem;
     max-width: 90%;
   }
 
   .formTitle {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
   }
 
   .inputField, .submitButton {
-    font-size: 14px;
-    padding: 8px;
+    font-size: 0.875rem;
+    padding: 0.5rem;
   }
 
   .toggleMessage {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .formContainer {
-    padding: 10px;
+    padding: 0.625rem;
     max-width: 100%;
   }
 
   .formTitle {
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 1rem;
+    margin-bottom: 0.625rem;
   }
 
   .inputField, .submitButton {
-    font-size: 12px;
-    padding: 6px;
+    font-size: 0.75rem;
+    padding: 0.375rem;
   }
 
   .toggleMessage {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 }
