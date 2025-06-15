@@ -30,10 +30,10 @@ const pages = [
   }
 ];
 
-const loginPage = [{
-  name: "login",
-  url: '/login'
-}]
+// const loginPage = [{
+//   name: "login",
+//   url: '/login'
+// }]
 
 // Latter add all other types.
 const settings = [
