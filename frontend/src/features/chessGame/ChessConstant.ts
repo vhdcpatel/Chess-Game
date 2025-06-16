@@ -18,4 +18,5 @@ export const initialState: ChessState = {
     history: [],
     promotionInfo: null,
     gameEndReason: null,
+    stockFishState: null,
 };

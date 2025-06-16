@@ -52,9 +52,19 @@ const chessSlice = createSlice({
         },
 
         startGame(state, action: PayloadAction<StartGamePayload>) {
-            const {  player, isSinglePlayer } = action.payload;
+            const {  player, isSinglePlayer, elo } = action.payload;
             state.player = player;
             state.isSinglePlayer = isSinglePlayer;
+            if(isSinglePlayer && elo){
+                state.stockFishState = {
+                    elo: elo,
+                    flagReady: false,
+                    flagThinking: false,
+                    error: null
+                }
+            }else{
+                state.stockFishState = null;
+            }
         },
 
         // Handle all moves expect promotion case.
