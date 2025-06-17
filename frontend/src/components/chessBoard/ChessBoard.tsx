@@ -23,11 +23,13 @@ import PromotionDialog from "./PromotionDialog/PromotionDialog";
 import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
 import GameOverDialog from "./GameOverDialog/GameOverDialog";
 import styles from './chessBoard.module.css';
+import { useStockFish } from "../../hooks/useStockFish/useStockFish";
 
 const ChessBoard: React.FC = () => {
 
     // const { socket } = useSocket();
     const dispatch = useAppDispatch();
+    const { isThinking } = useStockFish();
 
     const game = useAppSelector((state)=> state.chess.game);
     const gameState = useAppSelector((state)=> state.chess.gameState);
