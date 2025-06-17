@@ -43,10 +43,13 @@ export const useStockFish = ()=>{
         loadedRef.current = true;
 
         try {
-            workerRef.current =  new Worker(
-                new URL('../workers/stockfishWorker.ts', import.meta.url),
-                { type: 'classic' }
-            );
+            const workerUrl = new URL('../../workers/stockfishWorker.js', import.meta.url);
+            console.log('Worker URL:', workerUrl.href);
+
+            workerRef.current = new Worker(workerUrl, {
+                type: 'classic',
+                name: 'stockfish-worker'
+            });
 
             // Set up message event handler.
             workerRef.current.onmessage = (e)=>{
