@@ -49,7 +49,7 @@ export default defineConfig({
   },
 
   // Treat .wasm as a static asset so import.meta.url and ?url imports work
-  assetsInclude: ['**/*.wasm'],
+  // assetsInclude: ['**/*.wasm'],
 
   publicDir: 'public',
 
@@ -59,6 +59,6 @@ export default defineConfig({
   },
 
   optimizeDeps: {
-    exclude: ['stockfish'],
+    exclude: ['stockfish-17-lite-single.js'],
   },
 })

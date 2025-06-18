@@ -40,10 +40,12 @@ export const useStockFish = ()=>{
         loadedRef.current = true;
 
         try {
-            workerRef.current = new Worker(
-                new URL('/stockfish/stockfish-17-lite-single.js', import.meta.url),
-                { type: 'module' }
-            );
+            // workerRef.current = new Worker(
+            //     new URL('/stockfish/stockfish-17-lite-single.js', import.meta.url),
+            //     { type: 'module' }
+            // );
+            // Above code cause problem in production environment.
+            workerRef.current = new Worker('/stockfish/stockfish-17-lite-single.js', { type: 'module' });
             // workerRef.current = new Worker("/stockfish/stockfish-17-lite-single.js");
 
             // Set up message event handler.
