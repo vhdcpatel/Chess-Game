@@ -56,11 +56,16 @@ const chessSlice = createSlice({
             state.player = player;
             state.isSinglePlayer = isSinglePlayer;
             if(isSinglePlayer && elo){
-                state.stockFishState = {
-                    elo: elo,
-                    flagReady: false,
-                    flagThinking: false,
-                    error: null
+                // Now it set after single player settings only.
+                if(state.stockFishState === null) {
+                    state.stockFishState = {
+                        elo: elo,
+                        flagReady: false,
+                        flagThinking: false,
+                        error: null
+                    }
+                }else{
+                    state.stockFishState.elo = elo;
                 }
             }else{
                 state.stockFishState = null;

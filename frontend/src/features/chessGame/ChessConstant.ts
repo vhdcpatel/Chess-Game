@@ -8,9 +8,10 @@ export const InitialGameState: GameStatus = {
     isGameOver: false,
 }
 
+// Set Multiplayer by default so don't load wasm.
 export const initialState: ChessState = {
     player: 'w',
-    isSinglePlayer: true,
+    isSinglePlayer: false,
     game: null,
     possibleMoves: [],
     gameState: InitialGameState,

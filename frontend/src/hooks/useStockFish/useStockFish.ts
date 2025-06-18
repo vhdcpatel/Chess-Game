@@ -13,7 +13,6 @@ import { PieceSymbol, Square } from "chess.js";
 
 
 const limitStrength = true;
-const StockfishWorker = new URL('../../workers/stockfishWorker.ts', import.meta.url,);
 
 export const useStockFish = ()=>{
     const dispatch = useAppDispatch();
@@ -41,17 +40,11 @@ export const useStockFish = ()=>{
         loadedRef.current = true;
 
         try {
-            // const workerUrl = new URL('../../workers/stockfishWorker.js', import.meta.url);
-            // console.log('Worker URL:', workerUrl.href);
-            //
-            // workerRef.current = new Worker(workerUrl, {
-            //     type: 'classic',
-            //     name: 'stockfish-worker'
-            // });
-
-
-            workerRef.current = new Worker("/stockfish/stockfish-17-lite-single.js");
-            // workerRef.current = createStockfishWorker();
+            workerRef.current = new Worker(
+                new URL('/stockfish/stockfish-17-lite-single.js', import.meta.url),
+                { type: 'module' }
+            );
+            // workerRef.current = new Worker("/stockfish/stockfish-17-lite-single.js");
 
             // Set up message event handler.
             workerRef.current.onmessage = (e)=>{
@@ -160,6 +153,7 @@ export const useStockFish = ()=>{
 
 
     const requestSFMove = useCallback(async ()=>{
+        debugger;
         if(!workerRef.current){
             await loadStockFish();
             if(!workerRef.current) return
@@ -199,6 +193,7 @@ export const useStockFish = ()=>{
 
     // Auto trigger StockFish move.
     useEffect(()=>{
+        debugger;
         if(
             isSinglePlayer &&
             ready &&
