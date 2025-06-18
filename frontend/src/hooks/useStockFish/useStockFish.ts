@@ -3,19 +3,17 @@ import { useAppSelector } from "../useAppSelector";
 import { useCallback, useEffect, useRef } from "react";
 import { getEloSettings } from "../../utils/getEloSettings";
 import {
+    initializeStockFishState,
     makeMove,
     updateStockFishReadystate,
     updateStockFishThinking
 } from "../../features/chessGame/chessSlice";
 import { PieceSymbol, Square } from "chess.js";
 
-// interface StockFishWorker {
-//     postMessage: (message: string)=> void;
-//     onMessage: ((event: MessageEvent)=> void) | null;
-//     terminate: () => void;
-// }
+
 
 const limitStrength = true;
+const StockfishWorker = new URL('../../workers/stockfishWorker.ts', import.meta.url,);
 
 export const useStockFish = ()=>{
     const dispatch = useAppDispatch();
@@ -43,13 +41,17 @@ export const useStockFish = ()=>{
         loadedRef.current = true;
 
         try {
-            const workerUrl = new URL('../../workers/stockfishWorker.js', import.meta.url);
-            console.log('Worker URL:', workerUrl.href);
+            // const workerUrl = new URL('../../workers/stockfishWorker.js', import.meta.url);
+            // console.log('Worker URL:', workerUrl.href);
+            //
+            // workerRef.current = new Worker(workerUrl, {
+            //     type: 'classic',
+            //     name: 'stockfish-worker'
+            // });
 
-            workerRef.current = new Worker(workerUrl, {
-                type: 'classic',
-                name: 'stockfish-worker'
-            });
+
+            workerRef.current = new Worker("/stockfish/stockfish-17-lite-single.js");
+            // workerRef.current = createStockfishWorker();
 
             // Set up message event handler.
             workerRef.current.onmessage = (e)=>{
@@ -64,6 +66,7 @@ export const useStockFish = ()=>{
 
             // Initialize UCI protocol;
             workerRef.current.postMessage('uci');
+            dispatch(initializeStockFishState());
 
             // Simulate ELO by mapping ELO to skill level;
             // workerRef.current.postMessage('set-option name skill level value'+ )
@@ -75,7 +78,12 @@ export const useStockFish = ()=>{
     },[]);
 
     const handleStockfishMessage = useCallback((message: string)=>{
-        console.log("Stock Fish message", message);
+        console.log(message);
+        // if(message === "Stock Fish message Stockfish 17 Lite WASM by the Stockfish developers (see AUTHORS file)"){
+        //     debugger;
+        //     workerRef.current && workerRef.current.postMessage('uci');
+        // }
+
         const [type, ...rest] = message.split(" ");
 
         switch (type){
@@ -174,7 +182,7 @@ export const useStockFish = ()=>{
             // Start search with appropriate time/depth limits
             const searchCommand = settings.time ?
                 `go movetime ${settings.time}` :
-                `go depth ${settings.time}`
+                `go depth ${settings.depth}`
 
             workerRef.current.postMessage(searchCommand);
             // Targeting both depth and time will make game too much hard. (Check which one is working)

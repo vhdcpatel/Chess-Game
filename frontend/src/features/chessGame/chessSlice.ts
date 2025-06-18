@@ -234,10 +234,25 @@ const chessSlice = createSlice({
           return initialState;
         },
 
+        initializeStockFishState(state){
+            state.stockFishState = {
+                flagReady: false,
+                flagThinking: false,
+                elo: 1400,
+                error: null,
+            }
+        },
+
         updateStockFishThinking(state, action: PayloadAction<boolean>){
             const thinkingState = action.payload;
             if (!state.stockFishState) {
                 console.warn("Stockfish state is null — cannot update thinking flag.");
+                // state.stockFishState = {
+                //     flagReady: thinkingState,
+                //     flagThinking: thinkingState,
+                //     elo: 1400,
+                //     error: null,
+                // }
                 return;
             }
             state.stockFishState.flagThinking = thinkingState;
@@ -247,6 +262,12 @@ const chessSlice = createSlice({
             const readyState = action.payload;
             if (!state.stockFishState) {
                 console.warn("Stockfish state is null — cannot update thinking flag.");
+                // state.stockFishState = {
+                //     flagReady: readyState,
+                //     flagThinking: readyState,
+                //     elo: 1400,
+                //     error: null,
+                // }
                 return;
             }
             state.stockFishState.flagReady = readyState;
@@ -269,7 +290,8 @@ export const {
     resetFullGame,
     startGame,
     updateStockFishThinking,
-    updateStockFishReadystate
+    updateStockFishReadystate,
+    initializeStockFishState
 } = chessSlice.actions;
 
 export default chessSlice.reducer;

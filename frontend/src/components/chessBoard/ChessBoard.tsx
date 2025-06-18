@@ -29,7 +29,7 @@ const ChessBoard: React.FC = () => {
 
     // const { socket } = useSocket();
     const dispatch = useAppDispatch();
-    const { isThinking } = useStockFish();
+    const { } = useStockFish();
 
     const game = useAppSelector((state)=> state.chess.game);
     const gameState = useAppSelector((state)=> state.chess.gameState);
