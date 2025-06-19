@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styles from '../Game.module.css';
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material';
 import { getSrc } from '../../../utils/constants/srcMap';
 import PersonIcon from '@mui/icons-material/Person';
 import ComputerIcon from '@mui/icons-material/Computer';
 import { gameInfoModel } from '../Game';
 import GenericDialog from "../../dialogBox/GenericDialog";
+import MenuItem from "@mui/material/MenuItem";
 
 
 interface StartGameDialogBoxProps {
@@ -29,6 +30,10 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
                 }
               };
 
+  const handleEloChange = (e: SelectChangeEvent<number>) => {
+      setGameInfoLocal({...gameInfoLocal, elo: e.target.value as number})
+  }
+
   const dialogContent = (
       <>
         <div className={styles.outerCtn}>
@@ -50,6 +55,30 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
             </Button>
           </div>
         </div>
+       <div>
+       {/* Add DropDown For Elo and Add option of 800 to 2000 with gap 0f 100 */}
+           <h3 className={styles.titleText}>Please select ELO rating.</h3>
+           <div className={styles.innerCtn}>
+               <FormControl className={styles.eloDropdown} variant="outlined">
+                   <InputLabel id="elo-select-label">ELO Rating</InputLabel>
+                   <Select
+                       labelId="elo-select-label"
+                       id="elo-select"
+                       value={gameInfoLocal.elo || 1200}
+                       onChange={handleEloChange}
+                       label="ELO Rating"
+                       className={styles.selectField}
+                   >
+                       {Array.from({ length: 13 }, (_, i) => 800 + i * 100).map((elo) => (
+                           <MenuItem key={elo} value={elo} className={styles.menuItem}>
+                               {elo}
+                           </MenuItem>
+                       ))}
+                   </Select>
+               </FormControl>
+           </div>
+
+       </div>
         <div className={styles.outerCtn}>
           <h3 className={styles.titleText}>Please select side to play.</h3>
           <div className={styles.innerCtn}>

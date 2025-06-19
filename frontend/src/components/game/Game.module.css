@@ -49,3 +49,30 @@
   width: 1.5625rem;
   height: 1.5625rem;
 }
+
+.eloDropdown {
+  min-width: 200px !important;
+  width: 100% !important;
+}
+
+.selectField {
+  background-color: #f5f5f5 !important;
+  border-radius: 8px !important;
+}
+
+.selectField:hover {
+  background-color: #e8e8e8 !important;
+}
+
+.selectField.Mui-focused {
+  background-color: #fff !important;
+}
+
+.menuItem {
+  padding: 12px 16px !important;
+  font-weight: 500 !important;
+}
+
+.menuItem:hover {
+  background-color: #f0f0f0 !important;
+}
