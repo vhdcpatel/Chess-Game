@@ -29,7 +29,9 @@ const ChessBoard: React.FC = () => {
 
     // const { socket } = useSocket();
     const dispatch = useAppDispatch();
-    const { } = useStockFish();
+
+    // StockFish Hook for single player mode.
+    useStockFish();
 
     const game = useAppSelector((state)=> state.chess.game);
     const gameState = useAppSelector((state)=> state.chess.gameState);
@@ -44,6 +46,7 @@ const ChessBoard: React.FC = () => {
     const isGameOver = gameStatus.isGameOver ?? false;
 
     // For Handling the Socket.io for the multiplayer game.
+    // Will implement in the future.
     // Making Socket Disable Now.
     // useEffect(() => {
     //     if (socket) {
@@ -64,7 +67,7 @@ const ChessBoard: React.FC = () => {
 
     const handleMove = (sourceSquare: SquareNames, targetSquare: SquareNames)=>{
         // Updating the state of the game based on the move.
-        // handleMoveUpdate(sourceSquare, targetSquare, promotion ?? undefined);
+        // If not promotion move than move else give promotion Dialog box.
         dispatch(attemptMove({
             from: sourceSquare,
             to: targetSquare,
@@ -120,7 +123,8 @@ const ChessBoard: React.FC = () => {
         console.log('Game over dialog closed');
     };
 
-    // Handle the render board based on the player. (Memorize to save compute on each render.)
+    // Handle the render board based on the player.
+    // (Memorize to save compute on each render.)
     const { filesToRender, ranksToRender } = React.useMemo(() => {
         const files = player === 'w' ? FILES : [...FILES].reverse();
         const ranks = player === 'w' ? RANKS : [...RANKS].reverse();
@@ -155,7 +159,7 @@ const ChessBoard: React.FC = () => {
             <div className={styles.mainOuterCtn}>
                 {ranksToRender.map((rank,RankIndex) =>
                     <div key={rank} className={styles.ranks} >
-                    {filesToRender.map((file,FileIndex) => {
+                        {filesToRender.map((file,FileIndex) => {
                         const piece = boardPosition[RankIndex][FileIndex];
                         const isCheckOrMate =
                             (gameState.gameState === "Check" || gameState.gameState==="CheckMate") &&
