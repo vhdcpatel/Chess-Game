@@ -19,7 +19,7 @@ interface GameOverDialogProps {
     gameEndReason: string | null;
     onNewGame: () => void;
     onMainMenu: () => void;
-    onClose?: () => void;
+    onDownloadFen?: () => void;
 }
 
 const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
@@ -29,7 +29,7 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
         gameEndReason,
         onNewGame,
         onMainMenu,
-        onClose,
+        onDownloadFen,
     } = props;
 
     const getGameResult = () => {
@@ -110,13 +110,13 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
                     >
                         Main Menu
                     </Button>
-                    {onClose && (
+                    {onDownloadFen && (
                         <Button
                             variant="text"
-                            onClick={onClose}
+                            onClick={onDownloadFen}
                             className={styles.textButton}
                         >
-                            Close
+                            Download FEN
                         </Button>
                     )}
                 </div>
@@ -128,7 +128,7 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
         <GenericDialog
             isOpen={isOpen}
             title="Game Complete"
-            onClose={onClose}
+            onClose={onDownloadFen}
             maxWidth="sm"
         >
             {dialogContent}

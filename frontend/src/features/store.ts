@@ -4,7 +4,6 @@ import combineReducer from './rootReducer';
 
 export const store = configureStore({
   reducer: combineReducer,
-  // Add any middleware if needed
   middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {

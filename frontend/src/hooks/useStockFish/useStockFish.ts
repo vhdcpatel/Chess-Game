@@ -3,7 +3,6 @@ import { useAppSelector } from "../useAppSelector";
 import { useCallback, useEffect, useRef } from "react";
 import { getEloSettings } from "../../utils/getEloSettings";
 import {
-    initializeStockFishState,
     makeMove,
     updateStockFishReadystate,
     updateStockFishThinking
@@ -11,7 +10,7 @@ import {
 import { PieceSymbol, Square } from "chess.js";
 
 const limitStrength = true;
-const stockFishDelay = 100;
+const stockFishDelay = 1000;
 
 export const useStockFish = ()=>{
 
@@ -20,6 +19,7 @@ export const useStockFish = ()=>{
     const workerRef = useRef<Worker | null>(null);
     const isInitializedRef = useRef(false);
     const loadedRef = useRef(false);
+    const currentEloRef = useRef<number>(1400);
 
 
     const game = useAppSelector((state)=> state.chess.game);
@@ -29,58 +29,14 @@ export const useStockFish = ()=>{
     const stockFishState = useAppSelector((state)=> state.chess.stockFishState);
 
 
-    // const isEnabled = !!stockFishState; // Do Any Action if isEnabled.
+    // const isEnabled = !!stockFishState;
+    
+    // Derived state from redux.
     const elo = stockFishState?.elo ?? 1400;
     const ready = stockFishState?.flagReady ?? false;
     const thinking = stockFishState?.flagThinking ?? false;
 
-    // Lazy load Stockfish
-    const loadStockFish = useCallback(async () => {
-        if(loadedRef.current || isInitializedRef.current) return;
-
-        loadedRef.current = true;
-
-        try {
-            // workerRef.current = new Worker(
-            //     new URL('/stockfish/stockfish-17-lite-single.js', import.meta.url),
-            //     { type: 'module' }
-            // );
-            // Above code cause problem in production environment but working fine in local env.
-
-            workerRef.current = new Worker('/stockfish/stockfish-17-lite-single.js', { type: 'module' });
-            // workerRef.current = new Worker("/stockfish/stockfish-17-lite-single.js");
-
-            // Set up message event handler for worker thread.
-            workerRef.current.onmessage = (e)=>{
-                handleStockfishMessage(e.data);
-            };
-
-            // Handle worker thread errors
-            workerRef.current.onerror = (error) => {
-                console.error("Stockfish worker error:", error);
-                loadedRef.current = false;
-            };
-
-            // Initialize UCI protocol; (UCI handshake)
-            workerRef.current.postMessage('uci');
-            dispatch(initializeStockFishState());
-
-            // Simulate ELO by mapping ELO to skill level;
-            // workerRef.current.postMessage('set-option name skill level value'+ )
-        } catch(error){
-            console.error("Failed to load Stockfish: ",error);
-            // Update it in slice with
-            loadedRef.current = false;
-        }
-    },[]);
-
-
-    const handleStockfishMessage = useCallback((message: string)=>{
-        console.log(message);
-        // if(message === "Stock Fish message Stockfish 17 Lite WASM by the Stockfish developers (see AUTHORS file)"){
-        //     debugger;
-        //     workerRef.current && workerRef.current.postMessage('uci');
-        // }
+    const handleStockFishMessage = useCallback((message: string)=>{
 
         const [type, ...rest] = message.split(" ");
 
@@ -93,7 +49,9 @@ export const useStockFish = ()=>{
 
             case 'readyok':
                 if(workerRef.current && !isInitializedRef.current){
-                    const settings = getEloSettings(elo);
+                   
+                    const settings = getEloSettings(currentEloRef.current);
+                    
                     workerRef.current.postMessage(`setoption name Skill Level value ${settings.depth}`);
 
                     // Optionally set other UCI options
@@ -103,7 +61,7 @@ export const useStockFish = ()=>{
                         workerRef.current.postMessage(`setoption name UCI_Elo value ${stockFish}`);
                     }
 
-                    // Set threads to 1 for web worker implementation.(WASM) and don't add extra load on web.
+                    // Set threads to 1 for web worker implementation(WASM) as I don't add extra load on web.
                     workerRef.current.postMessage("setoption name Threads value 1");
 
                     isInitializedRef.current = true;
@@ -113,9 +71,10 @@ export const useStockFish = ()=>{
                 break;
 
             case "bestmove":{
-
                 const bestMove = rest[0];
+
                 dispatch(updateStockFishThinking(false));
+                
                 if(bestMove && bestMove !== "(none)" && game){
                     try{
                         // Parse move format e2e4 or e738q (promotion)
@@ -144,27 +103,75 @@ export const useStockFish = ()=>{
             }
         }
 
-    },[]);
+    },[elo, game, dispatch]);
 
+    // Lazy load StockFish
+    const loadStockFish = useCallback(async () => {
+        if(loadedRef.current || isInitializedRef.current) return;
+
+        loadedRef.current = true; // flag before load.
+        currentEloRef.current = elo; // Move into flag from redux.
+        // Read Stale Closure for more info.
+
+        try {
+            // workerRef.current = new Worker(
+            //     new URL('/stockfish/stockfish-17-lite-single.js', import.meta.url),
+            //     { type: 'module' }
+            // );
+            // Above code cause problem in production environment but working fine in local env.
+            // Some issue with path resolve. 
+
+            // Direct access from Public file as code is already compiled.
+            workerRef.current = new Worker('/stockfish/stockfish-17-lite-single.js', { type: 'module' });
+
+            // Set up message event handler
+            workerRef.current.onmessage = (e)=>{
+                handleStockFishMessage(e.data);
+            };
+
+            // Handle worker thread errors
+            workerRef.current.onerror = (error) => {
+                console.error("Stockfish worker error:", error);
+                // Reset states.
+                loadedRef.current = false;
+                isInitializedRef.current = false;
+                dispatch(updateStockFishReadystate(false));
+            };
+
+            // Initialize UCI protocol; (UCI handshake)
+            workerRef.current.postMessage('uci');
+        } catch(error){
+            console.error("Failed to load StockFish: ", error);
+            loadedRef.current = false;
+            dispatch(updateStockFishReadystate(false));
+        }
+    },[elo, dispatch, handleStockFishMessage]);
 
     // Autoload when single player mode is enabled.
-   // On Single Player Mode only to save network Bandwidth
+    // Load On Single Player Mode only to save network Bandwidth
     useEffect(()=>{
         if(isSinglePlayer && !loadedRef.current){
             loadStockFish().then(()=>{
                 // console.log("Stock Fish is initialized");
             });
         }
-    });
+    },[isSinglePlayer, loadStockFish]);
 
 
     const requestSFMove = useCallback(async ()=>{
-        if(!workerRef.current){
-            await loadStockFish();
-            if(!workerRef.current) return
+        // Added safety for more security
+        if(!workerRef.current || !ready || thinking || !game){
+            console.error("StockFish is not ready but got request for move.")
+            return;
         }
+        
+        // Can Implement retry mechanism.
+        // if(!workerRef.current){
+        //     // Try to reload/
+        //     await loadStockFish();
+        //     if(!workerRef.current) return
+        // }
 
-        if(!game || thinking) return;
 
         dispatch(updateStockFishThinking(true));
 
@@ -179,9 +186,11 @@ export const useStockFish = ()=>{
             workerRef.current.postMessage(`position fen ${currentFen}`);
 
             // Start search with appropriate time/depth limits
-            const searchCommand = settings.time ?
+            const searchCommand = !settings.time ?
                 `go movetime ${settings.time}` :
                 `go depth ${settings.depth}`
+            
+            debugger;
 
             workerRef.current.postMessage(searchCommand);
             // Targeting both depth and time will make game too much hard. (Check which one is working)
@@ -193,26 +202,53 @@ export const useStockFish = ()=>{
             // Dispatch action to make loader false.
         }
 
-    }, [game,thinking,elo,loadStockFish])
+    }, [game,thinking,elo,ready,dispatch])
 
 
     // Auto trigger StockFish move. After Each move.
     useEffect(()=>{
+        debugger;
         if(
             isSinglePlayer &&
             ready &&
             !gameState.isGameOver &&
             !thinking &&
-            gameState.turn !== player
+            gameState.turn !== player && 
+            game
         ){
             // Small delay to ensure UI updates before engine starts thinking
             const timer = setTimeout(()=>{
                 requestSFMove()
             },stockFishDelay);
+
             return () => clearTimeout(timer);
         }
 
-    },[ gameState.turn, gameState.isGameOver, isSinglePlayer, player, ready, thinking ])
+    },[ 
+        isSinglePlayer,
+        ready, 
+        gameState.isGameOver, 
+        thinking, 
+        gameState.turn, 
+        player, 
+        game,
+        requestSFMove
+    ])
+
+    // Update the ELO for already initialized engine (in game change)
+    useEffect(() => {
+        if (ready && isInitializedRef.current && workerRef.current && elo !== currentEloRef.current) {
+            currentEloRef.current = elo;
+            const settings = getEloSettings(elo);
+            
+            workerRef.current.postMessage(`setoption name Skill Level value ${settings.depth}`);
+            
+            if (limitStrength) {
+                const clampedElo = Math.min(Math.max(elo, 1350), 2850);
+                workerRef.current.postMessage(`setoption name UCI_Elo value ${clampedElo}`);
+            }
+        }
+    }, [elo, ready]);
 
 
     // Clean Up

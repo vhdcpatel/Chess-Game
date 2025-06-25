@@ -24,6 +24,7 @@ import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
 import GameOverDialog from "./GameOverDialog/GameOverDialog";
 import styles from './chessBoard.module.css';
 import { useStockFish } from "../../hooks/useStockFish/useStockFish";
+import { downloadFenToTxt } from '../../utils/downloadFenToTxt';
 
 const ChessBoard: React.FC = () => {
 
@@ -117,10 +118,13 @@ const ChessBoard: React.FC = () => {
         // Navigate to main menu or reset to initial state
     };
 
-    const handleCloseGameOver = () => {
-        // Optional: if you want to allow closing without action
+    const handleFenDownload = () => {
         // You might want to just show the final board state
-        console.log('Game over dialog closed');
+        if(game === null){
+            console.error('Game is null, cannot close game over dialog');
+            return;
+        }
+        downloadFenToTxt(game, 'game_fen.txt');
     };
 
     // Handle the render board based on the player.
@@ -152,7 +156,7 @@ const ChessBoard: React.FC = () => {
                 gameEndReason={gameEndReason}
                 onNewGame={handleNewGame}
                 onMainMenu={handleMainMenu}
-                onClose={handleCloseGameOver}
+                onDownloadFen={handleFenDownload}
             />}
 
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>

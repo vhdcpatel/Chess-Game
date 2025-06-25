@@ -240,24 +240,20 @@ const chessSlice = createSlice({
         },
 
         initializeStockFishState(state){
-            state.stockFishState = {
-                flagReady: false,
-                flagThinking: false,
-                elo: 1400,
-                error: null,
-            }
+            debugger;
+            // state.stockFishState = {
+            //     flagReady: false,
+            //     flagThinking: false,
+            //     elo: 1400,
+            //     error: null,
+            // }
         },
 
         updateStockFishThinking(state, action: PayloadAction<boolean>){
+            debugger;
             const thinkingState = action.payload;
             if (!state.stockFishState) {
                 console.warn("Stockfish state is null — cannot update thinking flag.");
-                // state.stockFishState = {
-                //     flagReady: thinkingState,
-                //     flagThinking: thinkingState,
-                //     elo: 1400,
-                //     error: null,
-                // }
                 return;
             }
             state.stockFishState.flagThinking = thinkingState;
@@ -265,14 +261,9 @@ const chessSlice = createSlice({
 
         updateStockFishReadystate(state, action: PayloadAction<boolean>){
             const readyState = action.payload;
+            debugger;
             if (!state.stockFishState) {
                 console.warn("Stockfish state is null — cannot update thinking flag.");
-                // state.stockFishState = {
-                //     flagReady: readyState,
-                //     flagThinking: readyState,
-                //     elo: 1400,
-                //     error: null,
-                // }
                 return;
             }
             state.stockFishState.flagReady = readyState;
