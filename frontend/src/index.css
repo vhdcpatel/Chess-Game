@@ -28,6 +28,8 @@
   --color-text-primary: #333333;
   --color-text-secondary: #666666;
   --color-text-disabled: #9e9e9e;
+  --color-background-dark: #000;
+  --color-foreground-dark: #181818;
 }
 
 body {
