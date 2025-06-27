@@ -28,8 +28,14 @@
   --color-text-primary: #333333;
   --color-text-secondary: #666666;
   --color-text-disabled: #9e9e9e;
-  --color-background-dark: #000;
-  --color-foreground-dark: #181818;
+  --color-text-main-new: #ffffff;
+  --color-background-dark: #0D0D0D;
+  --color-foreground-dark: #1F1F1F;
+  --loader-screen-gradient: linear-gradient(90deg, rgba(31, 31, 31, 1) 0%, rgba(61, 61, 61, 1) 50%, rgba(31, 31, 31, 1) 100%);
+
+  /* For loader Screen  */
+  /* background: #1F1F1F;
+  background: linear-gradient(90deg, rgba(31, 31, 31, 1) 0%, rgba(61, 61, 61, 1) 42%, rgba(31, 31, 31, 1) 100%); */
 }
 
 body {
