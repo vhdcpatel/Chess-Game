@@ -27,9 +27,6 @@ export const useStockFish = ()=>{
     const isSinglePlayer = useAppSelector((state)=> state.chess.isSinglePlayer);
     const player = useAppSelector((state)=> state.chess.player);
     const stockFishState = useAppSelector((state)=> state.chess.stockFishState);
-
-
-    // const isEnabled = !!stockFishState;
     
     // Derived state from redux.
     const elo = stockFishState?.elo ?? 1400;
@@ -37,6 +34,8 @@ export const useStockFish = ()=>{
     const thinking = stockFishState?.flagThinking ?? false;
 
     const handleStockFishMessage = useCallback((message: string)=>{
+        console.log(message);
+        
 
         const [type, ...rest] = message.split(" ");
 
@@ -172,7 +171,6 @@ export const useStockFish = ()=>{
         //     if(!workerRef.current) return
         // }
 
-
         dispatch(updateStockFishThinking(true));
 
         const currentFen = game.fen();
@@ -190,8 +188,6 @@ export const useStockFish = ()=>{
                 `go movetime ${settings.time}` :
                 `go depth ${settings.depth}`
             
-            debugger;
-
             workerRef.current.postMessage(searchCommand);
             // Targeting both depth and time will make game too much hard. (Check which one is working)
             // workerRef.current.postMessage(`go depth ${settings.depth} time ${settings.time}`);
@@ -207,7 +203,6 @@ export const useStockFish = ()=>{
 
     // Auto trigger StockFish move. After Each move.
     useEffect(()=>{
-        debugger;
         if(
             isSinglePlayer &&
             ready &&

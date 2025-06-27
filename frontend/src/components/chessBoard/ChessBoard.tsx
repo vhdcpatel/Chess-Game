@@ -24,7 +24,7 @@ import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
 import GameOverDialog from "./GameOverDialog/GameOverDialog";
 import styles from './chessBoard.module.css';
 import { useStockFish } from "../../hooks/useStockFish/useStockFish";
-import { downloadFenToTxt } from '../../utils/downloadFenToTxt';
+import { downloadFenToTxt, downloadPgnFile, downloadPgnToTxt } from '../../utils/downloadFenToTxt';
 
 const ChessBoard: React.FC = () => {
 
@@ -124,7 +124,7 @@ const ChessBoard: React.FC = () => {
             console.error('Game is null, cannot close game over dialog');
             return;
         }
-        downloadFenToTxt(game, 'game_fen.txt');
+        downloadPgnFile(game, 'game.pgn');
     };
 
     // Handle the render board based on the player.
