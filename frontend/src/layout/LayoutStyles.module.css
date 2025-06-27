@@ -2,12 +2,6 @@
   height: 100dvh;
 }
 
-.mainOuterCtnNew {
-  background: var(--color-background-dark);
-  height: 100dvh;
-  padding: 15px;
-}
-
 .header {
   height: 50px;
 }
@@ -16,11 +10,13 @@
   height: calc(100% - 4.28125rem);
 }
 
-.sidebar {
-  width: 19.375rem;
-  background-color: var(--color-foreground-dark);
-  border-radius: 0.5rem;
-  padding: 1rem;
+/* New Styles */
+.mainOuterCtnNew {
+  background: var(--color-background-dark);
+  height: 100dvh;
+  padding: 15px;
+  display: flex;
+  gap: 1rem;
 }
 
 .mainContent {

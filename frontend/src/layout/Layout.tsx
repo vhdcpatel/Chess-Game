@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom'
 import styles from './LayoutStyles.module.css'
 import HeaderBar from '../components/header/HeaderBar';
+import SideBar from '../components/SideBar/SideBar';
 
 const flagNew = false;
 
@@ -20,7 +21,7 @@ const Layout = () => {
         ) : (
             <React.Fragment>
                 <div className={styles.mainOuterCtnNew}>
-                    <aside className={styles.sidebar}>Sidebar</aside>
+                    <SideBar/>
                     <main className={styles.mainContent}>
                         <Outlet />
                     </main>
