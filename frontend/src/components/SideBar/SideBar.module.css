@@ -1,0 +1,22 @@
+.sidebarOuterCtn {
+  width: 19.375rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-foreground-dark);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+
+.sidebarTop {
+  /* Custom styles for the top section */
+}
+
+.sidebarMiddle {
+  flex: 1;
+  overflow-y: auto; /* Optional: scroll if content overflows */
+}
+
+.sidebarBottom {
+  /* Custom styles for the bottom section */
+}
