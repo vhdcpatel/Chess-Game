@@ -3,7 +3,6 @@ import { Button } from '@mui/material';
 import styles from './GameOverDialog.module.css';
 import GenericDialog from "../../dialogBox/GenericDialog";
 
-// Types
 type Color = 'w' | 'b';
 type GameState = 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
 
@@ -19,7 +18,7 @@ interface GameOverDialogProps {
     gameEndReason: string | null;
     onNewGame: () => void;
     onMainMenu: () => void;
-    onDownloadFen?: () => void;
+    onDownloadPGN?: () => void;
 }
 
 const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
@@ -29,7 +28,7 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
         gameEndReason,
         onNewGame,
         onMainMenu,
-        onDownloadFen,
+        onDownloadPGN,
     } = props;
 
     const getGameResult = () => {
@@ -110,13 +109,13 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
                     >
                         Main Menu
                     </Button>
-                    {onDownloadFen && (
+                    {onDownloadPGN && (
                         <Button
                             variant="text"
-                            onClick={onDownloadFen}
+                            onClick={onDownloadPGN}
                             className={styles.textButton}
                         >
-                            Download FEN
+                            Download PGN
                         </Button>
                     )}
                 </div>
@@ -128,7 +127,7 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
         <GenericDialog
             isOpen={isOpen}
             title="Game Complete"
-            onClose={onDownloadFen}
+            onClose={onDownloadPGN}
             maxWidth="sm"
         >
             {dialogContent}

@@ -118,7 +118,7 @@ const ChessBoard: React.FC = () => {
         // Navigate to main menu or reset to initial state
     };
 
-    const handleFenDownload = () => {
+    const handlePGNDownload = () => {
         // You might want to just show the final board state
         if(game === null){
             console.error('Game is null, cannot close game over dialog');
@@ -156,7 +156,7 @@ const ChessBoard: React.FC = () => {
                 gameEndReason={gameEndReason}
                 onNewGame={handleNewGame}
                 onMainMenu={handleMainMenu}
-                onDownloadFen={handleFenDownload}
+                onDownloadPGN={handlePGNDownload}
             />}
 
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
