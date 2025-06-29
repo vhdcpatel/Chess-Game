@@ -21,7 +21,7 @@
 
 .mainContent {
   width: calc(100% - 19.375rem);
-  padding: 1rem;
+  padding: 1rem 2rem;
   background-color: var(--color-foreground-dark);
   border-radius: 0.5rem;
   display: flex;

@@ -179,6 +179,8 @@ const ChessBoard: React.FC = () => {
                                 isPossibleMove={possibleMoves.includes(`${file}${rank}`)}
                                 isActive={activePiece?.square === `${file}${rank}`}
                                 isCheckOrMate={isCheckOrMate}
+                                rankIndex={RankIndex}
+                                fileIndex={FileIndex}
                             >
                                 {piece && (
                                     <Piece

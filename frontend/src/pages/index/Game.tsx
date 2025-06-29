@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import ChessBoard from '../chessBoard/ChessBoard';
+import ChessBoard from '../../components/chessBoard/ChessBoard';
 import { DEFAULT_POSITION } from '../../utils/constants/initialPosition';
 import styles from './Game.module.css';
-import StartGameDialogBox from './startGameDialogBox/StartGameDialogBox';
+import StartGameDialogBox from '../../components/game/startGameDialogBox/StartGameDialogBox';
 import { initGame, startGame } from "../../features/chessGame/chessSlice";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 
@@ -43,7 +43,7 @@ const Game: React.FC = () => {
           handleClose={handleCloseDialog}
           gameInfo={gameInfo}
       />
-      <div className={styles.mainOuterCtn}>
+      <div>
         <ChessBoard />
       </div>
     </React.Fragment>
