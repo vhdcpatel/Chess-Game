@@ -4,8 +4,7 @@ import { Chess } from "chess.js";
  * Determine the PGN result tag from the current Chess.js instance.
  */
 function getGameResult(chess: Chess): string {
-  if (chess.isStalemate()) {
-    // If it's White’s turn to move, Black just delivered mate
+  if (chess.isCheckmate()) {
     return chess.turn() === "w" ? "0-1" : "1-0";
   }
   if (
