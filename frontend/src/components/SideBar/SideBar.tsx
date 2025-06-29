@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './SideBar.module.css'
 import ChessMainLogo from '../../assets/chessLogoMain.jpg';
+import ProfileCard from '../profileCard/ProfileCard';
 
 const SideBar = () => {
   return (
@@ -22,8 +23,12 @@ const SideBar = () => {
       </div>
 
       <div className={styles.sidebarBottom}>
-        {/* Use Profile goes here. */}
-        user Profile goes here
+       <ProfileCard
+         avatarSrc=""
+         name="Anonymous"
+         status="Online"
+         onSettingsClick={() => console.log('Settings clicked')}
+       />
       </div>
     </aside>
   )
