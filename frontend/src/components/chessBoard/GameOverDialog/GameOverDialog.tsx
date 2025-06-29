@@ -111,9 +111,9 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
                     </Button>
                     {onDownloadPGN && (
                         <Button
-                            variant="text"
+                            variant="contained"
                             onClick={onDownloadPGN}
-                            className={styles.textButton}
+                            className={styles.primaryButton}
                         >
                             Download PGN
                         </Button>
