@@ -37,7 +37,6 @@ const updateGameStateAfterMove = (state: WritableDraft<ChessState>, lastMove?: M
     }
 }
 
-
 const chessSlice = createSlice({
     name: 'chess',
     initialState,
@@ -52,9 +51,24 @@ const chessSlice = createSlice({
         },
 
         startGame(state, action: PayloadAction<StartGamePayload>) {
-            const {  player, isSinglePlayer } = action.payload;
+            const {  player, isSinglePlayer, elo } = action.payload;
             state.player = player;
             state.isSinglePlayer = isSinglePlayer;
+            if(isSinglePlayer && elo){
+                // Now it set after single player settings only.
+                if(state.stockFishState === null) {
+                    state.stockFishState = {
+                        elo: elo,
+                        flagReady: false,
+                        flagThinking: false,
+                        error: null
+                    }
+                }else{
+                    state.stockFishState.elo = elo;
+                }
+            }else{
+                state.stockFishState = null;
+            }
         },
 
         // Handle all moves expect promotion case.
@@ -224,6 +238,24 @@ const chessSlice = createSlice({
           return initialState;
         },
 
+        updateStockFishThinking(state, action: PayloadAction<boolean>){
+            const thinkingState = action.payload;
+            if (!state.stockFishState) {
+                console.warn("StockFish state is null — cannot update thinking flag.");
+                return;
+            }
+            state.stockFishState.flagThinking = thinkingState;
+        },
+
+        updateStockFishReadystate(state, action: PayloadAction<boolean>){
+            const readyState = action.payload;
+            if (!state.stockFishState) {
+                console.warn("StockFish state is null — cannot update thinking flag.");
+                return;
+            }
+            state.stockFishState.flagReady = readyState;
+        }
+
     },
 });
 
@@ -240,6 +272,8 @@ export const {
     clearPossibleMoves,
     resetFullGame,
     startGame,
+    updateStockFishThinking,
+    updateStockFishReadystate,
 } = chessSlice.actions;
 
 export default chessSlice.reducer;

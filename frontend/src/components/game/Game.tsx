@@ -10,7 +10,7 @@ export interface gameInfoModel {
   player: 'w' | 'b';
   initialPosition?: string;
   isSinglePlayer: boolean;
-
+  elo: number;
 }
 
 const Game: React.FC = () => {
@@ -18,7 +18,8 @@ const Game: React.FC = () => {
   const gameInfo:gameInfoModel = {
     player: 'w',
     initialPosition: DEFAULT_POSITION,
-    isSinglePlayer: false
+    isSinglePlayer: false,
+    elo: 1200,
   };
 
   const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ const Game: React.FC = () => {
 
   const handleCloseDialog = (FinalGameInfo: gameInfoModel)=>{
     setDialogOpen(false);
-    dispatch(startGame({isSinglePlayer: FinalGameInfo.isSinglePlayer, player:  FinalGameInfo.player}));
+    dispatch(startGame({isSinglePlayer: FinalGameInfo.isSinglePlayer, player:  FinalGameInfo.player, elo: FinalGameInfo.elo}));
     // setGameInfo(FinalGameInfo);
   };
 

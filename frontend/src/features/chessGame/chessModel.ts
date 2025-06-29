@@ -22,6 +22,13 @@ export interface PromotionInfoModel {
     color: Color;
 }
 
+export interface StockFishStateModel {
+    flagReady: boolean;
+    flagThinking: boolean;
+    elo: number;
+    error: string | null;
+}
+
 export interface ChessState {
     player: playerColor;
     isSinglePlayer: boolean;
@@ -32,6 +39,7 @@ export interface ChessState {
     possibleMoves: string[];
     promotionInfo: PromotionInfoModel | null;
     gameEndReason: null | string;
+    stockFishState: StockFishStateModel | null;
 }
 
 export interface makeMovePayload {
@@ -43,4 +51,5 @@ export interface makeMovePayload {
 export interface StartGamePayload {
     player: playerColor;
     isSinglePlayer: boolean;
+    elo?: number;
 }
