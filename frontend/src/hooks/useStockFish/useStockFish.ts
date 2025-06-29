@@ -8,6 +8,7 @@ import {
     updateStockFishThinking
 } from "../../features/chessGame/chessSlice";
 import { PieceSymbol, Square } from "chess.js";
+import { useSearchParams } from "react-router-dom";
 
 const limitStrength = true;
 const stockFishDelay = 1000;
@@ -15,6 +16,7 @@ const stockFishDelay = 1000;
 export const useStockFish = ()=>{
 
     const dispatch = useAppDispatch();
+    const [searchParams] = useSearchParams();
 
     const workerRef = useRef<Worker | null>(null);
     const isInitializedRef = useRef(false);
@@ -34,7 +36,9 @@ export const useStockFish = ()=>{
     const thinking = stockFishState?.flagThinking ?? false;
 
     const handleStockFishMessage = useCallback((message: string)=>{
-        console.log(message);
+        if(searchParams.get('stockfish')){
+            console.log(message);
+        }
         
 
         const [type, ...rest] = message.split(" ");

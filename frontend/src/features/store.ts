@@ -16,7 +16,8 @@ export const store = configureStore({
           // ignoredActionsPaths: ['payload.game'],
 
           // Ignore these paths in the state
-          ignoredPaths: ['chess.game'],
+          ignoredActions: ['chess/attemptMove'],
+          ignoredPaths: ['chess.game', 'chess.history'],
         },
     }),
 });
