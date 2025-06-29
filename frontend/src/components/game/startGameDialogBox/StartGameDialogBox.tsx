@@ -65,71 +65,64 @@ const StartGameDialogBox: React.FC<StartGameDialogBoxProps> = (props) => {
             </Button>
           </div>
         </div>
-      <div className={styles.eloSliderContainer}>
-              <h4 className={styles.eloLabel}>ELO Rating</h4>
-              <div className={styles.eloSliderWrapper}>
-                  <Slider
-                      value={gameInfoLocal.elo || 1200}
-                      onChange={handleEloChange}
-                      min={800}
-                      max={2000}
-                      step={100}
-                      marks={[
-                          { value: 800, label: '800' },
-                          { value: 1200, label: '1200' },
-                          { value: 1600, label: '1600' },
-                          { value: 2000, label: '2000' }
-                      ]}
-                      valueLabelDisplay="on"
-                      className={styles.eloSlider}
-                      classes={{
-                          root: styles.sliderRoot,
-                          track: styles.sliderTrack,
-                          thumb: styles.sliderThumb,
-                          valueLabel: styles.sliderValueLabel,
-                          markLabel: styles.sliderMarkLabel,
-                          mark: styles.sliderMark,
-                          markActive: styles.sliderMarkActive
-                      }}
-                  />
-              </div>
-              <div className={styles.eloDescription}>
-                <span className={styles.eloDescText}>
-                  {getEloDescription(gameInfoLocal.elo || 1200)}
-                </span>
-          </div>
-          </div>
-        <div className={styles.outerCtn}>
-          <h3 className={styles.titleText}>Please select side to play.</h3>
-          <div className={styles.innerCtn}>
-            <Button
-                onClick={handleUpdates('color')('w')}
-                variant={gameInfoLocal.player === 'w' ? 'contained' : 'outlined'}
-                startIcon={<img className={styles.icons} src={getSrc['w']['k']} />}
-            >
-              White
-            </Button>
-            <Button
-                onClick={handleUpdates('color')('b')}
-                variant={gameInfoLocal.player === 'b' ? 'contained' : 'outlined'}
-                startIcon={<img className={styles.icons} src={getSrc['b']['k']} />}
-            >
-              Black
-            </Button>
-          </div>
+      {gameInfoLocal.isSinglePlayer &&
+        <div className={styles.eloSliderContainer}>
+                <h4 className={styles.eloLabel}>ELO Rating</h4>
+                <div className={styles.eloSliderWrapper}>
+                    <Slider
+                        value={gameInfoLocal.elo || 1200}
+                        onChange={handleEloChange}
+                        min={800}
+                        max={2000}
+                        step={100}
+                        marks={[
+                            { value: 800, label: '800' },
+                            { value: 1200, label: '1200' },
+                            { value: 1600, label: '1600' },
+                            { value: 2000, label: '2000' }
+                        ]}
+                        valueLabelDisplay="on"
+                        className={styles.customSlider}
+                    />
+                </div>
+                <div className={styles.eloDescription}>
+                  <span className={styles.eloDescText}>
+                    {getEloDescription(gameInfoLocal.elo || 1200)}
+                  </span>
+            </div>
         </div>
-        <div className={`${styles.outerCtn} ${styles.actionBox}`}>
-          <div className={styles.actionBoxInner}>
-            <Button
-                variant="contained"
-                onClick={() => {
-                  handleClose(gameInfoLocal);
-                }}
-            >
-              Start Game
-            </Button>
-          </div>
+      }
+      <div className={styles.outerCtn}>
+        <h3 className={styles.titleText}>Please select side to play.</h3>
+        <div className={styles.innerCtn}>
+          <Button
+              onClick={handleUpdates('color')('w')}
+              variant={gameInfoLocal.player === 'w' ? 'contained' : 'outlined'}
+              startIcon={<img className={styles.icons} src={getSrc['w']['k']} />}
+          >
+            White
+          </Button>
+          <Button
+              onClick={handleUpdates('color')('b')}
+              variant={gameInfoLocal.player === 'b' ? 'contained' : 'outlined'}
+              startIcon={<img className={styles.icons} src={getSrc['b']['k']} />}
+          >
+            Black
+          </Button>
         </div>
+      </div>
+      <div className={`${styles.outerCtn} ${styles.actionBox}`}>
+        <div className={styles.actionBoxInner}>
+          <Button
+              variant="contained"
+              onClick={() => {
+                handleClose(gameInfoLocal);
+              }}
+          >
+            Start Game
+          </Button>
+        </div>
+      </div>
       </>
   );
 
