@@ -24,7 +24,7 @@ import { pieceTypeForPromotion } from "../../features/chessGame/chessModel";
 import GameOverDialog from "./GameOverDialog/GameOverDialog";
 import styles from './chessBoard.module.css';
 import { useStockFish } from "../../hooks/useStockFish/useStockFish";
-import { downloadFenToTxt, downloadPgnFile, downloadPgnToTxt } from '../../utils/downloadFenToTxt';
+import { downloadPgnFile } from '../../utils/downloadFenToTxt';
 
 const ChessBoard: React.FC = () => {
 
