@@ -15,7 +15,6 @@ const SideBar = () => {
 
       <div className={styles.sidebarMiddle}>
         <div className={styles.sidebarMenuCtn}>
-          Menu
         </div>
         {/* add option such as play or learn */}
 
