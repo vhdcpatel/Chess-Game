@@ -43,7 +43,7 @@ const Game: React.FC = () => {
           handleClose={handleCloseDialog}
           gameInfo={gameInfo}
       />
-      <div>
+      <div className={styles.gameContainer}>
         <ChessBoard />
       </div>
     </React.Fragment>

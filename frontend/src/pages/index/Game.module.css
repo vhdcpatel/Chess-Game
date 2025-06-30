@@ -79,3 +79,7 @@
   opacity: 1 !important;
   background-color: currentColor !important;
 }
+
+.gameContainer {
+  width: fit-content;
+}

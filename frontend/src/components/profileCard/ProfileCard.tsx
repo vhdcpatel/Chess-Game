@@ -23,7 +23,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       alt={`${name}'s avatar`}
       sx={{ width: 48, height: 48 }}
     >
-      {name.charAt(0).toUpperCase()}
+      M 
     </Avatar>
 
     <div className={styles.info}>

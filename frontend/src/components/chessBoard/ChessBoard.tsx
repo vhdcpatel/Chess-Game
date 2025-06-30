@@ -25,6 +25,7 @@ import GameOverDialog from "./GameOverDialog/GameOverDialog";
 import styles from './chessBoard.module.css';
 import { useStockFish } from "../../hooks/useStockFish/useStockFish";
 import { downloadPgnFile } from '../../utils/downloadFenToTxt';
+import PlayerInfoBanner from '../playInfoBanner/PlayerInfoBanner';
 
 const ChessBoard: React.FC = () => {
 
@@ -160,6 +161,10 @@ const ChessBoard: React.FC = () => {
             />}
 
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
+            <PlayerInfoBanner 
+                player={player === 'w' ? 'b' : 'w'}
+                flagSinglePlayer={isSinglePlayer}
+            />
             <div className={styles.mainOuterCtn}>
                 {ranksToRender.map((rank,RankIndex) =>
                     <div key={rank} className={styles.ranks} >
@@ -199,6 +204,10 @@ const ChessBoard: React.FC = () => {
                     </div>
                 )}
             </div>
+            <PlayerInfoBanner 
+                player={player}
+                flagSinglePlayer={isSinglePlayer}
+            />
         </DndProvider>
         </React.Fragment>
     );
