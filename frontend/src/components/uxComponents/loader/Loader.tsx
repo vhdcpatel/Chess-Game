@@ -11,6 +11,7 @@ const Loader: React.FC = () => {
                     <CircularProgress
                         size={60}
                         thickness={2.5}
+                        sx={{ color: '#fff' }}
                     />
                     <div className={styles.overlay}>
                         <div className={styles.imgCtn}>

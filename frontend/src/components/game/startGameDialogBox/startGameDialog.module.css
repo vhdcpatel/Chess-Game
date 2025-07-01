@@ -1,0 +1,129 @@
+.titleText {
+  margin-block-start: 0.5rem ;
+  margin-block-end: 0.75rem ;
+  font-weight: 500;
+}
+
+.outerCtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column ;
+}
+
+.innerCtn {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.actionBox {
+  margin-top: 1rem;
+}
+
+.actionBoxInner {
+  display: flex;
+  justify-content: center;
+}
+
+.icons {
+  width: 1.5625rem;
+  height: 1.5625rem;
+}
+
+.eloSliderContainer {
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+}
+
+.eloLabel {
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.eloSliderWrapper {
+  padding: 0 20px;
+  margin: 30px 0;
+}
+
+.eloDescription {
+  text-align: center;
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.eloDescText {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2196f3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.customSlider {
+  color: #1976d2 !important;
+}
+
+.customSlider .MuiSlider-track {
+  background-color: #1976d2 !important;
+  border: none !important;
+}
+
+.customSlider .MuiSlider-thumb {
+  background-color: #1976d2 !important;
+  border: 2px solid #ffffff !important;
+}
+
+.customSlider .MuiSlider-thumb:hover {
+  box-shadow: 0px 0px 0px 8px rgba(25, 118, 210, 0.16) !important;
+}
+
+.customSlider .MuiSlider-thumb.Mui-focusVisible {
+  box-shadow: 0px 0px 0px 8px rgba(25, 118, 210, 0.16) !important;
+}
+
+.customSlider .MuiSlider-rail {
+  background-color: #e0e0e0 !important;
+}
+
+.customSlider .MuiSlider-valueLabel {
+  background-color: #1976d2 !important;
+  color: #ffffff !important;
+}
+
+.customSlider .MuiSlider-markLabel {
+  color: #666666 !important;
+}
+
+.customSlider .MuiSlider-mark {
+  background-color: #e0e0e0 !important;
+}
+
+.customSlider .MuiSlider-markActive {
+  background-color: #1976d2 !important;
+}
+
+@media (max-width: 768px) {
+  .eloSliderContainer {
+    padding: 15px;
+  }
+
+  .eloSliderWrapper {
+    padding: 0 10px;
+    margin: 20px 0;
+  }
+
+  .eloLabel {
+    font-size: 1rem;
+  }
+}

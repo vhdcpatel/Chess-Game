@@ -1,0 +1,85 @@
+
+
+.dialogCtn {
+  padding: 0.625rem 0.9375rem;
+}
+
+.headerText {
+  font-weight: 600;
+}
+
+/* MUI Slider Component Classes */
+.sliderRoot {
+  color: #2196f3 !important;
+  height: 8px !important;
+}
+
+.sliderTrack {
+  border: none !important;
+  background: linear-gradient(90deg, #ff6b6b 0%, #feca57 25%, #48dbfb 50%, #ff9ff3 75%, #54a0ff 100%) !important;
+}
+
+.sliderThumb {
+  height: 24px !important;
+  width: 24px !important;
+  background-color: #fff !important;
+  border: 2px solid currentColor !important;
+  box-shadow: 0 3px 1px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.13), 0 0 0 1px rgba(0,0,0,0.02) !important;
+}
+
+.sliderThumb:focus,
+.sliderThumb:hover,
+.sliderThumb.Mui-active,
+.sliderThumb.Mui-focusVisible {
+  box-shadow: 0px 0px 0px 8px rgba(33, 150, 243, 0.16) !important;
+}
+
+.sliderThumb:before {
+  display: none !important;
+}
+
+.sliderValueLabel {
+  line-height: 1.2 !important;
+  font-size: 12px !important;
+  background: unset !important;
+  padding: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% 50% 50% 0 !important;
+  background-color: #2196f3 !important;
+  transform-origin: bottom left !important;
+  transform: translate(50%, -100%) rotate(-45deg) scale(0) !important;
+}
+
+.sliderValueLabel:before {
+  display: none !important;
+}
+
+.sliderValueLabel.MuiSlider-valueLabelOpen {
+  transform: translate(50%, -100%) rotate(-45deg) scale(1) !important;
+}
+
+.sliderValueLabel > * {
+  transform: rotate(45deg) !important;
+}
+
+.sliderMarkLabel {
+  font-size: 0.75rem !important;
+  color: #666 !important;
+  font-weight: 500 !important;
+}
+
+.sliderMark {
+  background-color: #bfbfbf !important;
+  height: 8px !important;
+  width: 2px !important;
+}
+
+.sliderMarkActive {
+  opacity: 1 !important;
+  background-color: currentColor !important;
+}
+
+.gameContainer {
+  width: fit-content;
+}

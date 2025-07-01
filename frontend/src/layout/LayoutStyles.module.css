@@ -21,9 +21,28 @@
 
 .mainContent {
   width: calc(100% - 19.375rem);
-  padding: 1rem;
+  padding: 1rem 2rem;
   background-color: var(--color-foreground-dark);
   border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.titleTxtCtn {
+  border-bottom: var(--main-border-styles);
+}
+
+.titleText {
+  margin: 0;
+  color: var(--color-text-main-new);
+}
+
+.outletContainer {
+  flex: 1;
+  overflow-y: auto;
+  margin-block-start: 0.5rem;
 }
 
 @media (max-width: 900px) {

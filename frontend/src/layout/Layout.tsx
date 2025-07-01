@@ -6,6 +6,8 @@ import SideBar from '../components/SideBar/SideBar';
 
 const flagNew = false;
 
+const TitleText = "Play Chess";
+
 const Layout = () => {    
     
     return (
@@ -23,7 +25,12 @@ const Layout = () => {
                 <div className={styles.mainOuterCtnNew}>
                     <SideBar/>
                     <main className={styles.mainContent}>
-                        <Outlet />
+                        <div className={styles.titleTxtCtn}>
+                            <h1 className={styles.titleText}>{TitleText}</h1>
+                        </div>
+                        <div className={styles.outletContainer}>
+                            <Outlet />
+                        </div>
                     </main>
                 </div>
             </React.Fragment>

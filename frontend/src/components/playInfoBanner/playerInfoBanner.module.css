@@ -1,0 +1,48 @@
+.outerCtn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background-color: rgba(35, 35, 35, 1);
+  border-radius: 10px;
+}
+
+.whitePlayer {
+  margin-top: 0.5rem;
+  flex-direction: row-reverse;
+}
+
+.blackPlayer {
+  margin-bottom: 0.5rem;
+}
+
+.playerInfoCtn {
+  display: flex;
+  column-gap: 0.5rem;
+}
+
+.whitePlayer .playerInfoCtn {
+  flex-direction: row-reverse;
+}
+
+.profilePictureCtn img {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Reduce Width of Square to 4rem to adjust Spacing. */
+
+.playerNameCtn {
+  display: flex;
+  flex-direction: column;
+}
+
+.playerName {
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.playerStatus {
+
+}
