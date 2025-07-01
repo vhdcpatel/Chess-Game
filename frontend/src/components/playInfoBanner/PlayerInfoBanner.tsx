@@ -1,18 +1,20 @@
 import React from 'react';
 import styles from './playerInfoBanner.module.css';
-import { playerColor } from '../../features/chessGame/chessModel';
+import {  playerColor, TCapturePieces } from '../../features/chessGame/chessModel';
 import StockFishLogo from '../../assets/users/stockFishLogo.png';
 import userImage from '../../assets/users/userImage.png';
 
 interface IPlayerInfoBannerProps {
   player: playerColor;
   flagSinglePlayer: boolean;
+  capturedPieces: TCapturePieces
 }
 
 const PlayerInfoBanner: React.FC<IPlayerInfoBannerProps> = (props) => {
   const {
     player,
-    flagSinglePlayer
+    capturedPieces,
+    flagSinglePlayer,
   } = props;
 
   
@@ -34,7 +36,18 @@ const PlayerInfoBanner: React.FC<IPlayerInfoBannerProps> = (props) => {
             800
           </div>
           <div className={styles.playerStatus}>
-            {/*Add logic for lost pieces */}
+            {Object.entries(capturedPieces).length > 0 &&  (
+              <div>
+                <span>Captured Pieces:</span>
+                <ul>
+                  {Object.entries(capturedPieces).map(([piece, count], index) => (
+                      <li key={index}>
+                        {piece} ({count})
+                      </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

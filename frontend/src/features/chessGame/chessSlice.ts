@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Chess, Move } from 'chess.js';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
-import { ChessState, makeMovePayload, pieceTypeForPromotion, StartGamePayload } from './chessModel';
+import { CapturedPieceSymbols, ChessState, makeMovePayload, pieceTypeForPromotion, StartGamePayload } from './chessModel';
 import getGameStatus from '../../utils/getFullGameStatus';
 import { defaultStartFEN, initialState } from "./ChessConstant";
 import { WritableDraft } from 'immer';
+import { PieceColor } from '../../utils/constants/srcMap';
 
 const updateGameStateAfterMove = (state: WritableDraft<ChessState>, lastMove?: Move) => {
     if(!state.game) return;
@@ -106,6 +107,15 @@ const chessSlice = createSlice({
                         state.history.push(moveResults); // Might not need in future will drop in the future.
                         // Update the game state (Safe as you are not updating game inside getGameStatus.)
                         // state.gameState = getGameStatus(state.game as Chess);
+                        if(moveResults.captured){
+                            // Extract this out when implement for Undo, to handle move 
+                            // Refer updateCapturedPieceCount in notInUseUtil
+                            const opponentColor = moveResults.color === 'w' ? 'b' : 'w' as PieceColor;
+                            const capturedType = moveResults.captured as CapturedPieceSymbols;
+
+                            state.capturedPieces[opponentColor][capturedType] = (state.capturedPieces[opponentColor][capturedType] ?? 0) + 1;
+                        }
+
                         updateGameStateAfterMove(state);
                         state.activePiece = null;
                         state.possibleMoves = [];

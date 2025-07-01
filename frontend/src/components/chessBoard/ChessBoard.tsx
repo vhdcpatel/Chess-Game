@@ -44,6 +44,7 @@ const ChessBoard: React.FC = () => {
     const promotionInfo = useAppSelector((state)=> state.chess.promotionInfo);
     const gameStatus = useAppSelector((state)=> state.chess.gameState);
     const gameEndReason = useAppSelector((state)=> state.chess.gameEndReason);
+    const capturedPieces = useAppSelector((state)=> state.chess.capturedPieces);
 
     const isGameOver = gameStatus.isGameOver ?? false;
 
@@ -164,6 +165,7 @@ const ChessBoard: React.FC = () => {
             <PlayerInfoBanner 
                 player={player === 'w' ? 'b' : 'w'}
                 flagSinglePlayer={isSinglePlayer}
+                capturedPieces={capturedPieces[player === 'w' ? 'b' : 'w']}
             />
             <div className={styles.mainOuterCtn}>
                 {ranksToRender.map((rank,RankIndex) =>
@@ -207,6 +209,7 @@ const ChessBoard: React.FC = () => {
             <PlayerInfoBanner 
                 player={player}
                 flagSinglePlayer={isSinglePlayer}
+                capturedPieces={capturedPieces[player]}
             />
         </DndProvider>
         </React.Fragment>
