@@ -10,6 +10,10 @@
   height: calc(100% - 4.28125rem);
 }
 
+.mobileBottomNavigator {
+    display: none;
+  }
+
 /* New Styles */
 .mainOuterCtnNew {
   background: var(--color-background-dark);
@@ -45,14 +49,30 @@
   margin-block-start: 0.5rem;
 }
 
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
   .mainBody {
     height: calc(100% - 4rem);
   }  
 }
 
-@media (max-width: 600px) {
+@media screen and (max-width: 950px) {
+  .mainOuterCtnNew {
+    padding: 0;
+  }
+
+  .mainContent {
+    border-radius: 0;
+  }
+  
+  .mobileBottomNavigator {
+    display: block;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
   .mainBody {
     height: calc(100% - 3.5rem);
   }  
 }
+

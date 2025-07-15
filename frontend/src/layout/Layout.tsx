@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import styles from './LayoutStyles.module.css'
 import HeaderBar from '../components/header/HeaderBar';
 import SideBar from '../components/SideBar/SideBar';
+import MobileBottomNavigator from '../components/mobileBottomNavigator/MobileBottomNavigator';
 
 const flagNew = false;
 
@@ -25,11 +26,15 @@ const Layout = () => {
                 <div className={styles.mainOuterCtnNew}>
                     <SideBar/>
                     <main className={styles.mainContent}>
-                        <div className={styles.titleTxtCtn}>
+                        {/* Hide due to handle the spacing. */}
+                        {/* <div className={styles.titleTxtCtn}>
                             <h1 className={styles.titleText}>{TitleText}</h1>
-                        </div>
+                        </div> */}
                         <div className={styles.outletContainer}>
                             <Outlet />
+                        </div>
+                        <div className={styles.mobileBottomNavigator}>
+                            <MobileBottomNavigator />
                         </div>
                     </main>
                 </div>

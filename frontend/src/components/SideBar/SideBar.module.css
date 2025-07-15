@@ -39,3 +39,9 @@
   font-weight: bold;
   color: var(--color-text-main-new);
 }
+
+@media screen and (max-width: 950px) {
+  .sidebarOuterCtn {
+    display: none;
+  } 
+}

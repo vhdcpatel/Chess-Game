@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem;
-  background-color: rgba(35, 35, 35, 1);
+  background-color: var(--color-foreground-dark-layer2);
   border-radius: 10px;
 }
 
@@ -26,12 +26,11 @@
 }
 
 .profilePictureCtn img {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 /* Reduce Width of Square to 4rem to adjust Spacing. */
-
 .playerNameCtn {
   display: flex;
   flex-direction: column;
