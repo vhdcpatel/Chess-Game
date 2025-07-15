@@ -87,7 +87,7 @@ describe("Game Component", ()=>{
 
   it("Should render ChessBoard and Open dialog on mount", async ()=>{
     // Act
-    renderWithRedux(<Game />);
+    render(<Game />);
 
     // Assert 
     expect(await screen.findByTestId('dialog')).toBeDefined();
