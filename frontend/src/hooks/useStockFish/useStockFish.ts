@@ -36,7 +36,8 @@ export const useStockFish = ()=>{
     const thinking = stockFishState?.flagThinking ?? false;
 
     const handleStockFishMessage = useCallback((message: string)=>{
-        if(searchParams.get('stockfish')){
+        // Add add StockFish in query to get log of message. 
+        if(searchParams.get('stockFish')){
             console.log(message);
         }
         
@@ -55,16 +56,17 @@ export const useStockFish = ()=>{
                    
                     const settings = getEloSettings(currentEloRef.current);
                     
+                    // Setting just depth for StockFish.
                     workerRef.current.postMessage(`setoption name Skill Level value ${settings.depth}`);
 
-                    // Optionally set other UCI options
+                    // Optionally set other UCI options to control power of stockFish.
                     if(limitStrength){
                         workerRef.current.postMessage(`setoption name UCI_LimitStrength value true`);
-                        const stockFish = elo < 1350 ? elo : elo > 2850 ? 2850 : elo;
+                        const stockFish = elo < 1350 ? elo : elo > 2850 ? 2850 : elo; // Limit in range of 1350 to 2830;
                         workerRef.current.postMessage(`setoption name UCI_Elo value ${stockFish}`);
                     }
 
-                    // Set threads to 1 for web worker implementation(WASM) as I don't add extra load on web.
+                    // Set threads to 1 for web worker implementation(WASM) as I don't want to add extra load on web.
                     workerRef.current.postMessage("setoption name Threads value 1");
 
                     isInitializedRef.current = true;
@@ -99,7 +101,7 @@ export const useStockFish = ()=>{
                             console.error("Invalid move from Stockfish:", bestMove);
                         }
                     }catch(error){
-                        console.error("Error parsing Stockfish move:", error);
+                        console.error("Error parsing StockFish move:", error);
                     }
                 }
                 break;
@@ -113,7 +115,7 @@ export const useStockFish = ()=>{
         if(loadedRef.current || isInitializedRef.current) return;
 
         loadedRef.current = true; // flag before load.
-        currentEloRef.current = elo; // Move into flag from redux.
+        currentEloRef.current = elo; // Move Elo info from Redux to ref.
         // Read Stale Closure for more info.
 
         try {
@@ -134,7 +136,7 @@ export const useStockFish = ()=>{
 
             // Handle worker thread errors
             workerRef.current.onerror = (error) => {
-                console.error("Stockfish worker error:", error);
+                console.error("StockFish worker error:", error);
                 // Reset states.
                 loadedRef.current = false;
                 isInitializedRef.current = false;
@@ -162,13 +164,13 @@ export const useStockFish = ()=>{
 
 
     const requestSFMove = useCallback(async ()=>{
-        // Added safety for more security
+        // Added for extra safety.
         if(!workerRef.current || !ready || thinking || !game){
             console.error("StockFish is not ready but got request for move.")
             return;
         }
         
-        // Can Implement retry mechanism.
+        // Can Implement retry mechanism to load SF.
         // if(!workerRef.current){
         //     // Try to reload/
         //     await loadStockFish();
@@ -181,7 +183,7 @@ export const useStockFish = ()=>{
         const settings = getEloSettings(elo);
 
         try{
-            // Prepare for new game analysis
+            // Prepare for new game analysis.
             workerRef.current.postMessage('ucinewgame');
 
             // Set position
