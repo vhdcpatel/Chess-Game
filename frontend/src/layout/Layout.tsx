@@ -7,7 +7,8 @@ import MobileBottomNavigator from '../components/mobileBottomNavigator/MobileBot
 
 const flagNew = false;
 
-const TitleText = "Play Chess";
+// Hide title to get some more space for the chess board.
+// const TitleText = "Play Chess";
 
 const Layout = () => {    
     

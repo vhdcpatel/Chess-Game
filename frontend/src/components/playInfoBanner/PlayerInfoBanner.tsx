@@ -10,19 +10,19 @@ interface IPlayerInfoBannerProps {
   capturedPieces: TCapturePieces
 }
 
-const GetImageForPlayer = (player: playerColor, flagSinglePlayer: boolean): string => {
-  if (player === 'b') {
-    return StockFishLogo
+// const GetImageForPlayer = (player: playerColor, flagSinglePlayer: boolean): string => {
+//   if (player === 'b') {
+//     return StockFishLogo
   
-  }
-  return userImage;
-}
+//   }
+//   return userImage;
+// }
 
 const PlayerInfoBanner: React.FC<IPlayerInfoBannerProps> = (props) => {
   const {
     player,
     capturedPieces,
-    flagSinglePlayer,
+    // flagSinglePlayer,
   } = props;
 
   

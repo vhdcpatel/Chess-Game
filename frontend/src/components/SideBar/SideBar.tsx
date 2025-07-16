@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './SideBar.module.css'
 import ChessMainLogo from '../../assets/chessLogoMain.jpg';
 import ProfileCard from '../profileCard/ProfileCard';
