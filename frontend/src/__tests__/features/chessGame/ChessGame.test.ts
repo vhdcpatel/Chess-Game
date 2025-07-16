@@ -27,7 +27,7 @@ const mockGetGameStatus = vi.mocked(getGameStatus);
 const MockedChess = vi.mocked(Chess);
 
 describe('Chess Slice', () => {
-    // Test data factories for consistent test data
+    // Test data factories for consistent test data generation.
     const createMockGameState = (overrides = {}) => ({
         turn: 'w' as const,
         isGameOver: false,
@@ -55,10 +55,13 @@ describe('Chess Slice', () => {
 
     let mockChessInstance: ReturnType<typeof createMockChessInstance>;
 
-    const createStateWithGame = (overrides = {}) => ({
+    const createStateWithGame = (overrides: Partial<ChessState> = {}) => ({
+        // Get default state from the constant.
         ...initialState,
+        // Modify State for testing
         game: mockChessInstance,
         gameState: createMockGameState(),
+        // Custom overrides passed for creator method.
         ...overrides,
     });
 
@@ -73,7 +76,7 @@ describe('Chess Slice', () => {
     beforeEach(() => {
         // Reset all mocks before each test
         vi.clearAllMocks();
-        // Create fresh mock instance
+        // Create fresh mock instance chess instance.
         mockChessInstance = createMockChessInstance();
         mockGetGameStatus.mockReturnValue(createMockGameState());
         MockedChess.mockImplementation(() => mockChessInstance as unknown as Chess);
@@ -119,6 +122,25 @@ describe('Chess Slice', () => {
                     lan: '',
                     before: '',
                     after: ''
+                    // TS Error because of follow.
+                    // isCapture: function (): boolean {
+                    //     throw new Error('Function not implemented.');
+                    // },
+                    // isPromotion: function (): boolean {
+                    //     throw new Error('Function not implemented.');
+                    // },
+                    // isEnPassant: function (): boolean {
+                    //     throw new Error('Function not implemented.');
+                    // },
+                    // isKingsideCastle: function (): boolean {
+                    //     throw new Error('Function not implemented.');
+                    // },
+                    // isQueensideCastle: function (): boolean {
+                    //     throw new Error('Function not implemented.');
+                    // },
+                    // isBigPawn: function (): boolean {
+                    //     throw new Error('Function not implemented.');
+                    // }
                 }],
                 activePiece: createPiece(),
                 possibleMoves: ['e3', 'e4'],

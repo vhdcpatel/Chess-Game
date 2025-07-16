@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import styles from '../Game.module.css';
 import { Button, Slider } from '@mui/material';
 import { getSrc } from '../../../utils/constants/srcMap';
 import PersonIcon from '@mui/icons-material/Person';
 import ComputerIcon from '@mui/icons-material/Computer';
-import { gameInfoModel } from '../Game';
-import GenericDialog from "../../dialogBox/GenericDialog";
+import { gameInfoModel } from '../../../pages/index/Game';
+import GenericDialog from '../../dialogBox/GenericDialog';
+import styles from './startGameDialog.module.css';
 
 
 interface StartGameDialogBoxProps {

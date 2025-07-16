@@ -10,7 +10,6 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  /* border:1px solid red; */
 }
 
 .light {
@@ -54,6 +53,23 @@
   z-index: 3;
   /* pointer-events: none; */
 }
+
+.top-left-corner {
+  border-top-left-radius: 0.3125rem;
+}
+
+.top-right-corner {
+  border-top-right-radius: 0.3125rem;
+}
+
+.bottom-left-corner {
+  border-bottom-left-radius: 0.3125rem;
+}
+
+.bottom-right-corner {
+  border-bottom-right-radius: 0.3125rem;
+}
+
 
 @media (max-width: 600px) {
   .possibleMove::before {

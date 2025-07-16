@@ -3,6 +3,9 @@ import styles from './Square.module.css';
 import { charToNum } from '../../utils/charToNum';
 import { useDrop } from 'react-dnd';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
+import FileLabel from '../chessLabels/FileLabel';
+import { getBorderRadius } from '../../utils/getBorderRadius';
+import RankLabel from '../chessLabels/RankLabel';
 
 interface SquareProps {
   rank: string;
@@ -13,10 +16,23 @@ interface SquareProps {
   isCheckOrMate: boolean;
   onDrop: (item: PieceInfoModel, rank: string, file: string) => void;
   onClick: (file: string, rank: string) => void;
+  rankIndex: number;
+  fileIndex: number;
 }
 
 const Square: React.FC<SquareProps> = (props) => {
-  const {rank,file,children, onDrop,isPossibleMove, onClick, isActive, isCheckOrMate} = props;
+  const {
+    rank,
+    file,
+    children,
+    onDrop,
+    isPossibleMove,
+    onClick,
+    isActive,
+    isCheckOrMate,
+    rankIndex,
+    fileIndex,
+  } = props;
 
   const isLight = (Number(rank) + charToNum(file)) % 2 !== 0;
 
@@ -42,7 +58,13 @@ const Square: React.FC<SquareProps> = (props) => {
     }
   }
 
-  const squareClasses = `${isLight ? styles.light : styles.dark} ${styles.square} ${isPossibleMove ? styles.possibleMove : ''} ${isActive ? styles.activeSquare : ''} ${isCheckOrMate ? styles.checkOrMate : ''}`;
+  const squareClasses = `
+    ${isLight ? styles.light : styles.dark} 
+    ${styles.square} ${isPossibleMove ? styles.possibleMove : ''} 
+    ${isActive ? styles.activeSquare : ''} 
+    ${isCheckOrMate ? styles.checkOrMate : ''}
+    ${getBorderRadius(rankIndex, fileIndex)}
+  `;
   
   return (
     <React.Fragment>
@@ -54,6 +76,8 @@ const Square: React.FC<SquareProps> = (props) => {
           onClick={clickHandler}
           >
         {/* {rank}{file} */}
+        {fileIndex === 0 && <RankLabel rank={rank} rankIndex={rankIndex} />}
+        {rankIndex === 7 && <FileLabel file={file} fileIndex={fileIndex} />}
         {children}
       </div>
     </React.Fragment>

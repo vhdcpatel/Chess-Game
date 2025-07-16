@@ -25,6 +25,7 @@ import GameOverDialog from "./GameOverDialog/GameOverDialog";
 import styles from './chessBoard.module.css';
 import { useStockFish } from "../../hooks/useStockFish/useStockFish";
 import { downloadPgnFile } from '../../utils/downloadFenToTxt';
+import PlayerInfoBanner from '../playInfoBanner/PlayerInfoBanner';
 
 const ChessBoard: React.FC = () => {
 
@@ -43,6 +44,7 @@ const ChessBoard: React.FC = () => {
     const promotionInfo = useAppSelector((state)=> state.chess.promotionInfo);
     const gameStatus = useAppSelector((state)=> state.chess.gameState);
     const gameEndReason = useAppSelector((state)=> state.chess.gameEndReason);
+    const capturedPieces = useAppSelector((state)=> state.chess.capturedPieces);
 
     const isGameOver = gameStatus.isGameOver ?? false;
 
@@ -160,6 +162,11 @@ const ChessBoard: React.FC = () => {
             />}
 
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
+            <PlayerInfoBanner 
+                player={player === 'w' ? 'b' : 'w'}
+                flagSinglePlayer={isSinglePlayer}
+                capturedPieces={capturedPieces[player === 'w' ? 'b' : 'w']}
+            />
             <div className={styles.mainOuterCtn}>
                 {ranksToRender.map((rank,RankIndex) =>
                     <div key={rank} className={styles.ranks} >
@@ -179,6 +186,8 @@ const ChessBoard: React.FC = () => {
                                 isPossibleMove={possibleMoves.includes(`${file}${rank}`)}
                                 isActive={activePiece?.square === `${file}${rank}`}
                                 isCheckOrMate={isCheckOrMate}
+                                rankIndex={RankIndex}
+                                fileIndex={FileIndex}
                             >
                                 {piece && (
                                     <Piece
@@ -197,6 +206,11 @@ const ChessBoard: React.FC = () => {
                     </div>
                 )}
             </div>
+            <PlayerInfoBanner 
+                player={player}
+                flagSinglePlayer={isSinglePlayer}
+                capturedPieces={capturedPieces[player]}
+            />
         </DndProvider>
         </React.Fragment>
     );

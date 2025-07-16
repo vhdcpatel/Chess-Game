@@ -1,6 +1,8 @@
 .mainOuterDiv {
   height: 100%;
   width: 100%;
+  background: var(--color-background-dark);
+  background: var(--loader-screen-gradient);
   display: flex;
   justify-content: center;
   align-items: center;

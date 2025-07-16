@@ -1,0 +1,19 @@
+.fileLabel {
+  position: absolute;
+  bottom: calc(0% - 0.15rem);
+  right: calc(0% + 0.25rem);
+}
+
+.rankLabel {
+  position: absolute;
+  top: calc(0% + 0.25rem);
+  left: calc(0% + 0.25rem);
+}
+
+.lightColorTxt {
+  color: var(--greenish-color);
+}
+
+.darkColorTxt {
+  color: var(--light-brown-white-color);
+}

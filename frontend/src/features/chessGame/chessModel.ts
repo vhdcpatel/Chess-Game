@@ -2,7 +2,11 @@ import { Chess, Color, Move, PieceSymbol, Square, Square as SquareName } from "c
 
 export type playerColor = 'w' | 'b';
 
-export type pieceTypeForPromotion = 'q' | 'r' | 'b' | 'n';
+export type pieceTypeForPromotion = Exclude<PieceSymbol,'k' | 'p'>  
+
+export type CapturedPieceSymbols = Exclude<PieceSymbol, 'k'>;
+
+export type TCapturePieces = Partial<Record<CapturedPieceSymbols, number>>;
 
 export interface GameStatus {
     turn: Color;
@@ -29,6 +33,22 @@ export interface StockFishStateModel {
     error: string | null;
 }
 
+export interface makeMovePayload {
+    from: SquareName;
+    to: SquareName;
+    promotion?: PieceSymbol;
+}
+
+export interface StartGamePayload {
+    player: playerColor;
+    isSinglePlayer: boolean;
+    elo?: number;
+}
+
+export type TCapturePiecesRecords = {
+    [color in playerColor]: TCapturePieces
+}
+
 export interface ChessState {
     player: playerColor;
     isSinglePlayer: boolean;
@@ -40,16 +60,5 @@ export interface ChessState {
     promotionInfo: PromotionInfoModel | null;
     gameEndReason: null | string;
     stockFishState: StockFishStateModel | null;
-}
-
-export interface makeMovePayload {
-    from: SquareName;
-    to: SquareName;
-    promotion?: PieceSymbol;
-}
-
-export interface StartGamePayload {
-    player: playerColor;
-    isSinglePlayer: boolean;
-    elo?: number;
+    capturedPieces: TCapturePiecesRecords;
 }

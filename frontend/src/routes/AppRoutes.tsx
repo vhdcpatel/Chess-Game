@@ -4,7 +4,7 @@ import Layout from '../layout/Layout';
 import Loader from '../components/uxComponents/loader/Loader';
 import ProtectedRoutes from './ProtectedRoutes';
 
-const Game = React.lazy(() => import('../components/game/Game'));
+const Game = React.lazy(() => import('../pages/index/Game'));
 const AuthPage = React.lazy(() => import('../pages/authPage/AuthPage'));
 const PageNotFound = React.lazy(() => import('../components/uxComponents/pageNotFound/PageNotFound'));
 
