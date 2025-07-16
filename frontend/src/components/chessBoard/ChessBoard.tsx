@@ -163,7 +163,8 @@ const ChessBoard: React.FC = () => {
 
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <PlayerInfoBanner 
-                player={player === 'w' ? 'b' : 'w'}
+                player={player}
+                currentPlayer={player === 'w' ? 'b' : 'w'}
                 flagSinglePlayer={isSinglePlayer}
                 capturedPieces={capturedPieces[player === 'w' ? 'b' : 'w']}
             />
@@ -206,8 +207,9 @@ const ChessBoard: React.FC = () => {
                     </div>
                 )}
             </div>
-            <PlayerInfoBanner 
+            <PlayerInfoBanner
                 player={player}
+                currentPlayer={player}    
                 flagSinglePlayer={isSinglePlayer}
                 capturedPieces={capturedPieces[player]}
             />
