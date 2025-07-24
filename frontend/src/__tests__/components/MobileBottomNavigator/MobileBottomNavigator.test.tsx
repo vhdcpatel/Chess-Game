@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react"
 import MobileBottomNavigator from "../../../components/mobileBottomNavigator/MobileBottomNavigator"
+import styles from "../../../components/mobileBottomNavigator/mobileBottomNavigatorStyles.module.css"
 import userEvent from "@testing-library/user-event"
 
 // Helper Function to Keep each test self-contained & explicit.
@@ -47,13 +48,13 @@ describe("Should render MobileBottomNavigator correctly", () => {
   it("Should change the active section when clicked", async () => {
     const { user, gameButton, settingsButton, ProfileButton } = setup();
 
-    // Click on Settings
+    // Click on Settings and it should become active.
     await user.click(settingsButton);
     expect(settingsButton).toHaveClass("Mui-selected");
     expect(gameButton).not.toHaveClass("Mui-selected");
     expect(ProfileButton).not.toHaveClass("Mui-selected");
 
-    // Click on Profile
+    // Click on Profile and it should become active.
     await user.click(ProfileButton);
     expect(ProfileButton).toHaveClass("Mui-selected");
     expect(gameButton).not.toHaveClass("Mui-selected");
@@ -61,7 +62,20 @@ describe("Should render MobileBottomNavigator correctly", () => {
 
   });
 
+  it("Support keyboard activation for Profile",async ()=>{
+    const { user, ProfileButton } = setup();
 
+    ProfileButton.focus();
+    await user.keyboard("{enter}");
 
+    expect(ProfileButton).toHaveClass("Mui-selected");
 
+  });
+
+  it("applies the container CSS module class", () => {
+    render(<MobileBottomNavigator />);
+    // Look for the element with that class
+    const container = document.querySelector(`.${styles.container}`);
+    expect(container).toBeInTheDocument();
+  });
 })
