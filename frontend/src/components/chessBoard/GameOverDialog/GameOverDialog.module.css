@@ -13,9 +13,12 @@
     --color-text-main: #495057;
     --color-text-dark: #212529;
     --color-white: #fff;
+
+    --bg-gradient: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-lighter) 100%);
+    --bg-win: linear-gradient(135deg, var(--color-success-bg1) 0%, var(--color-success-bg2) 100%);
+    --bg-draw: linear-gradient(135deg, var(--color-warning-bg1) 0%, var(--color-warning-bg2) 100%);
 }
 
-/* Main containers */
 .outerCtn {
     margin-bottom: 1.5rem;
 }
@@ -24,12 +27,11 @@
     margin-bottom: 0;
 }
 
-/* Result container */
 .resultContainer {
     text-align: center;
     padding: 1.25rem;
     border-radius: 0.75rem;
-    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-lighter) 100%);
+    background: var(--bg-gradient);
     border: 0.125rem solid var(--color-border);
     margin-bottom: 0.5rem;
 }
@@ -45,12 +47,12 @@
 /* Different result type colors */
 .winResult {
     color: var(--color-success);
-    background: linear-gradient(135deg, var(--color-success-bg1) 0%, var(--color-success-bg2) 100%);
+    background: var(--bg-win);
 }
 
 .drawResult {
     color: var(--color-warning);
-    background: linear-gradient(135deg, var(--color-warning-bg1) 0%, var(--color-warning-bg2) 100%);
+    background: var(--bg-draw);
 }
 
 .defaultResult {

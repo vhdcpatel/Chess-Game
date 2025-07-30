@@ -10,12 +10,16 @@ interface ProfileCardProps {
   onSettingsClick?: () => void;
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({
-  avatarSrc,
-  name,
-  status = 'Free',
-  onSettingsClick = () => {},
-}) => (
+const ProfileCard: React.FC<ProfileCardProps> = (props) => {
+
+  const {
+    avatarSrc,
+    name,
+    status = 'Free',
+    onSettingsClick = () => {},
+  }  = props;
+
+  return (
   <div className={styles.card}>
     <Avatar
       className={styles.avatar}
@@ -23,21 +27,20 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       alt={`${name}'s avatar`}
       sx={{ width: 48, height: 48 }}
     >
-      M 
+      {name.charAt(0).toUpperCase()}
     </Avatar>
-
+  
     <div className={styles.info}>
       <span className={styles.name}>{name}</span>
       <span className={styles.status}>{status}</span>
     </div>
-
+  
     <button
       type="button"
       className={styles.settingsButton}
       onClick={onSettingsClick}
       aria-label="Settings"
     >
-      
       <img
         src={settingsIcon}
         alt="Settings"
@@ -45,6 +48,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       />
     </button>
   </div>
-);
+  );
+}
+  
 
 export default ProfileCard;
