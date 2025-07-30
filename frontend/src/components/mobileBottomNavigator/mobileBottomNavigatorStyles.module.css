@@ -1,3 +1,7 @@
+:root {
+  --mobile-navigator-height: 4rem;
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -11,10 +15,9 @@
 }
 
 .nav {
-  background-color: #121212 !important;
-  color: #ffffff;
-  height: 64px;
+  background-color: var(--mobile-navigator-background) !important;
+  color: var(--mobile-navigator-icon-color) !important;
+  height: var(--mobile-navigator-height);
   width: 100%;
-  max-width: 500px;
   max-width: unset;
 }
