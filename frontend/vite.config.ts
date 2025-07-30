@@ -30,6 +30,25 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'json-summary'],
+      reportsDirectory: './coverage',
+      reportOnFailure: true,
+      //  All test and config files will not be consider for coverage calculations.
+      exclude: [
+        '**/test-utils/**',
+        '**/*.test.tsx',
+        '**/*.test.ts',
+        'public/**',
+        '.eslintrc.cjs',
+        'theme.ts',
+        'vite.config.ts',
+        'vite-env.d.ts',
+        'src/utils/constants/**',
+        'src/utils/miniMax(deprecated-removeLatter)/**',
+      ],
+    },
   },
 
   worker: {
