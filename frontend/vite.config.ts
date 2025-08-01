@@ -37,16 +37,18 @@ export default defineConfig({
       reportOnFailure: true,
       //  All test and config files will not be consider for coverage calculations.
       exclude: [
-        '**/test-utils/**',
-        '**/*.test.tsx',
-        '**/*.test.ts',
-        'public/**',
-        '.eslintrc.cjs',
-        'theme.ts',
-        'vite.config.ts',
-        'vite-env.d.ts',
-        'src/utils/constants/**',
-        'src/utils/miniMax(deprecated-removeLatter)/**',
+        '**/test-utils/**',                  // testing helpers
+        '**/*.test.{ts,tsx}',               // test files
+        '**/__tests__/**',                  // test folders (optional)
+        'public/**',                        // static assets
+        'src/**/*.d.ts',                    // all type declarations (like vite-env.d.ts)
+        'vite.config.ts',            // vite config
+        'src/main.tsx',                     // app entry point
+        'src/App.tsx',                      // purely a wrapper in your case
+        'theme.ts',                     // MUI theme file
+        'src/.eslintrc.cjs',               // ESLint config (move to root ideally)
+        'src/utils/constants/**',           // hardcoded or static constants
+        'src/utils/miniMax(deprecated-removeLatter)/**', // deprecated logic
       ],
     },
   },

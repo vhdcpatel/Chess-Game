@@ -14,12 +14,12 @@ interface PromotionInfoModel {
     color: PieceColor;
 }
 
- const promotionPieces: { symbol: PieceSymbol; name: string }[] = [
+const promotionPieces: { symbol: PieceSymbol; name: string }[] = [
         { symbol: 'q', name: 'Queen' },
         { symbol: 'r', name: 'Rook' },
         { symbol: 'b', name: 'Bishop' },
         { symbol: 'n', name: 'Knight' },
-];
+    ];
 
 
 interface PromotionDialogProps {
@@ -60,6 +60,7 @@ const PromotionDialog: React.FC<PromotionDialogProps> = (props) => {
                                     alt={piece.name}
                                 />
                             }
+                            aria-label={`${piece.name}`}
                         >
                             {piece.name}
                         </Button>
