@@ -1,9 +1,7 @@
-import { beforeEach, describe, vi, Mock, it, expect } from 'vitest';
+import { describe, vi, Mock, it, expect } from 'vitest';
 import { render, RenderOptions, screen, waitFor } from '@testing-library/react';
-import abc from '../../../components/chessBoard/ChessBoard'
 import Game from '../../../pages/index/Game';
 import { useAppDispatch } from '../../../features';
-import { initGame, startGame } from '../../../features/chessGame/chessSlice';
 import { ReactElement } from 'react';
 import { configureStore, type PreloadedState } from '@reduxjs/toolkit';
 import rootReducer from '../../../features/rootReducer';

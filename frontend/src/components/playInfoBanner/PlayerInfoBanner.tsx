@@ -3,26 +3,33 @@ import styles from './playerInfoBanner.module.css';
 import {  playerColor, TCapturePieces } from '../../features/chessGame/chessModel';
 import StockFishLogo from '../../assets/users/stockFishLogo.png';
 import userImage from '../../assets/users/userImage.png';
+import { getSrc } from '../../utils/constants/srcMap';
+import { PieceSymbol } from 'chess.js';
 
 interface IPlayerInfoBannerProps {
   player: playerColor;
   flagSinglePlayer: boolean;
   capturedPieces: TCapturePieces
+  currentPlayer: playerColor;
 }
 
-// const GetImageForPlayer = (player: playerColor, flagSinglePlayer: boolean): string => {
-//   if (player === 'b') {
-//     return StockFishLogo
+const GetImageForPlayer = (CurrentPlayer: playerColor, activePlayer: playerColor, flagSinglePlayer: boolean): string => {
   
-//   }
-//   return userImage;
-// }
+  if (flagSinglePlayer && CurrentPlayer !== activePlayer) {
+    // Return StockFish logo for the opponent AI player.
+    return StockFishLogo;
+  }
+
+  return userImage;
+}
 
 const PlayerInfoBanner: React.FC<IPlayerInfoBannerProps> = (props) => {
+  
   const {
     player,
     capturedPieces,
-    // flagSinglePlayer,
+    currentPlayer,
+    flagSinglePlayer
   } = props;
 
   
@@ -33,26 +40,34 @@ const PlayerInfoBanner: React.FC<IPlayerInfoBannerProps> = (props) => {
     }>
       <div className={styles.playerInfoCtn}>
         <div className={styles.profilePictureCtn}>
-          {/* Profile Picture */}
-          <img src={player === 'b' ? StockFishLogo : userImage} alt="Player Profile Picture" />
+          <img src={GetImageForPlayer(currentPlayer, player, flagSinglePlayer)} alt="Player Profile Picture" />
         </div>
         <div className={styles.playerNameCtn}>
           <div className={styles.playerName}>
-            {/* Player Name */}
-            {player === 'b' ? 'StockFish' : 'You'}
             &nbsp;
             800
           </div>
           <div className={styles.playerStatus}>
-            {Object.entries(capturedPieces).length > 0 &&  (
+            {Object.entries(capturedPieces).length > 0 && (
               <div>
-                <span>Captured Pieces:</span>
+                <span>Capture Pieces</span>
                 <ul>
-                  {Object.entries(capturedPieces).map(([piece, count], index) => (
-                      <li key={index}>
-                        {piece} ({count})
+                  {Object.entries(capturedPieces).map(([piece, count]) => {
+                    const imgSrc = getSrc[currentPlayer][piece as PieceSymbol];
+                    return (
+                      <li key={piece}>
+                        <span>{piece}</span>
+                        <img
+                          src={imgSrc}
+                          className={styles.capturedPieceImage}
+                          alt={`Captured ${piece}`}
+                          title={`Captured ${piece}`}
+                        />
+                        x
+                        <span>({count})</span>
                       </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               </div>
             )}

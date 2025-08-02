@@ -26,5 +26,13 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off',
       },
     },
+    {
+      files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.{ts,tsx}'],
+      env: {
+        'vitest/globals': true,
+      },
+      plugins: ['vitest'],
+      extends: ['plugin:vitest/recommended'],
+    },
   ],
 }

@@ -2,16 +2,16 @@ import React from 'react';
 import { Button } from '@mui/material';
 import styles from './GameOverDialog.module.css';
 import GenericDialog from "../../dialogBox/GenericDialog";
+import { getGameResult } from './getGameResult';
 
-type Color = 'w' | 'b';
-type GameState = 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
+export type Color = 'w' | 'b';
+export type GameState = 'OnGoing' | 'Check' | 'CheckMate' | 'StaleMate' | 'Draw';
 
 interface GameStatus {
     turn: Color;
     gameState: GameState;
     isGameOver: boolean;
 }
-
 interface GameOverDialogProps {
     isOpen: boolean;
     gameStatus: GameStatus;
@@ -31,37 +31,7 @@ const GameOverDialog: React.FC<GameOverDialogProps> = (props) => {
         onDownloadPGN,
     } = props;
 
-    const getGameResult = () => {
-        switch (gameStatus.gameState) {
-            case 'CheckMate':
-                const winner = gameStatus.turn === 'w' ? 'Black' : 'White';
-                return {
-                    title: '🏆 Game Over - Checkmate!',
-                    message: `${winner} wins by checkmate!`,
-                    resultClass: styles.winResult
-                };
-            case 'StaleMate':
-                return {
-                    title: '🤝 Game Over - Stalemate!',
-                    message: 'The game ends in a draw by stalemate.',
-                    resultClass: styles.drawResult
-                };
-            case 'Draw':
-                return {
-                    title: '🤝 Game Over - Draw!',
-                    message: gameEndReason || 'The game ends in a draw.',
-                    resultClass: styles.drawResult
-                };
-            default:
-                return {
-                    title: '🎯 Game Over',
-                    message: 'The game has ended.',
-                    resultClass: styles.defaultResult
-                };
-        }
-    };
-
-    const result = getGameResult();
+    const result = getGameResult(gameStatus.gameState, gameStatus.turn, gameEndReason);
 
     const dialogContent = (
         <>

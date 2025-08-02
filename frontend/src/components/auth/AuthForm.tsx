@@ -4,7 +4,9 @@ import { useAuth } from '../../context/authContext/authContext';
 import styles from './authForm.module.css';
 
 const AuthForm: React.FC = () => {
+  
   const { login, signUp } = useAuth();
+  
   const location = useLocation();
   const isLogin = location.pathname === '/login';
   const navigator = useNavigate();
@@ -46,8 +48,6 @@ const AuthForm: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
-
-      // Show error message
     }
   };
   

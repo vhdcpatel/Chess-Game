@@ -7,10 +7,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import styles from './mobileBottomNavigatorStyles.module.css';
 
-export default function MobileBottomNavigator() {
-  const [value, setValue] = React.useState('game');
+type MobileBottomNavigatorOptions = "game" | "settings" | "profile";
 
-  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+export default function MobileBottomNavigator() {
+  const [value, setValue] = React.useState<MobileBottomNavigatorOptions>('game');
+
+  const handleChange = (_: React.SyntheticEvent, newValue: MobileBottomNavigatorOptions) => {
     setValue(newValue);
   };
 

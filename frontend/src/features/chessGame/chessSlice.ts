@@ -109,7 +109,6 @@ const chessSlice = createSlice({
                         // state.gameState = getGameStatus(state.game as Chess);
                         if(moveResults.captured){
                             // Extract this out when implement for Undo, to handle move 
-                            // Refer updateCapturedPieceCount in notInUseUtil
                             const opponentColor = moveResults.color === 'w' ? 'b' : 'w' as PieceColor;
                             const capturedType = moveResults.captured as CapturedPieceSymbols;
 

@@ -4,7 +4,6 @@ import { Button } from '@mui/material';
 import { getSrc } from '../../../utils/constants/srcMap';
 import GenericDialog from "../../dialogBox/GenericDialog";
 
-// Types
 type PieceColor = 'w' | 'b';
 type PieceSymbol = 'q' | 'r' | 'b' | 'n';
 type Square = string;
@@ -14,6 +13,14 @@ interface PromotionInfoModel {
     to: Square;
     color: PieceColor;
 }
+
+const promotionPieces: { symbol: PieceSymbol; name: string }[] = [
+        { symbol: 'q', name: 'Queen' },
+        { symbol: 'r', name: 'Rook' },
+        { symbol: 'b', name: 'Bishop' },
+        { symbol: 'n', name: 'Knight' },
+    ];
+
 
 interface PromotionDialogProps {
     promotionInfo: PromotionInfoModel | null;
@@ -30,13 +37,7 @@ const PromotionDialog: React.FC<PromotionDialogProps> = (props) => {
 
     if (!promotionInfo) return null;
 
-    const promotionPieces: { symbol: PieceSymbol; name: string }[] = [
-        { symbol: 'q', name: 'Queen' },
-        { symbol: 'r', name: 'Rook' },
-        { symbol: 'b', name: 'Bishop' },
-        { symbol: 'n', name: 'Knight' },
-    ];
-
+   
     const handlePromotionSelect = (piece: PieceSymbol) => {
         onPromote(piece);
     };
@@ -59,6 +60,7 @@ const PromotionDialog: React.FC<PromotionDialogProps> = (props) => {
                                     alt={piece.name}
                                 />
                             }
+                            aria-label={`${piece.name}`}
                         >
                             {piece.name}
                         </Button>

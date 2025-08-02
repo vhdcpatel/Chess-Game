@@ -4,7 +4,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -34,6 +33,9 @@
   --color-foreground-dark-layer2: #262626;
   --loader-screen-gradient: linear-gradient(90deg, rgba(31, 31, 31, 1) 0%, rgba(61, 61, 61, 1) 50%, rgba(31, 31, 31, 1) 100%);
   --main-border-styles: 1px solid rgba(49, 49, 49, 1);
+  --mobile-navigator-background: #121212;
+  --mobile-navigator-icon-color: #FFFFFF;
+  --mobile-navigator-background-active: #3F5B85;
 
   /* For loader Screen  */
   /* background: #1F1F1F;

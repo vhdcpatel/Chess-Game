@@ -5,7 +5,7 @@ import { useDrag } from 'react-dnd';
 import isFirefox from '../../utils/detectFireFox';
 import { Square } from 'chess.js';
 import { PieceInfoModel } from '../../utils/constants/initialPosition';
-import { useMediaQuery } from '@mui/material';
+import { isMobile } from '../../utils/detectMobile';
 
 interface PieceProps {
   type: PieceType;
@@ -21,6 +21,7 @@ const Piece: React.FC<PieceProps> = (props) => {
   const { type, color, position, activePieceHandler, active, isSinglePlayer, player} = props;
 
   const imgRef = React.useRef<HTMLImageElement>(null);
+  const isMobileScreen = isMobile();
 
   // For prevention of getting background on the image tag.
   useEffect(() => {
@@ -51,7 +52,7 @@ const Piece: React.FC<PieceProps> = (props) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  // Always add dependency for the drag other wise it will take the old value 
+  // Always add dependency for the drag other wise it will take stale value,
   // and state management will become inconsistent.
   }), [type, color, position, active, activePieceHandler]);
 
@@ -67,7 +68,7 @@ const Piece: React.FC<PieceProps> = (props) => {
       activePieceHandler('set')(currSquare);
   }
   
-  const isMobileScreen = useMediaQuery('(max-width: 1000px)');
+  
 
   // Use a ref for the img and attach drag to it in useEffect for type safety
   useEffect(() => {
